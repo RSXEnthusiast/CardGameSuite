@@ -3,8 +3,6 @@ package decks;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Random;
-import java.util.Stack;
 
 public class Standard extends Deck {
 
@@ -21,7 +19,7 @@ public class Standard extends Deck {
 		for (int i = 0; i < hands.length; i++) {
 			hands[i] = new ArrayList<Integer>();
 		}
-		super.initialize(deck, hands);
+		super.initializeFromSubclass(deck, hands);
 	}
 
 	public static String convertToString(int num) {

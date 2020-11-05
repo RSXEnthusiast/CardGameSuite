@@ -6,8 +6,10 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
 
+import deckMultiplayerManagement.DeckMultiplayerManager;
+
 public abstract class Deck {
-	private Queue<Integer> deck = new LinkedList<Integer>();
+	private Queue<Integer> deck;
 	private Stack<Integer> discard = new Stack<Integer>();
 	private boolean shuffleOnEmptyDeck;
 	private ArrayList<Integer>[] hands;
@@ -19,9 +21,47 @@ public abstract class Deck {
 		this.numPlayers = numPlayers;
 	}
 
-	public void initialize(Queue<Integer> deck, ArrayList<Integer>[] hands) {
+	public void initializeFromSubclass(Queue<Integer> deck, ArrayList<Integer>[] hands) {
 		this.deck = deck;
 		this.hands = hands;
+	}
+
+	public void initializeMyPlayerNum(int myPlayerNum) {
+		this.myPlayerNum = myPlayerNum;
+	}
+
+	public void initializeFromPeer(Deck deck) {
+		this.deck = deck.getDeck();
+		this.discard = deck.getDiscard();
+		this.shuffleOnEmptyDeck = deck.getShuffleOnEmptyDeck();
+		this.hands = deck.getHands();
+		this.numPlayers = deck.getNumPlayers();
+	}
+
+	private ArrayList<Integer>[] getHands() {
+		return hands;
+	}
+
+	private boolean getShuffleOnEmptyDeck() {
+		return shuffleOnEmptyDeck;
+	}
+
+	private Stack<Integer> getDiscard() {
+		return discard;
+	}
+
+	private Queue<Integer> getDeck() {
+		return deck;
+	}
+
+	private int draw() throws Exception {
+		if (deck.isEmpty() && !shuffleOnEmptyDeck) {
+			// TODO choose better exception
+			throw new Exception("Trying to draw card that doesn't exist");
+		} else if (deck.isEmpty()) {
+			shuffle();
+		}
+		return deck.poll();
 	}
 
 	public void shuffle() {
@@ -43,16 +83,15 @@ public abstract class Deck {
 		for (int i : temp) {
 			deck.add(i);
 		}
+		DeckMultiplayerManager.shuffle(this.deck);
 	}
 
-	private int draw() throws Exception {
-		if (deck.isEmpty() && !shuffleOnEmptyDeck) {
+	private Integer drawFromDiscard() throws Exception {
+		if (discard.isEmpty()) {
 			// TODO choose better exception
-			throw new Exception("Trying to draw card that doesn't exist");
-		} else if (deck.isEmpty()) {
-			shuffle();
+			throw new Exception("Trying to draw a card from discard that doesn't exist");
 		}
-		return deck.poll();
+		return discard.pop();
 	}
 
 	public void deal(int numCards) throws Exception {
@@ -72,6 +111,7 @@ public abstract class Deck {
 				hands[j].add(draw());
 			}
 		}
+		DeckMultiplayerManager.deal(numCards);
 	}
 
 	public ArrayList<Integer> getHand(int player) {
@@ -84,30 +124,41 @@ public abstract class Deck {
 
 	public void draw(int playerNum) throws Exception {
 		hands[playerNum].add(draw());
+		DeckMultiplayerManager.playerDraw(playerNum);
 	}
 
 	public void draw(int playerNum, int index) throws Exception {
 		hands[playerNum].add(index, draw());
+		DeckMultiplayerManager.playerDrawIntoIndex(playerNum, index);
+	}
+
+	public void drawFromDiscard(int playerNum) throws Exception {
+		hands[playerNum].add(drawFromDiscard());
+		DeckMultiplayerManager.playerDrawFromDiscard(playerNum);
 	}
 
 	public void drawFromDiscard(int playerNum, int index) throws Exception {
-		hands[playerNum].add(index, draw());
+		hands[playerNum].add(index, drawFromDiscard());
+		DeckMultiplayerManager.playerDrawFromDiscardIntoIndex(playerNum, index);
 	}
 
-	public void discardByValue(int player, int value) throws Exception {
-		if (!hands[player].remove((Object) value)) {
+	public void discardByValue(int playerNum, int value) throws Exception {
+		if (!hands[playerNum].remove((Object) value)) {
 			throw new Exception("Trying to discard a card that doesn't exist");
 		} else {
 			discard.add(value);
 		}
+		DeckMultiplayerManager.discardByValue(playerNum, value);
 	}
 
-	public void discardByIndex(int player, int index) throws Exception {
-		discard.add(hands[player].remove(index));
+	public void discardByIndex(int playerNum, int index) throws Exception {
+		discard.add(hands[playerNum].remove(index));
+		DeckMultiplayerManager.discardByIndex(playerNum, index);
 	}
 
 	public void discardFromDeck() {
 		discard.add(deck.poll());
+		DeckMultiplayerManager.discardFromDeck();
 	}
 
 	public int peekTopDiscard() {
@@ -124,5 +175,9 @@ public abstract class Deck {
 
 	public int getMyPlayerNum() {
 		return myPlayerNum;
+	}
+
+	public void setDeck(Queue<Integer> deck) {
+		this.deck = deck;
 	}
 }

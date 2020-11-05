@@ -1,9 +1,9 @@
 package gameMultiplayerManagement;
 
-import multiplayerDataManagement.MultiplayerManager;
+import multiplayerDataManagement.DataSender;
 
 public class FivesMultiplayerManager {
-	private MultiplayerManager db;
+	private DataSender db;
 	
 	public FivesMultiplayerManager(String url) {
 		

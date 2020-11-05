@@ -162,7 +162,7 @@ public class Fives {
 			System.out.println("Player " + (playerNum + 1) + "'s turn! These are your current cards:");
 			printVisibleHand(visibleHand, deck.getHand(playerNum), true);
 			System.out.print("Would you like to draw from the (1) draw pile or (2) grab "
-					+ Standard.convertToString(deck.peekTopDiscard()) + " from the discard? Enter 1/2: ");
+					+ Standard.convertToString(deck.peekTopDiscard()) + " from the discard?");
 			selectionInt = getSelection(2, scanner);
 		}
 		int pickup = 0;
