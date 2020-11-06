@@ -1,10 +1,11 @@
 package com.example.cardgamesuiteapp.multiplayerDataManagement;
 
 import org.javatuples.Triplet;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import deckMultiplayerManagement.DeckMultiplayerManager;
-import decks.Standard;
+import com.example.cardgamesuiteapp.deckMultiplayerManagement.DeckMultiplayerManager;
+import com.example.cardgamesuiteapp.decks.Standard;
 
 public class DataReciever {
 	DeckMultiplayerManager dmm;
@@ -21,6 +22,12 @@ public class DataReciever {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Triplet deseralizeData(JSONObject data) {
-		return new Triplet(data.get("Time"), data.get("Operation"), data.get("Data"));
+		Triplet result = null;
+		try {
+			result = new Triplet(data.get("Time"), data.get("Operation"), data.get("Data"));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }
