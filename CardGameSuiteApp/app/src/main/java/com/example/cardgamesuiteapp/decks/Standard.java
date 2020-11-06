@@ -22,6 +22,9 @@ public class Standard extends Deck {
         super.initializeFromSubclass(deck, hands);
     }
 
+    /**
+     * @deprecated as soon as we implement the gui
+     */
     public static String convertToString(int num) {
         String result = "";
         switch (num % 13) {
