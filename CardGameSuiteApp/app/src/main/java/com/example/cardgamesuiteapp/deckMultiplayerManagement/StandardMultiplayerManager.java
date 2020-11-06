@@ -1,6 +1,6 @@
-package deckMultiplayerManagement;
+package com.example.cardgamesuiteapp.deckMultiplayerManagement;
 
-import decks.Standard;
+import com.example.cardgamesuiteapp.decks.Standard;
 
 public class StandardMultiplayerManager extends DeckMultiplayerManager {
 
