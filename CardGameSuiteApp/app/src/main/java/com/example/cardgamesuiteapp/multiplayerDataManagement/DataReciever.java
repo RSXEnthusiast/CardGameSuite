@@ -3,8 +3,8 @@ package com.example.cardgamesuiteapp.multiplayerDataManagement;
 import org.javatuples.Triplet;
 import org.json.JSONObject;
 
-import deckMultiplayerManagement.DeckMultiplayerManager;
-import decks.Standard;
+import com.example.cardgamesuiteapp.deckMultiplayerManagement.DeckMultiplayerManager;
+import com.example.cardgamesuiteapp.decks.Standard;
 
 public class DataReciever {
 	DeckMultiplayerManager dmm;
