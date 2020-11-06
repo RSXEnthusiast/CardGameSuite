@@ -119,7 +119,6 @@ public class Standard extends Deck {
                 result += "s";
                 break;
         }
-        result += ".png";
         return result;
     }
 
