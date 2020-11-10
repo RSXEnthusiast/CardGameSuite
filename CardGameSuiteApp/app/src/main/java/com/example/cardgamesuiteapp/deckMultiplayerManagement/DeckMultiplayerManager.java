@@ -86,82 +86,82 @@ public abstract class DeckMultiplayerManager {
 	public void handleIncomingData(Triplet data) throws Exception {
 		switch ((Operation) data.getValue1()) {
 		case deal:
-			dealRecieved((HashMap<String, Integer>) data.getValue2());
+			dealReceived((HashMap<String, Integer>) data.getValue2());
 			break;
 		case discardByIndex:
-			discardByIndexRecieved((HashMap<String, Integer>) data.getValue2());
+			discardByIndexReceived((HashMap<String, Integer>) data.getValue2());
 			break;
 		case discardByValue:
-			discardByValueRecieved((HashMap<String, Integer>) data.getValue2());
+			discardByValueReceived((HashMap<String, Integer>) data.getValue2());
 			break;
 		case discardFromDeck:
-			discardFromDeckRecieved();
+			discardFromDeckReceived();
 			break;
 		case initialize:
-			initializeRecieved((Deck) data.getValue2());
+			initializeReceived((Deck) data.getValue2());
 			break;
 		case playerDraw:
-			playerDrawRecieved((HashMap<String, Integer>) data.getValue2());
+			playerDrawReceived((HashMap<String, Integer>) data.getValue2());
 			break;
 		case playerDrawIntoIndex:
-			playerDrawIntoIndexRecieved((HashMap<String, Integer>) data.getValue2());
+			playerDrawIntoIndexReceived((HashMap<String, Integer>) data.getValue2());
 			break;
 		case playerDrawFromDiscard:
-			playerDrawFromDiscardRecieved((HashMap<String, Integer>) data.getValue2());
+			playerDrawFromDiscardReceived((HashMap<String, Integer>) data.getValue2());
 			break;
 		case playerDrawIntoIndexFromDiscard:
-			playerDrawIntoIndexFromDiscardRecieved((HashMap<String, Integer>) data.getValue2());
+			playerDrawIntoIndexFromDiscardReceived((HashMap<String, Integer>) data.getValue2());
 			break;
 		case recover:
-			recoverRecieved((Deck) data.getValue2());
+			recoverReceived((Deck) data.getValue2());
 			break;
 		case shuffle:
-			shuffleRecieved((Queue<Integer>) data.getValue2());
+			shuffleReceived((Queue<Integer>) data.getValue2());
 		default:
 			break;
 		}
 	}
 
-	private void playerDrawFromDiscardRecieved(HashMap<String, Integer> data) throws Exception {
+	private void playerDrawFromDiscardReceived(HashMap<String, Integer> data) throws Exception {
 		deck.drawFromDiscard(data.get("playerNum"));
 	}
 
-	private void shuffleRecieved(Queue<Integer> deck) {
+	private void shuffleReceived(Queue<Integer> deck) {
 		this.deck.setDeck(deck);
 	}
 
-	private void recoverRecieved(Deck data) {
+	private void recoverReceived(Deck data) {
 	}
 
-	private void playerDrawIntoIndexFromDiscardRecieved(HashMap<String, Integer> data) throws Exception {
+	private void playerDrawIntoIndexFromDiscardReceived(HashMap<String, Integer> data) throws Exception {
 		deck.drawFromDiscard(data.get("playerNum"), data.get("index"));
 	}
 
-	private void playerDrawIntoIndexRecieved(HashMap<String, Integer> data) throws Exception {
+	private void playerDrawIntoIndexReceived(HashMap<String, Integer> data) throws Exception {
 		deck.draw(data.get("playerNum"), data.get("index"));
 	}
 
-	private void playerDrawRecieved(HashMap<String, Integer> data) throws Exception {
+	private void playerDrawReceived(HashMap<String, Integer> data) throws Exception {
 		deck.draw(data.get("playerNum"));
 	}
 
-	private void initializeRecieved(Deck deck) {
+	private void initializeReceived(Deck deck) {
 		deck.initializeFromPeer(deck);
 	}
 
-	private void discardFromDeckRecieved() {
+	private void discardFromDeckReceived() {
 		deck.discardFromDeck();
 	}
 
-	private void discardByValueRecieved(HashMap<String, Integer> data) throws Exception {
+	private void discardByValueReceived(HashMap<String, Integer> data) throws Exception {
 		deck.discardByValue(data.get("player"), data.get("value"));
 	}
 
-	private void discardByIndexRecieved(HashMap<String, Integer> data) throws Exception {
+	private void discardByIndexReceived(HashMap<String, Integer> data) throws Exception {
 		deck.discardByIndex(data.get("player"), data.get("index"));
 	}
 
-	private void dealRecieved(HashMap<String, Integer> data) throws Exception {
+	private void dealReceived(HashMap<String, Integer> data) throws Exception {
 		deck.deal(data.get("numCards"));
 	}
 }

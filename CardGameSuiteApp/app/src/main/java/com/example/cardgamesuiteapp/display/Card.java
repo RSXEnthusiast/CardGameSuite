@@ -19,28 +19,35 @@ public class Card extends View implements View.OnTouchListener {
     //    String that keeps track of the drawable to be displayed
     private String card = "";
     private Drawable toDraw;
+
     public Card(Context context) {
         super(context);
     }
 
-    public Card(Context context, AttributeSet attrs){
+    public Card(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public void setCard(int card){
+    public void setCard(int card) {
         this.card = Standard.getCardImageFileName(card);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Resources resources = this.getContext().getResources();
-        int resourceId = resources.getIdentifier(this.card, "drawable", this.getContext().getPackageName());
-       setBackgroundResource(resourceId);
+        setBackgroundResource(getImageId());
     }
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         return false;
+    }
+
+    public int getImageId() {
+        return getResources().getIdentifier(this.card, "drawable", this.getContext().getPackageName());
+    }
+
+    public String getCardFileName() {
+        return card;
     }
 }

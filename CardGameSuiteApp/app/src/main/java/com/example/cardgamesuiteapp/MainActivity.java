@@ -2,19 +2,26 @@ package com.example.cardgamesuiteapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.view.Window;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
+import android.widget.Toast;
 
-import com.example.cardgamesuiteapp.display.Card;
+import com.example.cardgamesuiteapp.display.Hand;
+
+import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity {
+    LinkedList<Integer> cards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        Card card = ((Card) findViewById(R.id.cardtodisplay));
-        card.setCard(7);
+        GridView grid = (GridView) findViewById(R.id.gridview);
+        grid.setAdapter(new Hand(this));
+        grid.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(MainActivity.this, ("You tapped on card " + cards.get(position)), Toast.LENGTH_SHORT));
     }
 }
