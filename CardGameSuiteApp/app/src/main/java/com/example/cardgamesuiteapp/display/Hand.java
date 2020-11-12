@@ -1,28 +1,41 @@
 package com.example.cardgamesuiteapp.display;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
-import com.example.cardgamesuiteapp.R;
+import com.example.cardgamesuiteapp.decks.Standard;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class Hand extends BaseAdapter {
     private Context context;
-    private Integer[] cards = {R.drawable.ace_c, R.drawable.ace_d, R.drawable.ace_h, R.drawable.ace_s};
+    private ArrayList<String> cards = new ArrayList<String>();
+    private int marginStart;
+    private int marginEnd;
 
-    public Hand(Context context) {
+    public Hand(Context context, ArrayList<Integer> hand, int marginStart, int marginEnd) {
         this.context = context;
+        for (int card : hand) {
+            cards.add(Standard.getCardImageFileName(card));
+        }
+        this.marginStart = marginStart;
+        this.marginEnd = marginEnd;
+    }
+
+    public void updateCards(ArrayList<Integer> hand) {
+        cards.clear();
+        for (int card : hand) {
+            cards.add(Standard.getCardImageFileName(card));
+        }
     }
 
     @Override
     public int getCount() {
-        return cards.length;
+        return cards.size();
     }
 
     @Override
@@ -40,13 +53,15 @@ public class Hand extends BaseAdapter {
         ImageView grid;
         if (convertView == null) {
             grid = new ImageView(context);
-            grid.setLayoutParams(new ViewGroup.LayoutParams(250, 350));
-            grid.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(250, 350);
+            layoutParams.setMarginStart(marginStart);
+            grid.setLayoutParams(layoutParams);
+            grid.setScaleType(ImageView.ScaleType.CENTER);
             grid.setPadding(1, 2, 1, 2);
         } else {
             grid = (ImageView) convertView;
         }
-        grid.setImageResource(cards[position]);
+        grid.setImageResource(context.getResources().getIdentifier(cards.get(position), "drawable", context.getPackageName()));
         return grid;
     }
 }
