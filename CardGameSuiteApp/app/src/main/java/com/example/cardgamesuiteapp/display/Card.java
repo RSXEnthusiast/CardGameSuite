@@ -1,18 +1,12 @@
 package com.example.cardgamesuiteapp.display;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.decks.Standard;
-
-import java.util.jar.Attributes;
 
 public class Card extends View implements View.OnTouchListener {
 
@@ -38,12 +32,12 @@ public class Card extends View implements View.OnTouchListener {
         return false;
     }
 
-    public void getImageId(String imageName) {
-        imageId = getResources().getIdentifier(imageName, "drawable", this.getContext().getPackageName());
+    public int getImageId(String imageName) {
+        return getResources().getIdentifier(imageName, "drawable", this.getContext().getPackageName());
     }
 
     public void updateImage(int imageNum) {
-        getImageId(Standard.getCardImageFileName(imageNum));
+        imageId = getImageId(Standard.getCardImageFileName(imageNum));
         this.invalidate();
     }
 }

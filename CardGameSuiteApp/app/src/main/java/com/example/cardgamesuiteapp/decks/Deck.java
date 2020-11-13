@@ -37,7 +37,7 @@ public abstract class Deck {
         this.numPlayers = deck.getNumPlayers();
     }
 
-    private ArrayList<Integer>[] getHands() {
+    public ArrayList<Integer>[] getHands() {
         return hands;
     }
 
