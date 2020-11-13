@@ -17,8 +17,7 @@ import java.util.jar.Attributes;
 public class Card extends View implements View.OnTouchListener {
 
     //    String that keeps track of the drawable to be displayed
-    private String card = "";
-    private Drawable toDraw;
+    private int imageId;
 
     public Card(Context context) {
         super(context);
@@ -28,14 +27,10 @@ public class Card extends View implements View.OnTouchListener {
         super(context, attrs);
     }
 
-    public void setCard(int card) {
-        this.card = Standard.getCardImageFileName(card);
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        setBackgroundResource(getImageId());
+        setBackgroundResource(imageId);
     }
 
     @Override
@@ -43,11 +38,12 @@ public class Card extends View implements View.OnTouchListener {
         return false;
     }
 
-    public int getImageId() {
-        return getResources().getIdentifier(this.card, "drawable", this.getContext().getPackageName());
+    public void getImageId(String imageName) {
+        imageId = getResources().getIdentifier(imageName, "drawable", this.getContext().getPackageName());
     }
 
-    public String getCardFileName() {
-        return card;
+    public void updateImage(int imageNum) {
+        getImageId(Standard.getCardImageFileName(imageNum));
+        this.invalidate();
     }
 }
