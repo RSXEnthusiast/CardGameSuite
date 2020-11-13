@@ -2,9 +2,14 @@ package com.example.cardgamesuiteapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActionBar;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import com.example.cardgamesuiteapp.decks.Standard;
 import com.example.cardgamesuiteapp.display.Hand;
 
 import java.util.ArrayList;
@@ -14,10 +19,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int playerNum = 3;
+        int playerNum = 2;
         switch (playerNum) {
             case 2:
                 setContentView(R.layout.two_players);
+                setUp2Players();
                 break;
             case 3:
                 setContentView(R.layout.three_players);
@@ -57,29 +63,30 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 20; i < 24; i++) {
             sixth.add(i);
         }
-        if (playerNum >= 2) {
-            GridView view1 = (GridView) findViewById(R.id.player1);
-            view1.setAdapter(new Hand(this, first));
-            GridView view2 = (GridView) findViewById(R.id.player2);
-            view2.setAdapter(new Hand(this, second));
-        }
-        if (playerNum >= 3) {
-            GridView view3 = (GridView) findViewById(R.id.player3);
-            view3.setAdapter(new Hand(this, third));
-        }
-        if (playerNum >= 4) {
-            GridView view4 = (GridView) findViewById(R.id.player4);
-            view4.setAdapter(new Hand(this, fourth));
-        }
-        if (playerNum >= 5) {
-            GridView view5 = (GridView) findViewById(R.id.player5);
-            view5.setAdapter(new Hand(this, fifth));
-        }
-        if (playerNum >= 6) {
-            GridView view6 = (GridView) findViewById(R.id.player6);
-            view6.setAdapter(new Hand(this, sixth));
-        }
     }
 
-//        grid.setOnItemClickListener((parent, view, position, id) -> Toast.makeText(MainActivity.this, ("You tapped on card " + cards.get(position)), Toast.LENGTH_SHORT));
+    private void setUp2Players() {
+        LinearLayout ll = findViewById(R.id.player1);
+        LinearLayout columnsTop = new LinearLayout(this);
+        columnsTop.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        columnsTop.setOrientation(LinearLayout.HORIZONTAL);
+        columnsTop.setWeightSum(1);
+        LinearLayout columnsBottom = new LinearLayout(this);
+        columnsBottom.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        columnsBottom.setOrientation(LinearLayout.HORIZONTAL);
+        columnsBottom.setWeightSum(1);
+        ll.addView(columnsTop);
+        ll.addView(columnsBottom);
+        ImageView[] cards = new ImageView[4];
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+        for (int i = 0; i < cards.length; i++) {
+            cards[i] = new ImageView(this);
+            cards[i].setImageResource(getResources().getIdentifier(Standard.getCardImageFileName(i), "drawable", this.getPackageName()));
+            cards[i].setLayoutParams(layoutParams);
+        }
+        columnsTop.addView(cards[0]);
+        columnsTop.addView(cards[1]);
+        columnsBottom.addView(cards[2]);
+        columnsBottom.addView(cards[3]);
+    }
 }
