@@ -42,22 +42,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setUp3Players(ArrayList<Integer>[] hands) {
-    }
-
     private void setUp2Players(ArrayList<Integer>[] hands) {
         LinearLayout player1 = findViewById(R.id.player1);
-        LinearLayout columnsTop = new LinearLayout(this);
-        columnsTop.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        columnsTop.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout columnsTopP1 = new LinearLayout(this);
+        columnsTopP1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        columnsTopP1.setOrientation(LinearLayout.HORIZONTAL);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.weight = 1;
-        columnsTop.setLayoutParams(layoutParams);
+        columnsTopP1.setLayoutParams(layoutParams);
         LinearLayout columnsBottom = new LinearLayout(this);
         columnsBottom.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         columnsBottom.setOrientation(LinearLayout.HORIZONTAL);
         columnsBottom.setLayoutParams(layoutParams);
-        player1.addView(columnsTop);
+        player1.addView(columnsTopP1);
         player1.addView(columnsBottom);
         ArrayList<Card> cards = new ArrayList<Card>();
         layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
@@ -66,13 +63,15 @@ public class MainActivity extends AppCompatActivity {
             cards.get(i).setLayoutParams(layoutParams);
             cards.get(i).updateImage(i);
         }
-        columnsTop.addView(cards.get(0));
-        columnsTop.addView(cards.get(1));
+        columnsTopP1.addView(cards.get(0));
+        columnsTopP1.addView(cards.get(1));
         columnsBottom.addView(cards.get(2));
         columnsBottom.addView(cards.get(3));
         for (int i = 0; i < cards.size(); i++) {
             cards.get(i).updateImage(i + 4);
         }
+    }
 
+    private void setUp3Players(ArrayList<Integer>[] hands) {
     }
 }
