@@ -1,6 +1,7 @@
 package com.example.cardgamesuiteapp.display;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,55 +13,41 @@ import com.example.cardgamesuiteapp.decks.Standard;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class Hand extends BaseAdapter {
+public class Hand extends ViewGroup {
+    public Card card1;
+    public Card card2;
+    public Card card3;
+    public Card card4;
 
-    private Context context;
-    private ArrayList<String> cards = new ArrayList<String>();
-
-    public Hand(Context context, ArrayList<Integer> hand) {
-        this.context = context;
-        for (int card : hand) {
-            cards.add(Standard.getCardImageFileName(card));
-        }
+    public Hand(Context context) {
+        super(context);
     }
 
-    public void updateCards(ArrayList<Integer> hand) {
-        cards.clear();
-        for (int card : hand) {
-            cards.add(Standard.getCardImageFileName(card));
-        }
+    public Hand(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public Hand(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    public Hand(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    public void init() {
+        card1 = new Card(this.getContext());
+        card2 = new Card(this.getContext());
+        card3 = new Card(this.getContext());
+        card4 = new Card(this.getContext());
+        card1.updateImage(0);
+        card2.updateImage(1);
+        card3.updateImage(2);
+        card4.updateImage(3);
     }
 
     @Override
-    public int getCount() {
-        return cards.size();
-    }
+    protected void onLayout(boolean b, int i, int i1, int i2, int i3) {
 
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView grid;
-        if (convertView == null) {
-            grid = new ImageView(context);
-            int width = 35 * 5;
-            int height = 35 * 7;
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, height);
-            grid.setLayoutParams(layoutParams);
-            grid.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            grid.setPadding(1, 2, 1, 2);
-        } else {
-            grid = (ImageView) convertView;
-        }
-        grid.setImageResource(context.getResources().getIdentifier(cards.get(position), "drawable", context.getPackageName()));
-        return grid;
     }
 }

@@ -2,6 +2,7 @@ package com.example.cardgamesuiteapp.display;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,6 +31,10 @@ public class Card extends View implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         return false;
+    }
+
+    public int getImageId() {
+        return imageId;
     }
 
     public int getImageId(String imageName) {
