@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.99"/>
+        app:layout_constraintVertical_bias="0.99" />
 
     <com.example.cardgamesuiteapp.display.Hand
         android:id="@+id/player2"
@@ -24,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.01"/>
+        app:layout_constraintVertical_bias="0.01" />
 
     <com.example.cardgamesuiteapp.display.Deck
         android:id="@+id/deck"

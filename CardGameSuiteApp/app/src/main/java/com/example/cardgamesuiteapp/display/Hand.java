@@ -1,24 +1,15 @@
 package com.example.cardgamesuiteapp.display;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-
-import com.example.cardgamesuiteapp.decks.Standard;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
+import android.widget.TableLayout;
 
 public class Hand extends ViewGroup {
-    public Card card1;
-    public Card card2;
-    public Card card3;
-    public Card card4;
-
     public Hand(Context context) {
         super(context);
     }
@@ -27,27 +18,39 @@ public class Hand extends ViewGroup {
         super(context, attrs);
     }
 
-    public Hand(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
-    public Hand(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
-    public void init() {
-        card1 = new Card(this.getContext());
-        card2 = new Card(this.getContext());
-        card3 = new Card(this.getContext());
-        card4 = new Card(this.getContext());
-        card1.updateImage(0);
-        card2.updateImage(1);
-        card3.updateImage(2);
-        card4.updateImage(3);
+    @Override
+    public boolean shouldDelayChildPressedState() {
+        return false;
     }
 
     @Override
-    protected void onLayout(boolean b, int i, int i1, int i2, int i3) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        //idek what the fuck is supposed to go in this method
+        int count = getChildCount();
+    }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        //None of this shit works
+        final int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            final View child = getChildAt(i);
+            if (child.getVisibility() != GONE) {
+                final LayoutParams lp = (TableLayout.LayoutParams) child.getLayoutParams();
+                Gravity.apply(((TableLayout.LayoutParams) lp).gravity, child.getMeasuredWidth(), child.getMeasuredHeight(), new Rect(), new Rect());
+                child.layout(5, 5, 5, 5);
+            }
+        }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        //Not even sure if this shit works
+        super.onDraw(canvas);
+        LayoutParams lp = new TableLayout.LayoutParams(75, 105, 1);
+        this.addView(new Card(getContext()), lp);
+        this.addView(new Card(getContext()), lp);
+        this.addView(new Card(getContext()), lp);
+        this.addView(new Card(getContext()), lp);
     }
 }

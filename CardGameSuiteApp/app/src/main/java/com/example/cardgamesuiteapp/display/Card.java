@@ -25,7 +25,7 @@ public class Card extends View implements View.OnTouchListener {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        setBackgroundResource(imageId);
+        setBackgroundResource(getImageId("ace_c"));
     }
 
     @Override
