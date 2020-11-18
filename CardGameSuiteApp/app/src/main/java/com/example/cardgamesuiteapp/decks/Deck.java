@@ -1,6 +1,7 @@
 package com.example.cardgamesuiteapp.decks;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
@@ -8,7 +9,7 @@ import java.util.Stack;
 import com.example.cardgamesuiteapp.deckMultiplayerManagement.DeckMultiplayerManager;
 
 public abstract class Deck {
-    private Queue<Integer> deck;
+    private Queue<Integer> deck = new LinkedList<Integer>();
     private Stack<Integer> discard = new Stack<Integer>();
     private boolean shuffleOnEmptyDeck;
     private ArrayList<Integer>[] hands;

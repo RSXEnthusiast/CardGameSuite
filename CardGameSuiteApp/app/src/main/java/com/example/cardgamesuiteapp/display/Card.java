@@ -2,6 +2,7 @@ package com.example.cardgamesuiteapp.display;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,6 +13,7 @@ public class Card extends View implements View.OnTouchListener {
 
     //    String that keeps track of the drawable to be displayed
     private int imageId;
+    private int cardNum;
 
     public Card(Context context) {
         super(context);
@@ -32,12 +34,21 @@ public class Card extends View implements View.OnTouchListener {
         return false;
     }
 
+    public int getImageId() {
+        return imageId;
+    }
+
     public int getImageId(String imageName) {
         return getResources().getIdentifier(imageName, "drawable", this.getContext().getPackageName());
     }
 
     public void updateImage(int imageNum) {
+        cardNum = imageNum;
         imageId = getImageId(Standard.getCardImageFileName(imageNum));
         this.invalidate();
+    }
+
+    public int getCardNum() {
+        return cardNum;
     }
 }
