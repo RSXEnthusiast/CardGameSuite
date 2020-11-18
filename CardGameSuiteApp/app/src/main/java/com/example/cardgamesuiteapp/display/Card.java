@@ -13,6 +13,7 @@ public class Card extends View implements View.OnTouchListener {
 
     //    String that keeps track of the drawable to be displayed
     private int imageId;
+    private int cardNum;
 
     public Card(Context context) {
         super(context);
@@ -25,7 +26,7 @@ public class Card extends View implements View.OnTouchListener {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        setBackgroundResource(getImageId("ace_c"));
+        setBackgroundResource(imageId);
     }
 
     @Override
@@ -42,7 +43,12 @@ public class Card extends View implements View.OnTouchListener {
     }
 
     public void updateImage(int imageNum) {
+        cardNum = imageNum;
         imageId = getImageId(Standard.getCardImageFileName(imageNum));
         this.invalidate();
+    }
+
+    public int getCardNum() {
+        return cardNum;
     }
 }

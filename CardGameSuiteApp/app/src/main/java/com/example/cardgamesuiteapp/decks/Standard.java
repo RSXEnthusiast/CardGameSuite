@@ -13,13 +13,13 @@ public class Standard extends Deck {
         for (int i = 1; i <= 13 * 4; i++) {
             deck.add(i);
         }
-        this.shuffle();
         ArrayList<Integer>[] hands;
         hands = new ArrayList[numPlayers];
         for (int i = 0; i < hands.length; i++) {
             hands[i] = new ArrayList<Integer>();
         }
         super.initializeFromSubclass(deck, hands);
+        this.shuffle();
     }
 
     /**
@@ -62,6 +62,9 @@ public class Standard extends Deck {
     }
 
     public static String getCardImageFileName(int num) {
+        if (num == -1){
+            return "card_back";
+        }
         String result = "";
         switch (num % 13) {
             case 1:
