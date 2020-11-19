@@ -3,7 +3,6 @@ package com.example.cardgamesuiteapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
