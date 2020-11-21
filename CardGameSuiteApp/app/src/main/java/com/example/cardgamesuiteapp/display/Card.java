@@ -46,13 +46,17 @@ public class Card extends View implements View.OnTouchListener {
 
     public void updateImage(int imageNum) {
         cardNum = imageNum;
-        imageId = getImageId(Standard.getCardImageFileName(imageNum));
+        if (isFaceUp) {
+            imageId = getImageId(Standard.getCardImageFileName(imageNum));
+        }
         this.setOnTouchListener(this);
         this.invalidate();
     }
 
-    //changes the cards drawable resource to the back of a card
-    ///or vice versa if the card is already flipped
+    /**
+     * changes the cards drawable resource to the back of a card
+     * or vice versa if the card is already flipped
+     */
     public void flipCard() {
         if (isFaceUp) {
             imageId = getImageId(Standard.getCardImageFileName(-1));
@@ -68,7 +72,7 @@ public class Card extends View implements View.OnTouchListener {
         return cardNum;
     }
 
-    public void setCardNum(int cardNum){
+    public void setCardNum(int cardNum) {
         this.cardNum = cardNum;
     }
 }

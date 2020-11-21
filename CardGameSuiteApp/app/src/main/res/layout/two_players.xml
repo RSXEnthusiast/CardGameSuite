@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".Fives">
 
+    <Button
+        android:id="@+id/confirmMemorizedButton"
+        android:layout_width="116dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text="Memorized"
+        android:textSize="11dp"
+        app:layout_constraintStart_toEndOf="@id/player1"
+        app:layout_constraintTop_toBottomOf="@id/instruction" />
+
     <com.example.cardgamesuiteapp.display.Hand
         android:id="@+id/player1"
         android:layout_width="150dp"
@@ -26,7 +38,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.01" />
 
-    <com.example.cardgamesuiteapp.display.Deck
+    <com.example.cardgamesuiteapp.display.Card
         android:id="@+id/deck"
         android:layout_width="75dp"
         android:layout_height="105dp"
@@ -48,14 +60,14 @@
 
     <TextView
         android:id="@+id/instruction"
-        android:layout_width="300dp"
+        android:layout_width="400dp"
         android:layout_height="30dp"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@id/player1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.585"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.952" />
+        app:layout_constraintVertical_bias="0.99" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

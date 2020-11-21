@@ -45,8 +45,8 @@ public class Hand extends ViewGroup {
         }
     }
 
-    public void removeAllCards(){
-        for (Card card : cards){
+    public void removeAllCards() {
+        for (Card card : cards) {
             this.removeView(card);
             cards.remove(card);
         }
@@ -118,7 +118,15 @@ public class Hand extends ViewGroup {
         cards.get(i).updateImage(card);
     }
 
-    public void flipCard(int i){cards.get(i).flipCard();}
+    public void flipCardByIndex(int i) {
+        cards.get(i).flipCard();
+    }
+
+    public void flipAllCards() {
+        for (Card card : cards) {
+            card.flipCard();
+        }
+    }
 
     public void removeCard(int card) {
         for (int i = 0; i < cards.size(); i++) {
@@ -134,5 +142,13 @@ public class Hand extends ViewGroup {
         cardView.updateImage(card);
         this.addView(cardView);
         cards.add(cardView);
+    }
+
+    public void flipCardByNum(int cardNum) {
+        for (Card card : cards) {
+            if (card.getCardNum() == cardNum) {
+                card.flipCard();
+            }
+        }
     }
 }

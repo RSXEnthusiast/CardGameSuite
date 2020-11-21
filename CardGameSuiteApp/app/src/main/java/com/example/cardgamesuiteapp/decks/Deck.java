@@ -14,7 +14,7 @@ public abstract class Deck {
     private boolean shuffleOnEmptyDeck;
     private ArrayList<Integer>[] hands;
     int numPlayers;
-    int myPlayerNum;
+    int myPlayerNum = 0;
     int playersTurn;
     int curPlayersTurn;
 
@@ -195,5 +195,14 @@ public abstract class Deck {
 
     public int getCurPlayersTurn() {
         return curPlayersTurn;
+    }
+
+    public int getCardLocation(int playerNum, int cardNum) {
+        for (int i = 0; i < getHand(playerNum).size(); i++) {
+            if (getHand(playerNum).get(i) == cardNum) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
