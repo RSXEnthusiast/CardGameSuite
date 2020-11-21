@@ -2,11 +2,11 @@ package com.example.cardgamesuiteapp.display;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.cardgamesuiteapp.Fives;
 import com.example.cardgamesuiteapp.decks.Standard;
 
 public class Card extends View implements View.OnTouchListener {
@@ -14,8 +14,7 @@ public class Card extends View implements View.OnTouchListener {
     //    String that keeps track of the drawable to be displayed
     private int imageId;
     private int cardNum;
-    private boolean isFlipped = false;
-
+    private boolean isFaceUp = true;
 
     public Card(Context context) {
         super(context);
@@ -33,7 +32,7 @@ public class Card extends View implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        this.flipCard();
+        Fives.cardTouched(imageId, cardNum);
         return false;
     }
 
@@ -54,18 +53,22 @@ public class Card extends View implements View.OnTouchListener {
 
     //changes the cards drawable resource to the back of a card
     ///or vice versa if the card is already flipped
-    public void flipCard(){
-        if(!isFlipped){
+    public void flipCard() {
+        if (isFaceUp) {
             imageId = getImageId(Standard.getCardImageFileName(-1));
-            this.isFlipped = true;
-        }else{
+            this.isFaceUp = false;
+        } else {
             imageId = getImageId(Standard.getCardImageFileName(cardNum));
-            this.isFlipped = false;
+            this.isFaceUp = true;
         }
         this.invalidate();
     }
 
     public int getCardNum() {
         return cardNum;
+    }
+
+    public void setCardNum(int cardNum){
+        this.cardNum = cardNum;
     }
 }

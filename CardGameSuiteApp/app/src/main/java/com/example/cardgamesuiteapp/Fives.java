@@ -3,12 +3,12 @@ package com.example.cardgamesuiteapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.cardgamesuiteapp.decks.Standard;
 import com.example.cardgamesuiteapp.display.Card;
+import com.example.cardgamesuiteapp.display.Deck;
 import com.example.cardgamesuiteapp.display.Hand;
 
 import java.util.ArrayList;
@@ -20,9 +20,11 @@ public class Fives extends AppCompatActivity {
     static Standard deck;
     static HashMap<Integer, boolean[]> visibleHands = new HashMap<Integer, boolean[]>();
     static int[] totalScores;
-    static Hand[] players;
-    static Card discard;
-    TextView instruction;
+    static Hand[] viewPlayers;
+    static Card viewDiscard;
+    static Deck viewDeck;
+    TextView viewInstructions;
+    static fivesStage stage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +32,78 @@ public class Fives extends AppCompatActivity {
         setContentView(R.layout.two_players);
         totalScores = new int[numPlayers];
         deck = new Standard(true, numPlayers);
-        players = new Hand[numPlayers];
-        players[0] = findViewById(R.id.player1);
-        players[1] = findViewById(R.id.player2);
-        discard = findViewById(R.id.discard);
-        instruction = findViewById(R.id.instruction);
-        Card testCard = findViewById(R.id.testCard);
-        testCard.updateImage(4);
+        viewPlayers = new Hand[numPlayers];
+        viewPlayers[0] = findViewById(R.id.player1);
+        viewPlayers[1] = findViewById(R.id.player2);
+        viewDiscard = findViewById(R.id.discard);
+        viewDeck = findViewById(R.id.deck);
+        viewInstructions = findViewById(R.id.instruction);
         newRound();
-//        players[0].flipCard(2);
+    }
+
+    public static void cardTouched(int imageId, int cardNum) {
+        if (!deck.isMyTurn()) {
+            return;//Not my turn
+        }
+        switch (stage) {
+            case draw:
+                stageDraw(imageId, cardNum);
+                break;
+            case drewFromDraw:
+                stageDrewFromDraw(imageId, cardNum);
+                break;
+            case discardedFromDraw:
+                stageDiscardFromDraw(imageId, cardNum);
+                break;
+            case drewFromDiscard:
+                stageDrewFromDiscard(imageId, cardNum);
+                break;
+        }
+    }
+
+    private static void stageDraw(int imageId, int cardNum) {
+        if (cardNum == deck.peekTopDraw()) {
+            stage = fivesStage.drewFromDraw;
+            //Logic for drawn from draw pile
+        } else if (cardNum == deck.peekTopDiscard()) {
+            stage = fivesStage.drewFromDiscard;
+            //Logic for drawn from discard pile
+        }
+    }
+
+    private static void stageDrewFromDraw(int imageId, int cardNum) {
+        int topDiscard = deck.peekTopDiscard();
+        if (topDiscard == cardNum) {
+            stage = fivesStage.discardedFromDraw;
+            //Logic for discarded from draw
+        } else if (isValidTapOnCardInHand(cardNum)) {
+            stage = fivesStage.draw;//reset stage, turn over.
+            //Logic for swapped with hand
+        }
+    }
+
+    private static void stageDiscardFromDraw(int imageId, int cardNum) {
+        if (isValidTapOnCardInHand(cardNum)) {
+            stage = fivesStage.draw; //reset stage, turn over.
+            //logic for flipping over card in hand.
+        }
+    }
+
+    private static void stageDrewFromDiscard(int imageId, int cardNum) {
+        if (isValidTapOnCardInHand(cardNum)) {
+            stage = fivesStage.draw; //reset stage, turn over.
+            //logic for drawn from discard
+        }
+    }
+
+    private static boolean isValidTapOnCardInHand(int cardNum) {
+        ArrayList<Integer> hand = deck.getHand(deck.getMyPlayerNum());
+        for (int i = 0; i < hand.size(); i++) {
+            if (hand.get(i) == cardNum && !visibleHands.get(deck.getMyPlayerNum())[i]) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void newRound() {
@@ -50,16 +115,18 @@ public class Fives extends AppCompatActivity {
         //Flipping up discard card
         deck.discardFromDeck();
         for (int i = 0; i < numPlayers + numAI; i++) {
-            visibleHands.put(i,new boolean[4]);
+            visibleHands.put(i, new boolean[4]);
         }
         visibleHands.get(0)[2] = true;
         visibleHands.get(0)[3] = true;
+        stage = fivesStage.draw;
         updateEntireScreen();
     }
 
     private void updateEntireScreen() {
-        discard.updateImage(deck.peekTopDiscard());
-        for (int i = 0; i < players.length; i++) {
+        viewDiscard.updateImage(deck.peekTopDiscard());
+        viewDeck.updateImage(deck.peekTopDraw());
+        for (int i = 0; i < viewPlayers.length; i++) {
             ArrayList<Integer> actualDisplay = new ArrayList<Integer>();
             ArrayList<Integer> hand = deck.getHand(i);
             for (int j = 0; j < hand.size(); j++) {
@@ -69,9 +136,26 @@ public class Fives extends AppCompatActivity {
                     actualDisplay.add(-1);
                 }
             }
-            players[i].initHand(actualDisplay);
+            viewPlayers[i].initHand(actualDisplay);
         }
-        instruction.setText("Instructions");
+        viewInstructions.setText(getCurInstruction());
+    }
+
+    private String getCurInstruction() {
+        if (deck.isMyTurn()) {
+            switch (stage) {
+                case draw:
+                    return "Draw a card";
+                case drewFromDraw:
+                    return "Discard the new card, or swap it with a face down card";
+                case discardedFromDraw:
+                    return "Select a face down card to flip over";
+                case drewFromDiscard:
+                    return "Select a face down card to swap the new card with";
+            }
+        }
+        return "Player " + deck.getCurPlayersTurn() + "'s Turn";
+
     }
 
     private static void playGame(Standard deck, int numHumans, int numAI) throws Exception {
@@ -287,5 +371,9 @@ public class Fives extends AppCompatActivity {
     private static int getAILocationSelection(String selectionString, ArrayList<Integer> hand, boolean[] visibleHand) {
         // TODO
         return 0;
+    }
+
+    private enum fivesStage {
+        draw, drewFromDraw, discardedFromDraw, drewFromDiscard
     }
 }
