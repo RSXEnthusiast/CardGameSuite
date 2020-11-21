@@ -14,6 +14,8 @@ public class Card extends View implements View.OnTouchListener {
     //    String that keeps track of the drawable to be displayed
     private int imageId;
     private int cardNum;
+    private boolean isFlipped = false;
+
 
     public Card(Context context) {
         super(context);
@@ -31,6 +33,7 @@ public class Card extends View implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
+        this.flipCard();
         return false;
     }
 
@@ -45,6 +48,20 @@ public class Card extends View implements View.OnTouchListener {
     public void updateImage(int imageNum) {
         cardNum = imageNum;
         imageId = getImageId(Standard.getCardImageFileName(imageNum));
+        this.setOnTouchListener(this);
+        this.invalidate();
+    }
+
+    //changes the cards drawable resource to the back of a card
+    ///or vice versa if the card is already flipped
+    public void flipCard(){
+        if(!isFlipped){
+            imageId = getImageId(Standard.getCardImageFileName(-1));
+            this.isFlipped = true;
+        }else{
+            imageId = getImageId(Standard.getCardImageFileName(cardNum));
+            this.isFlipped = false;
+        }
         this.invalidate();
     }
 

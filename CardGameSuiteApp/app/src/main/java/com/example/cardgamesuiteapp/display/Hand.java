@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -116,6 +117,8 @@ public class Hand extends ViewGroup {
     public void updateCard(int i, int card) {
         cards.get(i).updateImage(card);
     }
+
+    public void flipCard(int i){cards.get(i).flipCard();}
 
     public void removeCard(int card) {
         for (int i = 0; i < cards.size(); i++) {

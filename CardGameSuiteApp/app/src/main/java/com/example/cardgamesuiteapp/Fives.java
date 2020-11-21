@@ -3,6 +3,7 @@ package com.example.cardgamesuiteapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,7 +35,10 @@ public class Fives extends AppCompatActivity {
         players[1] = findViewById(R.id.player2);
         discard = findViewById(R.id.discard);
         instruction = findViewById(R.id.instruction);
+        Card testCard = findViewById(R.id.testCard);
+        testCard.updateImage(4);
         newRound();
+//        players[0].flipCard(2);
     }
 
     public void newRound() {

@@ -57,4 +57,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.98" />
 
+    <view
+        android:id="@+id/testCard"
+        class="com.example.cardgamesuiteapp.display.Card"
+        android:layout_width="90dp"
+        android:layout_height="171dp"
+        tools:layout_editor_absoluteX="41dp"
+        tools:layout_editor_absoluteY="237dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
