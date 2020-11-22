@@ -62,9 +62,6 @@ public class Standard extends Deck {
     }
 
     public static String getCardImageFileName(int num) {
-        if (num == -1){
-            return "card_back";
-        }
         String result = "";
         switch (num % 13) {
             case 1:

@@ -199,6 +199,7 @@ public abstract class Deck {
 
     public int getCardLocation(int playerNum, int cardNum) {
         for (int i = 0; i < getHand(playerNum).size(); i++) {
+            System.out.println(getHand(playerNum).get(i));
             if (getHand(playerNum).get(i) == cardNum) {
                 return i;
             }

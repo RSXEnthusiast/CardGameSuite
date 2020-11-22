@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.cardgamesuiteapp.Fives;
+import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.decks.Standard;
 
 public class Card extends View implements View.OnTouchListener {
@@ -59,7 +60,7 @@ public class Card extends View implements View.OnTouchListener {
      */
     public void flipCard() {
         if (isFaceUp) {
-            imageId = getImageId(Standard.getCardImageFileName(-1));
+            imageId = R.drawable.card_back;
             this.isFaceUp = false;
         } else {
             imageId = getImageId(Standard.getCardImageFileName(cardNum));

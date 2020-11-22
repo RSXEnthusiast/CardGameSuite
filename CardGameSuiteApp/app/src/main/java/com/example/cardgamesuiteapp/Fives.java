@@ -25,8 +25,8 @@ public class Fives extends AppCompatActivity {
     static Card viewDiscard;
     static Card viewDeck;
     static TextView viewInstruction;
-    static fivesStage stage;
     static Button viewMemorized;
+    static fivesStage stage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class Fives extends AppCompatActivity {
         viewMemorized.setVisibility(View.INVISIBLE);
     }
 
-    private void updateViewInstruction() {
+    private static void updateViewInstruction() {
         viewInstruction.setText(getCurInstruction());
     }
 
@@ -91,15 +91,15 @@ public class Fives extends AppCompatActivity {
     }
 
     private static void stageDrewFromDraw(int imageId, int cardNum) {
-        int topDiscard = deck.peekTopDiscard();
-        if (topDiscard == cardNum) {
+        if (deck.peekTopDiscard() == cardNum) {
             stage = fivesStage.discardedFromDraw;
             //Logic for discarded from draw
-            viewInstruction.setText(getCurInstruction());
             deck.discardFromDeck();
+            System.out.println(deck.peekTopDraw());
             viewDiscard.updateImage(deck.peekTopDiscard());
             viewDeck.flipCard();
             viewDeck.updateImage(deck.peekTopDraw());
+            viewInstruction.setText(getCurInstruction());
         } else if (isValidTapOnCardInHand(cardNum)) {
             stage = fivesStage.draw;//reset stage, turn over.
             //Logic for swapped with hand
@@ -108,7 +108,7 @@ public class Fives extends AppCompatActivity {
             viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(cardLocation);
             try {
                 deck.discardByValue(deck.getMyPlayerNum(), cardNum);
-                deck.draw(deck.getCardLocation(deck.getMyPlayerNum(), cardNum));
+                deck.draw(deck.getMyPlayerNum(),cardLocation);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -124,6 +124,7 @@ public class Fives extends AppCompatActivity {
             //logic for flipping over card in hand.
             viewPlayers[deck.getMyPlayerNum()].flipCardByNum(cardNum);
             visibleHands.get(deck.getMyPlayerNum())[deck.getCardLocation(deck.getMyPlayerNum(), cardNum)] = true;
+            updateViewInstruction();
         }
     }
 
@@ -131,8 +132,9 @@ public class Fives extends AppCompatActivity {
         if (isValidTapOnCardInHand(cardNum)) {
             stage = fivesStage.draw; //reset stage, turn over.
             //logic for drawn from discard
-            stage = fivesStage.draw; //reset stage, turn over.
-
+            viewPlayers[deck.getMyPlayerNum()].flipCardByNum(cardNum);
+            visibleHands.get(deck.getMyPlayerNum())[deck.getCardLocation(deck.getMyPlayerNum(), cardNum)] = true;
+            updateViewInstruction();
         }
     }
 
@@ -192,109 +194,6 @@ public class Fives extends AppCompatActivity {
         }
         return "Player " + deck.getCurPlayersTurn() + "'s Turn";
 
-    }
-
-    private static void playGame(Standard deck, int numHumans, int numAI) throws Exception {
-        // Player turn 1
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < numHumans; j++) {
-                System.out.println();
-                visibleHands.put(j, turn(j, deck, visibleHands.get(j), false));
-            }
-            for (int j = numHumans; j < numAI; j++) {
-                System.out.println();
-                visibleHands.put(j, turn(j, deck, visibleHands.get(j), true));
-            }
-        }
-    }
-
-    private static boolean[] turn(int playerNum, Standard deck, boolean[] visibleHand, boolean isAI)
-            throws Exception {
-        int selectionInt = 0;
-        if (isAI) {
-            selectionInt = getAIDrawSelection(playerNum, visibleHand, deck.getHand(playerNum));
-            if (selectionInt == 1) {
-                System.out.println("AI decides to draw.");
-            } else {
-                System.out.println(
-                        "AI picks up a " + Standard.convertToString(deck.peekTopDiscard()) + " from the discard.");
-            }
-        } else {
-            System.out.println("Player " + (playerNum + 1) + "'s turn! These are your current cards:");
-            System.out.print("Would you like to draw from the (1) draw pile or (2) grab "
-                    + Standard.convertToString(deck.peekTopDiscard()) + " from the discard?");
-        }
-        int pickup = 0;
-        boolean drawFromDrawPile = false;
-        switch (selectionInt) {
-            case 1:
-                pickup = deck.peekTopDraw();
-                drawFromDrawPile = true;
-                break;
-            case 2:
-                pickup = deck.peekTopDiscard();
-                drawFromDrawPile = false;
-                break;
-        }
-        String keepDraw = "Y";
-        if (drawFromDrawPile) {
-            if (isAI) {
-                keepDraw = getAIKeepSelection(pickup, deck.getHand(playerNum), visibleHand);
-                System.out.print("AI decides to ");
-                if (keepDraw.equals("Y")) {
-                    System.out.print("keep");
-                } else {
-                    System.out.print("discard");
-                }
-                System.out.println(" the card.");
-            } else {
-                System.out.println(
-                        "You picked up a " + Standard.convertToString(pickup) + ", would you like to keep it?");
-            }
-        }
-        if (isAI) {
-            selectionInt = getAILocationSelection(keepDraw, deck.getHand(playerNum), visibleHand);
-        } else {
-            switch (keepDraw) {
-                case "Y":
-                    System.out.println("Where would you like to put it?");
-                    break;
-                case "N":
-                    System.out.println("Which card would you like to flip up?");
-                    break;
-            }
-            int numHidden = 0;
-            for (boolean isVis : visibleHand) {
-                if (!isVis) {
-                    numHidden++;
-                }
-            }
-            for (int i = 0; i < selectionInt; i++) {
-                if (visibleHand[i]) {
-                    selectionInt++;
-                }
-            }
-        }
-        switch (keepDraw) {
-            case "Y":
-                if (drawFromDrawPile) {
-                    deck.draw(playerNum, selectionInt - 1);
-                } else {
-                    deck.drawFromDiscard(playerNum, selectionInt - 1);
-                }
-                deck.discardByIndex(playerNum, selectionInt);
-                System.out.println("You swapped a " + Standard.convertToString(pickup) + " for a "
-                        + Standard.convertToString(deck.peekTopDiscard()) + ".");
-                break;
-            case "N":
-                deck.discardFromDeck();
-                System.out.println("You flipped up a "
-                        + Standard.convertToString(deck.getHand(playerNum).get(selectionInt - 1)) + ".");
-                break;
-        }
-        visibleHand[selectionInt - 1] = true;
-        System.out.println("This is your hand after your turn:");
-        return visibleHand;
     }
 
     public static int[] scoreGame(Standard deck) {
@@ -362,36 +261,6 @@ public class Fives extends AppCompatActivity {
         }
         System.out.println("Player " + (winnerIndex + 1) + " wins!");
         return false;
-    }
-
-    private void setUp2Players(ArrayList<Integer>[] hands) {
-        LinearLayout player1 = findViewById(R.id.player1);
-        LinearLayout columnsTopP1 = new LinearLayout(this);
-        columnsTopP1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        columnsTopP1.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.weight = 1;
-        columnsTopP1.setLayoutParams(layoutParams);
-        LinearLayout columnsBottom = new LinearLayout(this);
-        columnsBottom.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        columnsBottom.setOrientation(LinearLayout.HORIZONTAL);
-        columnsBottom.setLayoutParams(layoutParams);
-        player1.addView(columnsTopP1);
-        player1.addView(columnsBottom);
-        ArrayList<Card> cards = new ArrayList<Card>();
-        layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
-        for (int i = 0; i < hands[0].size(); i++) {
-            cards.add(new Card(this));
-            cards.get(i).setLayoutParams(layoutParams);
-            cards.get(i).updateImage(i);
-        }
-        columnsTopP1.addView(cards.get(0));
-        columnsTopP1.addView(cards.get(1));
-        columnsBottom.addView(cards.get(2));
-        columnsBottom.addView(cards.get(3));
-        for (int i = 0; i < cards.size(); i++) {
-            cards.get(i).updateImage(i + 4);
-        }
     }
 
     private static int getAIDrawSelection(int playerNum, boolean[] visibleHand, ArrayList<Integer> arrayList) {
