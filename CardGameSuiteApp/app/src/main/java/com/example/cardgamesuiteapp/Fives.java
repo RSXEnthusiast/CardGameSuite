@@ -44,6 +44,9 @@ public class Fives extends AppCompatActivity {
         newRound();
     }
 
+    /**
+     * When confirmMemorizedButton is tapped, this method is called.
+     */
     private void cardsMemorized() {
         stage = fivesStage.draw;
         updateViewInstruction();
@@ -52,10 +55,18 @@ public class Fives extends AppCompatActivity {
         viewMemorized.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Updates view instruction based upon current stage
+     */
     private static void updateViewInstruction() {
         viewInstruction.setText(getCurInstruction());
     }
 
+    /**
+     * Walks through the stages of a players turn and switches the value of the enum and calls the relevant game method during each phase
+     *
+     * @param cardNum the value of the card that was tapped on
+     */
     public static void cardTouched(int cardNum) {
         if (!deck.isMyTurn()) {
             return;//Not your turn
@@ -76,19 +87,27 @@ public class Fives extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method is called when a card is touched and the current stage is draw
+     *
+     * @param cardNum the value of the card that was tapped on
+     */
     private static void stageDraw(int cardNum) {
         if (cardNum == deck.peekTopDraw()) {
             stage = fivesStage.drewFromDraw;
-            //Logic for drawn from draw pile
             viewDeck.flipCard();
             viewInstruction.setText(getCurInstruction());
         } else if (cardNum == deck.peekTopDiscard()) {
             stage = fivesStage.drewFromDiscard;
-            //Logic for drawn from discard pile
             viewInstruction.setText(getCurInstruction());
         }
     }
 
+    /**
+     * This method is called when a card is touched and the current stage is drewFromDraw
+     *
+     * @param cardNum the value of the card that was tapped on
+     */
     private static void stageDrewFromDraw(int cardNum) {
         if (deck.peekTopDiscard() == cardNum) {
             stage = fivesStage.discardedFromDraw;
@@ -117,6 +136,11 @@ public class Fives extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method is called when a card is touched and the current stage is discardedFromDraw
+     *
+     * @param cardNum the value of the card that was tapped on
+     */
     private static void stageDiscardFromDraw(int cardNum) {
         if (isValidTapOnCardInHand(cardNum)) {
             stage = fivesStage.draw; //reset stage, turn over.
@@ -127,6 +151,11 @@ public class Fives extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method is called when a card is touched and the current stage is drewFromDiscard
+     *
+     * @param cardNum the value of the card that was tapped on
+     */
     private static void stageDrewFromDiscard(int cardNum) {
         if (isValidTapOnCardInHand(cardNum)) {
             stage = fivesStage.draw; //reset stage, turn over.
@@ -145,6 +174,10 @@ public class Fives extends AppCompatActivity {
         }
     }
 
+    /**
+     * @param cardNum the value of the card that was tapped on
+     * @return true if the card is in the hand and is face down
+     */
     private static boolean isValidTapOnCardInHand(int cardNum) {
         ArrayList<Integer> hand = deck.getHand(deck.getMyPlayerNum());
         for (int i = 0; i < hand.size(); i++) {
@@ -155,6 +188,9 @@ public class Fives extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Called every time that there is a new round, to reset the table
+     */
     public void newRound() {
         try {
             deck.deal(4);
@@ -174,6 +210,9 @@ public class Fives extends AppCompatActivity {
         updateEntireScreen();
     }
 
+    /**
+     * This method updates every single dynamic item on the screen.
+     */
     private static void updateEntireScreen() {
         viewDiscard.updateImage(deck.peekTopDiscard());
         viewDeck.updateImage(deck.peekTopDraw());
@@ -187,6 +226,9 @@ public class Fives extends AppCompatActivity {
         viewInstruction.setText(getCurInstruction());
     }
 
+    /**
+     * @return the instruction text based on the current stage, or which player's turn it is
+     */
     private static String getCurInstruction() {
         if (deck.isMyTurn()) {
             switch (stage) {
@@ -203,9 +245,14 @@ public class Fives extends AppCompatActivity {
             }
         }
         return "Player " + deck.getCurPlayersTurn() + "'s Turn";
-
     }
 
+    /**
+     * This method is not yet used. It will score the game after each round.
+     *
+     * @param deck the deck object to score
+     * @return the scores of each player
+     */
     public static int[] scoreGame(Standard deck) {
         int[] scores = new int[deck.getNumPlayers()];
         for (int i = 0; i < deck.getNumPlayers(); i++) {
@@ -233,6 +280,10 @@ public class Fives extends AppCompatActivity {
         return scores;
     }
 
+    /**
+     * @param i the card value
+     * @return the numerical value of the card in fives
+     */
     private static int getFivesValue(int i) {
         if (i == 5) {
             return -5;
@@ -246,6 +297,10 @@ public class Fives extends AppCompatActivity {
         return i;
     }
 
+    /**
+     * @param totalScores the total scores of the game
+     * @return true if a player has won
+     */
     private static boolean hasWon(int[] totalScores) {
         int maxScore = 0;
         for (int i = 1; i < totalScores.length; i++) {
@@ -272,22 +327,25 @@ public class Fives extends AppCompatActivity {
         System.out.println("Player " + (winnerIndex + 1) + " wins!");
         return false;
     }
+// Possible AI methods, will probably be changed before the final version
+//    private static int getAIDrawSelection(int playerNum, boolean[] visibleHand, ArrayList<Integer> arrayList) {
+//        // TODO
+//        return 0;
+//    }
+//
+//    private static String getAIKeepSelection(int pickup, ArrayList<Integer> arrayList, boolean[] visibleHand) {
+//        // TODO
+//        return null;
+//    }
+//
+//    private static int getAILocationSelection(String selectionString, ArrayList<Integer> hand, boolean[] visibleHand) {
+//        // TODO
+//        return 0;
+//    }
 
-    private static int getAIDrawSelection(int playerNum, boolean[] visibleHand, ArrayList<Integer> arrayList) {
-        // TODO
-        return 0;
-    }
-
-    private static String getAIKeepSelection(int pickup, ArrayList<Integer> arrayList, boolean[] visibleHand) {
-        // TODO
-        return null;
-    }
-
-    private static int getAILocationSelection(String selectionString, ArrayList<Integer> hand, boolean[] visibleHand) {
-        // TODO
-        return 0;
-    }
-
+    /**
+     * The stages of the fives game turns for each player
+     */
     private enum fivesStage {
         memCards, draw, drewFromDraw, discardedFromDraw, drewFromDiscard
     }
