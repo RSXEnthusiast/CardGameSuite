@@ -33,7 +33,7 @@ public class Card extends View implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        Fives.cardTouched(imageId, cardNum);
+        Fives.cardTouched(cardNum);
         return false;
     }
 
@@ -45,6 +45,11 @@ public class Card extends View implements View.OnTouchListener {
         return getResources().getIdentifier(imageName, "drawable", this.getContext().getPackageName());
     }
 
+    /**
+     * Updates the card value, and the card image if the card is face up.
+     *
+     * @param imageNum the number representing the card
+     */
     public void updateImage(int imageNum) {
         cardNum = imageNum;
         if (isFaceUp) {

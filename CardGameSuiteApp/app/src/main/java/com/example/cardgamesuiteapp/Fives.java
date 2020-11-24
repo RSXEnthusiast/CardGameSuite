@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.cardgamesuiteapp.decks.Standard;
@@ -13,13 +12,12 @@ import com.example.cardgamesuiteapp.display.Card;
 import com.example.cardgamesuiteapp.display.Hand;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Fives extends AppCompatActivity {
     final static int numPlayers = 2;
     final static int numAI = 0;
     static Standard deck;
-    static HashMap<Integer, boolean[]> visibleHands = new HashMap<Integer, boolean[]>();
+    static boolean[][] visibleHands;// The current state of the cards in players' hands, face up or face down.
     static int[] totalScores;
     static Hand[] viewPlayers;
     static Card viewDiscard;
@@ -34,6 +32,7 @@ public class Fives extends AppCompatActivity {
         setContentView(R.layout.two_players);
         totalScores = new int[numPlayers];
         deck = new Standard(true, numPlayers);
+        visibleHands = new boolean[numPlayers][];
         viewPlayers = new Hand[numPlayers];
         viewPlayers[0] = findViewById(R.id.player1);
         viewPlayers[1] = findViewById(R.id.player2);
@@ -57,27 +56,27 @@ public class Fives extends AppCompatActivity {
         viewInstruction.setText(getCurInstruction());
     }
 
-    public static void cardTouched(int imageId, int cardNum) {
+    public static void cardTouched(int cardNum) {
         if (!deck.isMyTurn()) {
             return;//Not your turn
         }
         switch (stage) {
             case draw:
-                stageDraw(imageId, cardNum);
+                stageDraw(cardNum);
                 break;
             case drewFromDraw:
-                stageDrewFromDraw(imageId, cardNum);
+                stageDrewFromDraw(cardNum);
                 break;
             case discardedFromDraw:
-                stageDiscardFromDraw(imageId, cardNum);
+                stageDiscardFromDraw(cardNum);
                 break;
             case drewFromDiscard:
-                stageDrewFromDiscard(imageId, cardNum);
+                stageDrewFromDiscard(cardNum);
                 break;
         }
     }
 
-    private static void stageDraw(int imageId, int cardNum) {
+    private static void stageDraw(int cardNum) {
         if (cardNum == deck.peekTopDraw()) {
             stage = fivesStage.drewFromDraw;
             //Logic for drawn from draw pile
@@ -90,16 +89,15 @@ public class Fives extends AppCompatActivity {
         }
     }
 
-    private static void stageDrewFromDraw(int imageId, int cardNum) {
+    private static void stageDrewFromDraw(int cardNum) {
         if (deck.peekTopDiscard() == cardNum) {
             stage = fivesStage.discardedFromDraw;
             //Logic for discarded from draw
             deck.discardFromDeck();
-            System.out.println(deck.peekTopDraw());
             viewDiscard.updateImage(deck.peekTopDiscard());
             viewDeck.flipCard();
             viewDeck.updateImage(deck.peekTopDraw());
-            viewInstruction.setText(getCurInstruction());
+            updateViewInstruction();
         } else if (isValidTapOnCardInHand(cardNum)) {
             stage = fivesStage.draw;//reset stage, turn over.
             //Logic for swapped with hand
@@ -108,32 +106,41 @@ public class Fives extends AppCompatActivity {
             viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(cardLocation);
             try {
                 deck.discardByValue(deck.getMyPlayerNum(), cardNum);
-                deck.draw(deck.getMyPlayerNum(),cardLocation);
+                deck.draw(deck.getMyPlayerNum(), cardLocation);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             viewDeck.flipCard();
             viewDeck.updateImage(deck.peekTopDraw());
             viewDiscard.updateImage(deck.peekTopDiscard());
-        }
-    }
-
-    private static void stageDiscardFromDraw(int imageId, int cardNum) {
-        if (isValidTapOnCardInHand(cardNum)) {
-            stage = fivesStage.draw; //reset stage, turn over.
-            //logic for flipping over card in hand.
-            viewPlayers[deck.getMyPlayerNum()].flipCardByNum(cardNum);
-            visibleHands.get(deck.getMyPlayerNum())[deck.getCardLocation(deck.getMyPlayerNum(), cardNum)] = true;
             updateViewInstruction();
         }
     }
 
-    private static void stageDrewFromDiscard(int imageId, int cardNum) {
+    private static void stageDiscardFromDraw(int cardNum) {
+        if (isValidTapOnCardInHand(cardNum)) {
+            stage = fivesStage.draw; //reset stage, turn over.
+            //logic for flipping over card in hand.
+            viewPlayers[deck.getMyPlayerNum()].flipCardByNum(cardNum);
+            visibleHands[deck.getMyPlayerNum()][deck.getCardLocation(deck.getMyPlayerNum(), cardNum)] = true;
+            updateViewInstruction();
+        }
+    }
+
+    private static void stageDrewFromDiscard(int cardNum) {
         if (isValidTapOnCardInHand(cardNum)) {
             stage = fivesStage.draw; //reset stage, turn over.
             //logic for drawn from discard
-            viewPlayers[deck.getMyPlayerNum()].flipCardByNum(cardNum);
-            visibleHands.get(deck.getMyPlayerNum())[deck.getCardLocation(deck.getMyPlayerNum(), cardNum)] = true;
+            int cardLocation = deck.getCardLocation(deck.getMyPlayerNum(), cardNum);
+            viewPlayers[deck.getMyPlayerNum()].updateCard(cardLocation, deck.peekTopDiscard());
+            viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(cardLocation);
+            try {
+                deck.drawFromDiscard(deck.getMyPlayerNum(), cardLocation);
+                deck.discardByValue(deck.getMyPlayerNum(), cardNum);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            viewDiscard.updateImage(deck.peekTopDiscard());
             updateViewInstruction();
         }
     }
@@ -141,7 +148,7 @@ public class Fives extends AppCompatActivity {
     private static boolean isValidTapOnCardInHand(int cardNum) {
         ArrayList<Integer> hand = deck.getHand(deck.getMyPlayerNum());
         for (int i = 0; i < hand.size(); i++) {
-            if (hand.get(i) == cardNum && !visibleHands.get(deck.getMyPlayerNum())[i]) {
+            if (hand.get(i) == cardNum && !visibleHands[deck.getMyPlayerNum()][i]) {
                 return true;
             }
         }
@@ -156,8 +163,11 @@ public class Fives extends AppCompatActivity {
         }
         //Flipping up discard card
         deck.discardFromDeck();
-        for (int i = 0; i < numPlayers + numAI; i++) {
-            visibleHands.put(i, new boolean[4]);
+        for (int i = 0; i < visibleHands.length; i++) {
+            visibleHands[i] = new boolean[4];
+            for (int j = 0; j < visibleHands[i].length; j++) {
+                visibleHands[i][j] = false;
+            }
         }
         stage = fivesStage.memCards;
         viewMemorized.setVisibility(View.VISIBLE);

@@ -5,7 +5,13 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class Standard extends Deck {
-
+    /**
+     * Constructor for a standard deck
+     * Also contains logic for creation of a standard deck and the player hand arrays
+     *
+     * @param shuffleOnEmptyDeck Shuffles automatically when deck is empty if true.
+     * @param numPlayers         How many people are playing.
+     */
     @SuppressWarnings("unchecked")
     public Standard(boolean shuffleOnEmptyDeck, int numPlayers) {
         super(shuffleOnEmptyDeck, numPlayers);
@@ -18,49 +24,14 @@ public class Standard extends Deck {
         for (int i = 0; i < hands.length; i++) {
             hands[i] = new ArrayList<Integer>();
         }
-        super.initializeFromSubclass(deck, hands);
-        this.shuffle();
+        super.initializeDeckAndHands(deck, hands);
+        this.shuffleDiscardIntoDeck();
     }
 
     /**
-     * @deprecated as soon as we implement the gui
+     * @param num number representing card
+     * @return name of file corresponding to num
      */
-    public static String convertToString(int num) {
-        String result = "";
-        switch (num % 13) {
-            case 1:
-                result += "A";
-                break;
-            case 11:
-                result += "J";
-                break;
-            case 12:
-                result += "Q";
-                break;
-            case 0:
-                result += "K";
-                break;
-            default:
-                result += num % 13;
-                break;
-        }
-        switch ((num - 1) / 13) {
-            case 0:
-                result += "H";
-                break;
-            case 1:
-                result += "C";
-                break;
-            case 2:
-                result += "D";
-                break;
-            case 3:
-                result += "S";
-                break;
-        }
-        return result;
-    }
-
     public static String getCardImageFileName(int num) {
         String result = "";
         switch (num % 13) {
@@ -122,10 +93,22 @@ public class Standard extends Deck {
         return result;
     }
 
+    /**
+     * Compares the numerical values of two cards considering an ace to be worth 1.
+     *
+     * @param one first integer
+     * @param two second integer
+     * @return difference between two values
+     */
+
     public static boolean compareNumericalValues(int one, int two) {
         return one % 13 == two % 13;
     }
 
+    /**
+     * @param i The number representing the card considering an ace to be worth 1.
+     * @return the numerical value of a card.
+     */
     public static int getNumericalValue(int i) {
         return (i - 1) % 13 + 1;
     }

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 public class Hand extends ViewGroup {
     int deviceWidth;
-
     ArrayList<Card> cards = new ArrayList<Card>();
 
     public Hand(Context context) {
