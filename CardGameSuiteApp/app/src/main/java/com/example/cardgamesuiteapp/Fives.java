@@ -121,6 +121,7 @@ public class Fives extends AppCompatActivity {
             stage = fivesStage.draw;//reset stage, turn over.
             //Logic for swapped with hand
             int cardLocation = deck.getCardLocation(deck.getMyPlayerNum(), cardNum);
+            visibleHands[deck.getMyPlayerNum()][deck.getCardLocation(deck.getMyPlayerNum(), cardNum)] = true;
             viewPlayers[deck.getMyPlayerNum()].updateCard(cardLocation, deck.peekTopDraw());
             viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(cardLocation);
             try {
@@ -161,6 +162,7 @@ public class Fives extends AppCompatActivity {
             stage = fivesStage.draw; //reset stage, turn over.
             //logic for drawn from discard
             int cardLocation = deck.getCardLocation(deck.getMyPlayerNum(), cardNum);
+            visibleHands[deck.getMyPlayerNum()][cardLocation] = true;
             viewPlayers[deck.getMyPlayerNum()].updateCard(cardLocation, deck.peekTopDiscard());
             viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(cardLocation);
             try {
