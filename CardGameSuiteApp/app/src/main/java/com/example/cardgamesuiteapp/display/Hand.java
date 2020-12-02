@@ -36,6 +36,7 @@ public class Hand extends ViewGroup {
     }
 
     public void initHand(ArrayList<Integer> hand) {
+        removeAllCards();
         for (int card : hand) {
             Card cardView = new Card(getContext());
             cardView.updateImage(card);
@@ -45,9 +46,10 @@ public class Hand extends ViewGroup {
     }
 
     public void removeAllCards() {
-        for (Card card : cards) {
-            this.removeView(card);
-            cards.remove(card);
+        int tempLength = cards.size();
+        for (int i = 0; i < tempLength; i++) {
+            this.removeView(cards.get(0));
+            cards.remove(0);
         }
     }
 
@@ -149,5 +151,13 @@ public class Hand extends ViewGroup {
                 card.flipCard();
             }
         }
+    }
+
+    public boolean isCardFaceUp(int index) {
+        return cards.get(index).isFaceUp();
+    }
+
+    public int getNumCards() {
+        return cards.size();
     }
 }

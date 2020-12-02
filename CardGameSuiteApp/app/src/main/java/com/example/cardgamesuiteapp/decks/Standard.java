@@ -100,8 +100,8 @@ public class Standard extends Deck {
      * @param two second integer
      * @return difference between two values
      */
-
-    public static boolean compareNumericalValues(int one, int two) {
+    @Override
+    public boolean compareNumericalValues(Integer one, int two) {
         return one % 13 == two % 13;
     }
 

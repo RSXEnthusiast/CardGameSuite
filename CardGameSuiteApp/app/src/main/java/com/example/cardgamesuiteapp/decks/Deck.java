@@ -72,6 +72,13 @@ public abstract class Deck {
     }
 
     /**
+     * Moves to the next player
+     */
+    public void nextPlayer() {
+        curPlayersTurn = (curPlayersTurn + 1) % numPlayers;
+    }
+
+    /**
      * @return the hands array
      */
     public ArrayList<Integer>[] getHands() {
@@ -264,20 +271,29 @@ public abstract class Deck {
         DeckMultiplayerManager.playerDrawFromDiscardIntoIndex(playerNum, index);
     }
 
+    public boolean discardByNumericalValue(int playerNum, int value) {
+        for (int i = 0; i < hands[playerNum].size(); i++) {
+            if (compareNumericalValues(hands[playerNum].get(i), value)) {
+                discard.add(hands[playerNum].remove(i));
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Takes a card from a player's hand and puts it on the discard based upon the value.
      *
-     * @param playerNum the number of the player drawing the card
+     * @param playerNum the number of the player discarding the card
      * @param value     The value to be discarded
-     * @throws Exception if the discard pile is empty
      */
-    public void discardByValue(int playerNum, int value) throws Exception {
+    public boolean discardByValue(int playerNum, int value) {
         if (!hands[playerNum].remove((Object) value)) {
-            throw new Exception("Trying to discard a card that doesn't exist");
-        } else {
-            discard.add(value);
+            return false;
         }
+        discard.add(value);
         DeckMultiplayerManager.discardByValue(playerNum, value);
+        return true;
     }
 
     /**
@@ -285,11 +301,12 @@ public abstract class Deck {
      *
      * @param playerNum the number of the player drawing the card
      * @param index     The location of the card to be discarded
-     * @throws Exception if the discard pile is empty
      */
-    public void discardByIndex(int playerNum, int index) throws Exception {
-        discard.add(hands[playerNum].remove(index));
+    public int discardByIndex(int playerNum, int index) {
+        int temp = hands[playerNum].remove(index);
+        discard.add(temp);
         DeckMultiplayerManager.discardByIndex(playerNum, index);
+        return temp;
     }
 
     /**
@@ -379,4 +396,7 @@ public abstract class Deck {
         }
         return -1;
     }
+
+
+    protected abstract boolean compareNumericalValues(Integer integer, int value);
 }

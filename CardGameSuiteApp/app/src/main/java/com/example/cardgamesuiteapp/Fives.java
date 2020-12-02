@@ -12,47 +12,70 @@ import com.example.cardgamesuiteapp.display.Card;
 import com.example.cardgamesuiteapp.display.Hand;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class Fives extends AppCompatActivity {
-    final static int numPlayers = 2;
-    final static int numAI = 0;
+    final static int numHumans = 1;
+    final static int numAI = 1;
     static Standard deck;
-    static boolean[][] visibleHands;// The current state of the cards in players' hands, face up or face down.
-    static int[] totalScores;
-    static Hand[] viewPlayers;
-    static Card viewDiscard;
-    static Card viewDeck;
-    static TextView viewInstruction;
-    static Button viewMemorized;
-    static fivesStage stage;
+    static int[] totalScores;// Keeps track of the cumulative score of the game
+    static Hand[] viewPlayers;// The custom player views
+    static Card viewDiscard;// The discard view
+    static Card viewDeck;// The deck view
+    static TextView viewInstruction;// The instruction view
+    static Button viewConfirm;// The button the user will press once they've memorized their cards
+    static TextView[] viewPlayerNames;// The textViews of the player names
+    static TextView[] viewPlayerScores;// The textView of the player scores.
+    static fivesStage stage;// The current stage of play
+    static int winnerIndex;
+    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.two_players);
-        totalScores = new int[numPlayers];
-        deck = new Standard(true, numPlayers);
-        visibleHands = new boolean[numPlayers][];
-        viewPlayers = new Hand[numPlayers];
+        totalScores = new int[numHumans + numAI];
+        deck = new Standard(true, numHumans + numAI);
+        viewPlayers = new Hand[numHumans + numAI];
         viewPlayers[0] = findViewById(R.id.player1);
         viewPlayers[1] = findViewById(R.id.player2);
         viewDiscard = findViewById(R.id.discard);
         viewDeck = findViewById(R.id.deck);
         viewInstruction = findViewById(R.id.instruction);
-        viewMemorized = findViewById(R.id.confirmMemorizedButton);
-        viewMemorized.setOnClickListener(v -> cardsMemorized());
-        newRound();
+        viewConfirm = findViewById(R.id.confirmButton);
+        viewConfirm.setOnClickListener(v -> confirmButtonTapped());//call confirmButtonTapped when that button is tapped
+        viewPlayerNames = new TextView[numAI + numHumans];
+        viewPlayerScores = new TextView[numHumans + numAI];
+        viewPlayerNames[0] = findViewById(R.id.player1name);
+        viewPlayerNames[1] = findViewById(R.id.player2name);
+        viewPlayerScores[0] = findViewById(R.id.player1score);
+        viewPlayerScores[1] = findViewById(R.id.player2score);
+        newGame();
     }
 
     /**
      * When confirmMemorizedButton is tapped, this method is called.
      */
-    private void cardsMemorized() {
-        stage = fivesStage.draw;
-        updateViewInstruction();
-        viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(2);
-        viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(3);
-        viewMemorized.setVisibility(View.INVISIBLE);
+    private void confirmButtonTapped() {
+        switch ((String) viewConfirm.getText()) {
+            case "Memorized":
+                stage = fivesStage.draw;
+                updateViewInstruction();
+                viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(2);
+                viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(3);
+                viewConfirm.setVisibility(View.INVISIBLE);
+                break;
+            case "Continue":
+                stage = fivesStage.memCards;
+                viewConfirm.setText("Memorized");
+                newRound();
+                break;
+            case "New Game":
+                stage = fivesStage.memCards;
+                viewConfirm.setText("Memorized");
+                newGame();
+        }
     }
 
     /**
@@ -60,6 +83,12 @@ public class Fives extends AppCompatActivity {
      */
     private static void updateViewInstruction() {
         viewInstruction.setText(getCurInstruction());
+    }
+
+    private static void updateViewScores() {
+        for (int i = 0; i < viewPlayerScores.length; i++) {
+            viewPlayerScores[i].setText("" + totalScores[i]);
+        }
     }
 
     /**
@@ -109,6 +138,7 @@ public class Fives extends AppCompatActivity {
      * @param cardNum the value of the card that was tapped on
      */
     private static void stageDrewFromDraw(int cardNum) {
+        boolean endTurn = false;
         if (deck.peekTopDiscard() == cardNum) {
             stage = fivesStage.discardedFromDraw;
             //Logic for discarded from draw
@@ -118,10 +148,10 @@ public class Fives extends AppCompatActivity {
             viewDeck.updateImage(deck.peekTopDraw());
             updateViewInstruction();
         } else if (isValidTapOnCardInHand(cardNum)) {
+            endTurn = true;
             stage = fivesStage.draw;//reset stage, turn over.
             //Logic for swapped with hand
             int cardLocation = deck.getCardLocation(deck.getMyPlayerNum(), cardNum);
-            visibleHands[deck.getMyPlayerNum()][deck.getCardLocation(deck.getMyPlayerNum(), cardNum)] = true;
             viewPlayers[deck.getMyPlayerNum()].updateCard(cardLocation, deck.peekTopDraw());
             viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(cardLocation);
             try {
@@ -135,7 +165,17 @@ public class Fives extends AppCompatActivity {
             viewDiscard.updateImage(deck.peekTopDiscard());
             updateViewInstruction();
         }
+        if (endTurn) {
+            if (roundOver()) {
+                scoreRound();
+            }
+            deck.nextPlayer();
+            if (numAI > 0 && deck.getCurPlayersTurn() >= numHumans) {
+                runAITurns();
+            }
+        }
     }
+
 
     /**
      * This method is called when a card is touched and the current stage is discardedFromDraw
@@ -143,12 +183,23 @@ public class Fives extends AppCompatActivity {
      * @param cardNum the value of the card that was tapped on
      */
     private static void stageDiscardFromDraw(int cardNum) {
+        boolean endTurn = false;
         if (isValidTapOnCardInHand(cardNum)) {
+            endTurn = true;
             stage = fivesStage.draw; //reset stage, turn over.
             //logic for flipping over card in hand.
             viewPlayers[deck.getMyPlayerNum()].flipCardByNum(cardNum);
-            visibleHands[deck.getMyPlayerNum()][deck.getCardLocation(deck.getMyPlayerNum(), cardNum)] = true;
             updateViewInstruction();
+        }
+        if (endTurn) {
+            if (roundOver()) {
+                scoreRound();
+            }
+            deck.nextPlayer();
+            System.out.println(deck.getCurPlayersTurn());
+            if (numAI > 0 && deck.getCurPlayersTurn() >= numHumans) {
+                runAITurns();
+            }
         }
     }
 
@@ -158,11 +209,12 @@ public class Fives extends AppCompatActivity {
      * @param cardNum the value of the card that was tapped on
      */
     private static void stageDrewFromDiscard(int cardNum) {
+        boolean endTurn = false;
         if (isValidTapOnCardInHand(cardNum)) {
+            endTurn = true;
             stage = fivesStage.draw; //reset stage, turn over.
             //logic for drawn from discard
             int cardLocation = deck.getCardLocation(deck.getMyPlayerNum(), cardNum);
-            visibleHands[deck.getMyPlayerNum()][cardLocation] = true;
             viewPlayers[deck.getMyPlayerNum()].updateCard(cardLocation, deck.peekTopDiscard());
             viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(cardLocation);
             try {
@@ -174,7 +226,17 @@ public class Fives extends AppCompatActivity {
             viewDiscard.updateImage(deck.peekTopDiscard());
             updateViewInstruction();
         }
+        if (endTurn) {
+            if (roundOver()) {
+                scoreRound();
+            }
+            deck.nextPlayer();
+            if (numAI > 0 && deck.getCurPlayersTurn() >= numHumans) {
+                runAITurns();
+            }
+        }
     }
+
 
     /**
      * @param cardNum the value of the card that was tapped on
@@ -183,17 +245,27 @@ public class Fives extends AppCompatActivity {
     private static boolean isValidTapOnCardInHand(int cardNum) {
         ArrayList<Integer> hand = deck.getHand(deck.getMyPlayerNum());
         for (int i = 0; i < hand.size(); i++) {
-            if (hand.get(i) == cardNum && !visibleHands[deck.getMyPlayerNum()][i]) {
+            if (hand.get(i) == cardNum && !viewPlayers[deck.getMyPlayerNum()].isCardFaceUp(i)) {
                 return true;
             }
         }
         return false;
     }
 
+    private void newGame() {
+        deck.shuffleDiscardIntoDeck();
+        for (int i = 0; i < totalScores.length; i++) {
+            totalScores[i] = 0;
+        }
+        updateViewScores();
+        newRound();
+    }
+
+
     /**
      * Called every time that there is a new round, to reset the table
      */
-    public void newRound() {
+    public static void newRound() {
         try {
             deck.deal(4);
         } catch (Exception e) {
@@ -201,14 +273,8 @@ public class Fives extends AppCompatActivity {
         }
         //Flipping up discard card
         deck.discardFromDeck();
-        for (int i = 0; i < visibleHands.length; i++) {
-            visibleHands[i] = new boolean[4];
-            for (int j = 0; j < visibleHands[i].length; j++) {
-                visibleHands[i][j] = false;
-            }
-        }
         stage = fivesStage.memCards;
-        viewMemorized.setVisibility(View.VISIBLE);
+        viewConfirm.setVisibility(View.VISIBLE);
         updateEntireScreen();
     }
 
@@ -218,7 +284,7 @@ public class Fives extends AppCompatActivity {
     private static void updateEntireScreen() {
         viewDiscard.updateImage(deck.peekTopDiscard());
         viewDeck.updateImage(deck.peekTopDraw());
-        viewDeck.flipCard();
+        viewDeck.setFaceUp(false);
         for (int i = 0; i < viewPlayers.length; i++) {
             viewPlayers[i].initHand(deck.getHand(i));
             viewPlayers[i].flipAllCards();
@@ -244,42 +310,65 @@ public class Fives extends AppCompatActivity {
                     return "Select a face down card to flip over";
                 case drewFromDiscard:
                     return "Select a face down card to swap the new card with";
+                case gameOver:
+                    return viewPlayerNames[winnerIndex].getText() + " won!";
             }
         }
         return "Player " + deck.getCurPlayersTurn() + "'s Turn";
     }
 
     /**
-     * This method is not yet used. It will score the game after each round.
+     * A simple method to check whether the round is complete or not.
      *
-     * @param deck the deck object to score
-     * @return the scores of each player
+     * @return true if the round is over, false if not.
      */
-    public static int[] scoreGame(Standard deck) {
-        int[] scores = new int[deck.getNumPlayers()];
+    private static boolean roundOver() {
+        for (int i = 0; i < viewPlayers.length; i++) {
+            for (int j = 0; j < viewPlayers[i].getNumCards(); j++) {
+                if (!viewPlayers[i].isCardFaceUp(j)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * This method is used to score the game after each round.
+     */
+    public static void scoreRound() {
         for (int i = 0; i < deck.getNumPlayers(); i++) {
-            ArrayList<Integer> cards = deck.getHand(i);
             // Duplicates
             ArrayList<Integer> toRemove = new ArrayList<Integer>();
-            for (int j = 0; j < cards.size() - 1; j++) {
-                for (int k = j + 1; k < cards.size(); k++) {
-                    if (Standard.compareNumericalValues(cards.get(j), cards.get(k))
-                            && Standard.getNumericalValue(cards.get(j)) != 5) {
-                        toRemove.add(cards.get(j));
+            for (int j = 0; j < deck.getHand(i).size() - 1; j++) {
+                for (int k = j + 1; k < deck.getHand(i).size(); k++) {
+                    // If it isn't a 5(worth -5) or a K(worth 0) remove it.
+                    if (deck.compareNumericalValues(deck.getHand(i).get(j), deck.getHand(i).get(k))
+                            && Standard.getNumericalValue(deck.getHand(i).get(j)) != 5) {
+                        toRemove.add(deck.getHand(i).get(j));
                     }
                 }
             }
+            //Remove all instances of the duplicate numbers
             for (int num : toRemove) {
-                while (cards.remove((Object) num)) {
-                    // empty while
+                while (deck.discardByNumericalValue(i, num)) {
+                    //Empty while
                 }
             }
-            // Values
-            while (!cards.isEmpty()) {
-                scores[i] += getFivesValue(Standard.getNumericalValue(cards.remove(0)));
+            // Adding current round values to score
+            while (!deck.getHand(i).isEmpty()) {
+                totalScores[i] += getFivesValue(Standard.getNumericalValue(deck.discardByIndex(i, 0)));
             }
         }
-        return scores;
+        updateViewScores();
+        if (hasWon()) {
+            stage = fivesStage.gameOver;
+            updateViewInstruction();
+            viewConfirm.setText("New Game");
+        } else {
+            viewConfirm.setText("Continue");
+        }
+        viewConfirm.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -300,12 +389,11 @@ public class Fives extends AppCompatActivity {
     }
 
     /**
-     * @param totalScores the total scores of the game
      * @return true if a player has won
      */
-    private static boolean hasWon(int[] totalScores) {
+    private static boolean hasWon() {
         int maxScore = 0;
-        for (int i = 1; i < totalScores.length; i++) {
+        for (int i = 0; i < totalScores.length; i++) {
             if (totalScores[i] > maxScore) {
                 maxScore = totalScores[i];
             }
@@ -314,7 +402,7 @@ public class Fives extends AppCompatActivity {
             return false;
         }
         int numWinners = 0;
-        int winnerIndex = 0;
+        winnerIndex = 0;
         for (int i = 0; i < totalScores.length; i++) {
             if (totalScores[i] == maxScore) {
                 numWinners++;
@@ -322,33 +410,125 @@ public class Fives extends AppCompatActivity {
             }
         }
         if (numWinners > 1) {
-            System.out.println(
-                    "Overtime! Multiple players have the same score over 50, keep playing until one is ahead!");
             return false;
         }
-        System.out.println("Player " + (winnerIndex + 1) + " wins!");
+        return true;
+    }
+
+    /**
+     * Called when it's the AI turns
+     */
+    private static void runAITurns() {
+        for (int i = numHumans; i < numAI + numHumans; i++) {
+            boolean drawFromDiscard = getAIDrawFromDiscard();
+            boolean keepDraw = true;
+            if (!drawFromDiscard) {
+                AIDrawFromPile();
+                if (!getAIKeepSelection()) {
+                    keepDraw = false;
+                }
+            }
+            int location = getAILocationSelection(drawFromDiscard, keepDraw);
+            if (drawFromDiscard) {
+                AIDrewFromDiscard(location);
+            } else if (keepDraw) {
+                AIKeptDraw(location);
+            } else {
+                AIDiscardedDraw(location);
+            }
+            deck.nextPlayer();
+        }
+    }
+
+    /**
+     * This updates the screen after the AI has decided to draw from the draw pile.
+     */
+    private static void AIDrawFromPile() {
+        viewDeck.flipCard();
+        viewInstruction.setText(getCurInstruction());
+    }
+
+    /**
+     * This is the logic for updating the screen after the AI has kept a drawn card
+     *
+     * @param location where the card should be swapped to
+     */
+    private static void AIKeptDraw(int location) {
+        //Logic for swapped with hand
+        viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDraw());
+        viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
+        try {
+            deck.discardByIndex(deck.getCurPlayersTurn(), location);
+            deck.draw(deck.getCurPlayersTurn(), location);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        viewDeck.flipCard();
+        viewDeck.updateImage(deck.peekTopDraw());
+        viewDiscard.updateImage(deck.peekTopDiscard());
+        if (roundOver()) {
+            scoreRound();
+        }
+    }
+
+
+    private static void AIDiscardedDraw(int location) {
+        //logic for flipping over card in hand.
+        viewPlayers[deck.getMyPlayerNum()].flipCardByNum(location);
+    }
+
+    private static void AIDrewFromDiscard(int location) {
+        //logic for drawn from discard
+        viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDiscard());
+        viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
+        try {
+            deck.drawFromDiscard(deck.getCurPlayersTurn(), location);
+            deck.discardByValue(deck.getCurPlayersTurn(), location);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        viewDiscard.updateImage(deck.peekTopDiscard());
+        if (roundOver()) {
+            scoreRound();
+        }
+    }
+
+    /**
+     * The AI will decide whether to pickup the discard or not.
+     *
+     * @return true if draw from deck, false if draw from discard
+     */
+    private static boolean getAIDrawFromDiscard() {
         return false;
     }
-// Possible AI methods, will probably be changed before the final version
-//    private static int getAIDrawSelection(int playerNum, boolean[] visibleHand, ArrayList<Integer> arrayList) {
-//        // TODO
-//        return 0;
-//    }
-//
-//    private static String getAIKeepSelection(int pickup, ArrayList<Integer> arrayList, boolean[] visibleHand) {
-//        // TODO
-//        return null;
-//    }
-//
-//    private static int getAILocationSelection(String selectionString, ArrayList<Integer> hand, boolean[] visibleHand) {
-//        // TODO
-//        return 0;
-//    }
+
+    /**
+     * If the AI drew from the pile they will decide whether to keep the card or not
+     *
+     * @return true if the AI wants to pick it up, false if not.
+     */
+    private static boolean getAIKeepSelection() {
+        return true;
+    }
+
+    /**
+     * The AI will decide which card to flip up or swap
+     *
+     * @return the location of the card to flip up or swap
+     */
+    private static int getAILocationSelection(boolean drawFromDiscard, boolean keepDraw) {
+        for (int i = 0; i < viewPlayers[deck.getCurPlayersTurn()].getNumCards(); i++) {
+            if (!viewPlayers[deck.getCurPlayersTurn()].isCardFaceUp(i)) {
+                return i;
+            }
+        }
+        return 0;
+    }
 
     /**
      * The stages of the fives game turns for each player
      */
     private enum fivesStage {
-        memCards, draw, drewFromDraw, discardedFromDraw, drewFromDiscard
+        memCards, draw, drewFromDraw, discardedFromDraw, drewFromDiscard, gameOver
     }
 }

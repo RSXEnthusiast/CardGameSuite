@@ -81,4 +81,18 @@ public class Card extends View implements View.OnTouchListener {
     public void setCardNum(int cardNum) {
         this.cardNum = cardNum;
     }
+
+    public boolean isFaceUp() {
+        return isFaceUp;
+    }
+
+    public void setFaceUp(boolean b) {
+        isFaceUp = b;
+        if (!isFaceUp) {
+            imageId = R.drawable.card_back;
+        } else {
+            imageId = getImageId(Standard.getCardImageFileName(cardNum));
+        }
+        invalidate();
+    }
 }
