@@ -470,7 +470,11 @@ public class Fives extends AppCompatActivity {
         viewDiscard.updateImage(deck.peekTopDiscard());
     }
 
-
+    /**
+     * This method is called to update the screen after the AI has decided to discard from the draw pile
+     *
+     * @param location which card will be flipped up.
+     */
     private static void AIDiscardedDraw(int location) {
         System.out.println("AIDiscardedDraw");
         //logic for flipping over card in hand.
@@ -481,9 +485,13 @@ public class Fives extends AppCompatActivity {
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
     }
 
+    /**
+     * This method is called to update the screen and deck after the AI has decided to draw from the discard.
+     *
+     * @param location where to put the card that the AI drew from this discard.
+     */
     private static void AIDrewFromDiscard(int location) {
         System.out.println("AIDrewFromDiscard");
-        //logic for drawn from discard
         viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDiscard());
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
         try {
@@ -574,6 +582,11 @@ public class Fives extends AppCompatActivity {
         return bestIndex;
     }
 
+    /**
+     * @param hand            the hand that the method will evaluate
+     * @param testingLocation the location that is currently flipped down, but needs to be evaluated as it's the potential new card location.
+     * @return the value of the face up cards and the card at the testing location
+     */
     private static int getAIKnownHandWorth(ArrayList<Integer> hand, int testingLocation) {
         ArrayList<Integer> toRemove = new ArrayList<Integer>();
         //Removing cards that are unknown
@@ -589,6 +602,10 @@ public class Fives extends AppCompatActivity {
     }
 
 
+    /**
+     * @param hand the hand the the method will evaluate
+     * @return the value of the face up cards in the hand
+     */
     private static int getAICurHandWorth(ArrayList<Integer> hand) {
         ArrayList<Integer> toRemove = new ArrayList<Integer>();
         //Removing cards that are unknown
@@ -603,6 +620,10 @@ public class Fives extends AppCompatActivity {
         return scoreAIHand(hand);
     }
 
+    /**
+     * @param hand The hand that the method will evaluate
+     * @return the value of the hand
+     */
     private static int scoreAIHand(ArrayList<Integer> hand) {
         ArrayList<Integer> toRemove = new ArrayList<Integer>();
         //Removing duplicates
@@ -630,7 +651,7 @@ public class Fives extends AppCompatActivity {
     }
 
     /**
-     * The stages of the fives game turns for each player
+     * The stages of the fives game turn
      */
     private enum fivesStage {
         memCards, draw, drewFromDraw, discardedFromDraw, drewFromDiscard, gameOver
