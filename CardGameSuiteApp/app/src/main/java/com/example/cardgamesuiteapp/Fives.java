@@ -196,7 +196,6 @@ public class Fives extends AppCompatActivity {
                 scoreRound();
             }
             deck.nextPlayer();
-            System.out.println(deck.getCurPlayersTurn());
             if (numAI > 0 && deck.getCurPlayersTurn() >= numHumans) {
                 runAITurns();
             }
@@ -282,6 +281,9 @@ public class Fives extends AppCompatActivity {
      * This method updates every single dynamic item on the screen.
      */
     private static void updateEntireScreen() {
+        if (deck.discardIsEmpty()) {
+            deck.discardFromDeck();
+        }
         viewDiscard.updateImage(deck.peekTopDiscard());
         viewDeck.updateImage(deck.peekTopDraw());
         viewDeck.setFaceUp(false);
@@ -420,23 +422,22 @@ public class Fives extends AppCompatActivity {
      */
     private static void runAITurns() {
         for (int i = numHumans; i < numAI + numHumans; i++) {
-            boolean drawFromDiscard = getAIDrawFromDiscard();
-            boolean keepDraw = true;
-            if (!drawFromDiscard) {
+            int drawFromDiscard = getAIDrawFromDiscard();
+            if (drawFromDiscard != -1) {
+                AIDrewFromDiscard(drawFromDiscard);
+            } else {
                 AIDrawFromPile();
-                if (!getAIKeepSelection()) {
-                    keepDraw = false;
+                int drawFromPile = getAIKeepDrawSelection();
+                if (drawFromPile != -1) {
+                    AIKeptDraw(drawFromPile);
+                } else {
+                    AIDiscardedDraw(getAIFlipLocation());
                 }
             }
-            int location = getAILocationSelection(drawFromDiscard, keepDraw);
-            if (drawFromDiscard) {
-                AIDrewFromDiscard(location);
-            } else if (keepDraw) {
-                AIKeptDraw(location);
-            } else {
-                AIDiscardedDraw(location);
-            }
             deck.nextPlayer();
+        }
+        if (roundOver()) {
+            scoreRound();
         }
     }
 
@@ -444,8 +445,8 @@ public class Fives extends AppCompatActivity {
      * This updates the screen after the AI has decided to draw from the draw pile.
      */
     private static void AIDrawFromPile() {
+        System.out.println("AIDrawFromPile");
         viewDeck.flipCard();
-        viewInstruction.setText(getCurInstruction());
     }
 
     /**
@@ -454,6 +455,7 @@ public class Fives extends AppCompatActivity {
      * @param location where the card should be swapped to
      */
     private static void AIKeptDraw(int location) {
+        System.out.println("AIKeptDraw");
         //Logic for swapped with hand
         viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDraw());
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
@@ -466,49 +468,77 @@ public class Fives extends AppCompatActivity {
         viewDeck.flipCard();
         viewDeck.updateImage(deck.peekTopDraw());
         viewDiscard.updateImage(deck.peekTopDiscard());
-        if (roundOver()) {
-            scoreRound();
-        }
     }
 
 
     private static void AIDiscardedDraw(int location) {
+        System.out.println("AIDiscardedDraw");
         //logic for flipping over card in hand.
-        viewPlayers[deck.getMyPlayerNum()].flipCardByNum(location);
+        viewDeck.flipCard();
+        deck.discardFromDeck();
+        viewDeck.updateImage(deck.peekTopDraw());
+        viewDiscard.updateImage(deck.peekTopDiscard());
+        viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
     }
 
     private static void AIDrewFromDiscard(int location) {
+        System.out.println("AIDrewFromDiscard");
         //logic for drawn from discard
         viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDiscard());
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
         try {
             deck.drawFromDiscard(deck.getCurPlayersTurn(), location);
-            deck.discardByValue(deck.getCurPlayersTurn(), location);
+            deck.discardByIndex(deck.getCurPlayersTurn(), location + 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
         viewDiscard.updateImage(deck.peekTopDiscard());
-        if (roundOver()) {
-            scoreRound();
-        }
     }
 
     /**
      * The AI will decide whether to pickup the discard or not.
      *
-     * @return true if draw from deck, false if draw from discard
+     * @return -1 if the AI doesn't want to draw from discard, or the index at which the AI wants to place the discard.
      */
-    private static boolean getAIDrawFromDiscard() {
-        return false;
+    private static int getAIDrawFromDiscard() {
+        return keepCard(deck.peekTopDiscard());
     }
 
     /**
      * If the AI drew from the pile they will decide whether to keep the card or not
      *
-     * @return true if the AI wants to pick it up, false if not.
+     * @return -1 if the AI discards the drawn card, or the index at which the AI would like to put the drawn card.
      */
-    private static boolean getAIKeepSelection() {
-        return true;
+    private static int getAIKeepDrawSelection() {
+        return keepCard(deck.peekTopDraw());
+    }
+
+    /**
+     * @param newCard the card to test in the hand
+     * @return -1 if the AI doesn't want the card, or the index at which the AI would like to put the card.
+     */
+    private static int keepCard(int newCard) {
+        ArrayList<Integer> curHand = deck.getHand(deck.getCurPlayersTurn());
+        int curScore = getAIKnownHandWorth((ArrayList<Integer>) curHand.clone(), -1);
+        int lowestNewScore = 100;
+        int lowestNewScoreMoveIndex = -1;
+        for (int i = 0; i < 4; i++) {
+            if (!viewPlayers[deck.getCurPlayersTurn()].isCardFaceUp(i)) {
+                ArrayList<Integer> testingNewHand = (ArrayList<Integer>) curHand.clone();
+                testingNewHand.remove(i);
+                testingNewHand.add(i, newCard);
+                int testingNewHandWorth = getAIKnownHandWorth(testingNewHand, i);
+                if (testingNewHandWorth < lowestNewScore) {
+                    lowestNewScore = testingNewHandWorth;
+                    lowestNewScoreMoveIndex = i;
+                }
+            }
+        }
+        System.out.println("curScore: " + curScore + " lowestNewScore: " + lowestNewScore);
+        if (lowestNewScore - curScore < 0 || (lowestNewScore - curScore <= 3 && Standard.getNumericalValue(newCard) <= 3)) {
+            return lowestNewScoreMoveIndex;
+        }
+        return -1;
     }
 
     /**
@@ -516,13 +546,87 @@ public class Fives extends AppCompatActivity {
      *
      * @return the location of the card to flip up or swap
      */
-    private static int getAILocationSelection(boolean drawFromDiscard, boolean keepDraw) {
-        for (int i = 0; i < viewPlayers[deck.getCurPlayersTurn()].getNumCards(); i++) {
-            if (!viewPlayers[deck.getCurPlayersTurn()].isCardFaceUp(i)) {
-                return i;
+    private static int getAIFlipLocation() {
+        int bestIndex = 2;
+        ArrayList<Integer> curHand = deck.getHand(deck.getCurPlayersTurn());
+        int curHandWorth = getAICurHandWorth((ArrayList<Integer>) curHand.clone());
+        int bestNewHandVal = 1000;
+        if (!viewPlayers[deck.getCurPlayersTurn()].isCardFaceUp(2)) {
+            bestNewHandVal = getAIKnownHandWorth((ArrayList<Integer>) curHand.clone(), 2);
+        }
+        int newHandValTemp = 1000;
+        if (!viewPlayers[deck.getCurPlayersTurn()].isCardFaceUp(3)) {
+            newHandValTemp = getAIKnownHandWorth((ArrayList<Integer>) curHand.clone(), 3);
+        }
+        if (newHandValTemp < bestNewHandVal) {
+            bestNewHandVal = newHandValTemp;
+            bestIndex = 3;
+        }
+        if (bestNewHandVal - curHandWorth <= 3) {
+            return bestIndex;
+        }
+        if (!viewPlayers[deck.getCurPlayersTurn()].isCardFaceUp(0)) {
+            return 0;
+        }
+        if (!viewPlayers[deck.getCurPlayersTurn()].isCardFaceUp(1)) {
+            return 1;
+        }
+        return bestIndex;
+    }
+
+    private static int getAIKnownHandWorth(ArrayList<Integer> hand, int testingLocation) {
+        ArrayList<Integer> toRemove = new ArrayList<Integer>();
+        //Removing cards that are unknown
+        for (int i = 0; i < 2; i++) {
+            if (!viewPlayers[deck.getCurPlayersTurn()].isCardFaceUp(i) && i != testingLocation) {
+                toRemove.add(hand.get(i));
             }
         }
-        return 0;
+        while (!toRemove.isEmpty()) {
+            hand.remove((Object) toRemove.remove(0));
+        }
+        return scoreAIHand(hand);
+    }
+
+
+    private static int getAICurHandWorth(ArrayList<Integer> hand) {
+        ArrayList<Integer> toRemove = new ArrayList<Integer>();
+        //Removing cards that are unknown
+        for (int i = 0; i < 4; i++) {
+            if (!viewPlayers[deck.getCurPlayersTurn()].isCardFaceUp(i)) {
+                toRemove.add(hand.get(i));
+            }
+        }
+        while (!toRemove.isEmpty()) {
+            hand.remove((Object) toRemove.remove(0));
+        }
+        return scoreAIHand(hand);
+    }
+
+    private static int scoreAIHand(ArrayList<Integer> hand) {
+        ArrayList<Integer> toRemove = new ArrayList<Integer>();
+        //Removing duplicates
+        for (int i = 0; i < hand.size() - 1; i++) {
+            for (int j = i + 1; j < hand.size(); j++) {
+                // If it isn't a 5(worth -5) or a K(worth 0) remove it.
+                if (deck.compareNumericalValues(hand.get(i), hand.get(j))
+                        && Standard.getNumericalValue(hand.get(i)) != 5) {
+                    toRemove.add(hand.get(i));
+                }
+            }
+        }
+        //Remove all instances of the duplicate numbers
+        for (int num : toRemove) {
+            while (hand.remove((Object) num)) {
+                //Empty while
+            }
+        }
+        int totalCount = 0;
+        // Adding current round values to score
+        while (!hand.isEmpty()) {
+            totalCount += getFivesValue(Standard.getNumericalValue(hand.remove(0)));
+        }
+        return totalCount;
     }
 
     /**

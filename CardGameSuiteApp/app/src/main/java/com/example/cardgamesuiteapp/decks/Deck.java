@@ -117,7 +117,7 @@ public abstract class Deck {
             // TODO choose better exception
             throw new Exception("The deck is empty. You cannot draw a card from an empty deck.");
         } else if (deck.isEmpty()) {
-            shuffleDiscardIntoDeck();
+            shuffleLeavingTopDiscard();
         }
         return deck.poll();
     }
@@ -332,6 +332,9 @@ public abstract class Deck {
      * @return The value of the top card on the draw pile.
      */
     public int peekTopDraw() {
+        if (deck.isEmpty() && shuffleOnEmptyDeck) {
+            shuffleLeavingTopDiscard();
+        }
         return deck.peek();
     }
 
@@ -399,4 +402,8 @@ public abstract class Deck {
 
 
     protected abstract boolean compareNumericalValues(Integer integer, int value);
+
+    public boolean discardIsEmpty() {
+        return discard.isEmpty();
+    }
 }
