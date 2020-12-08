@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cardgamesuiteapp.decks.Standard;
 import com.example.cardgamesuiteapp.display.Card;
+import com.example.cardgamesuiteapp.display.CardAnimation;
 import com.example.cardgamesuiteapp.display.Hand;
 
 import java.util.ArrayList;
@@ -52,6 +54,10 @@ public class Fives extends AppCompatActivity {
         viewPlayerScores[0] = findViewById(R.id.player1score);
         viewPlayerScores[1] = findViewById(R.id.player2score);
         newGame();
+//        setContentView(R.layout.animation_test);
+        CardAnimation test = findViewById(R.id.slide);
+        ImageView testCard = findViewById(R.id.testCard);
+        test.cardAnimate(testCard);
     }
 
     /**
@@ -421,16 +427,39 @@ public class Fives extends AppCompatActivity {
      * Called when it's the AI turns
      */
     private static void runAITurns() {
+        //@Evan
+        //You'll probably have to add your code in the methods that are called under my comments,
+        //as you'll need numbers n such out of them. I just left comments in this method so that
+        //they'll be all in once place.
+        //As always, feel free to ask questions n such.
         for (int i = numHumans; i < numAI + numHumans; i++) {
             int drawFromDiscard = getAIDrawFromDiscard();
             if (drawFromDiscard != -1) {
+                //@Evan
+                //This is where the AI has chosen to draw from the discard,
+                //so the discard needs to be animated moving from the discard pile to the hand,
+                //then the card that it replaced needs to be moved to the discard.
                 AIDrewFromDiscard(drawFromDiscard);
             } else {
+                //@Evan
+                //This is where the AI has chosen to draw from the pile,
+                //so you could also animate the card flipping over, but probably do that last.
+                //Otherwise you don't need to touch this method.
                 AIDrawFromPile();
                 int drawFromPile = getAIKeepDrawSelection();
                 if (drawFromPile != -1) {
+                    //@Evan
+                    //This is where the AI has chosen to keep the card from the draw pile,
+                    //so the discard needs to be animated moving from the draw pile to the hand,
+                    //then the card that it replaced needs to be moved to the discard.
+                    //Should be pretty similar to the AIDrewFromDiscard animation stuff.
                     AIKeptDraw(drawFromPile);
                 } else {
+                    //@Evan
+                    //This is where the AI has chosen to discard the card it drew,
+                    //so the card needs to be moved from the draw pile to the discard pile.
+                    //Then the card at the location passed into the method needs to be flipped over.
+                    //Probably don't need a wait after this, as it is the end of the AI's turn.
                     AIDiscardedDraw(getAIFlipLocation());
                 }
             }
@@ -470,7 +499,11 @@ public class Fives extends AppCompatActivity {
         viewDiscard.updateImage(deck.peekTopDiscard());
     }
 
-
+    /**
+     * This method is called to update the screen after the AI has decided to discard from the draw pile
+     *
+     * @param location which card will be flipped up.
+     */
     private static void AIDiscardedDraw(int location) {
         System.out.println("AIDiscardedDraw");
         //logic for flipping over card in hand.
@@ -481,9 +514,13 @@ public class Fives extends AppCompatActivity {
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
     }
 
+    /**
+     * This method is called to update the screen and deck after the AI has decided to draw from the discard.
+     *
+     * @param location where to put the card that the AI drew from this discard.
+     */
     private static void AIDrewFromDiscard(int location) {
         System.out.println("AIDrewFromDiscard");
-        //logic for drawn from discard
         viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDiscard());
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
         try {
@@ -574,6 +611,11 @@ public class Fives extends AppCompatActivity {
         return bestIndex;
     }
 
+    /**
+     * @param hand            the hand that the method will evaluate
+     * @param testingLocation the location that is currently flipped down, but needs to be evaluated as it's the potential new card location.
+     * @return the value of the face up cards and the card at the testing location
+     */
     private static int getAIKnownHandWorth(ArrayList<Integer> hand, int testingLocation) {
         ArrayList<Integer> toRemove = new ArrayList<Integer>();
         //Removing cards that are unknown
@@ -589,6 +631,10 @@ public class Fives extends AppCompatActivity {
     }
 
 
+    /**
+     * @param hand the hand the the method will evaluate
+     * @return the value of the face up cards in the hand
+     */
     private static int getAICurHandWorth(ArrayList<Integer> hand) {
         ArrayList<Integer> toRemove = new ArrayList<Integer>();
         //Removing cards that are unknown
@@ -603,6 +649,10 @@ public class Fives extends AppCompatActivity {
         return scoreAIHand(hand);
     }
 
+    /**
+     * @param hand The hand that the method will evaluate
+     * @return the value of the hand
+     */
     private static int scoreAIHand(ArrayList<Integer> hand) {
         ArrayList<Integer> toRemove = new ArrayList<Integer>();
         //Removing duplicates
@@ -630,7 +680,7 @@ public class Fives extends AppCompatActivity {
     }
 
     /**
-     * The stages of the fives game turns for each player
+     * The stages of the fives game turn
      */
     private enum fivesStage {
         memCards, draw, drewFromDraw, discardedFromDraw, drewFromDiscard, gameOver
