@@ -142,7 +142,11 @@ public class Fives extends AppCompatActivity {
         if (deck.peekTopDiscard() == cardNum) {
             stage = fivesStage.discardedFromDraw;
             //Logic for discarded from draw
-            deck.discardFromDeck();
+            try {
+                deck.discardFromDeck();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             viewDiscard.updateImage(deck.peekTopDiscard());
             viewDeck.flipCard();
             viewDeck.updateImage(deck.peekTopDraw());
@@ -267,11 +271,11 @@ public class Fives extends AppCompatActivity {
     public static void newRound() {
         try {
             deck.deal(4);
+            deck.discardFromDeck();
         } catch (Exception e) {
             e.printStackTrace();
         }
         //Flipping up discard card
-        deck.discardFromDeck();
         stage = fivesStage.memCards;
         viewConfirm.setVisibility(View.VISIBLE);
         updateEntireScreen();
@@ -281,9 +285,6 @@ public class Fives extends AppCompatActivity {
      * This method updates every single dynamic item on the screen.
      */
     private static void updateEntireScreen() {
-        if (deck.discardIsEmpty()) {
-            deck.discardFromDeck();
-        }
         viewDiscard.updateImage(deck.peekTopDiscard());
         viewDeck.updateImage(deck.peekTopDraw());
         viewDeck.setFaceUp(false);
@@ -479,7 +480,11 @@ public class Fives extends AppCompatActivity {
         System.out.println("AIDiscardedDraw");
         //logic for flipping over card in hand.
         viewDeck.flipCard();
-        deck.discardFromDeck();
+        try {
+            deck.discardFromDeck();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         viewDeck.updateImage(deck.peekTopDraw());
         viewDiscard.updateImage(deck.peekTopDiscard());
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
