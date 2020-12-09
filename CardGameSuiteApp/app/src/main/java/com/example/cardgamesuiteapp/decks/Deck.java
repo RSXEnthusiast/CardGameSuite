@@ -312,7 +312,12 @@ public abstract class Deck {
     /**
      * Takes a card directly from the deck and puts it in the discard
      */
-    public void discardFromDeck() {
+    public void discardFromDeck() throws Exception {
+        if (deck.isEmpty() && !shuffleOnEmptyDeck) {
+            throw new Exception("Trying to discard from an empty deck");
+        } else if (deck.isEmpty()) {
+            shuffleDiscardIntoDeck();
+        }
         discard.add(deck.poll());
         DeckMultiplayerManager.discardFromDeck();
     }
