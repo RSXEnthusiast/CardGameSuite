@@ -37,6 +37,9 @@ public class Card extends View implements View.OnTouchListener {
         return false;
     }
 
+    /**
+     * @return the imageId of the card.
+     */
     public int getImageId() {
         return imageId;
     }
@@ -74,18 +77,34 @@ public class Card extends View implements View.OnTouchListener {
         this.invalidate();
     }
 
+    /**
+     * @return the card value number
+     */
     public int getCardNum() {
         return cardNum;
     }
 
+    /**
+     * Sets the cardnum value
+     *
+     * @param cardNum the card of which to set the cardnum value to
+     */
     public void setCardNum(int cardNum) {
         this.cardNum = cardNum;
     }
 
+    /**
+     * @return true if the card is face up, false if not.
+     */
     public boolean isFaceUp() {
         return isFaceUp;
     }
 
+    /**
+     * Sets the orientation of the card.
+     *
+     * @param b The orientation of which to set the card. True if face up, false if face down.
+     */
     public void setFaceUp(boolean b) {
         isFaceUp = b;
         if (!isFaceUp) {
