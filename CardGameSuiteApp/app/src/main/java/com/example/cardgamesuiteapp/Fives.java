@@ -16,6 +16,7 @@ import com.example.cardgamesuiteapp.display.Hand;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Fives extends AppCompatActivity {
     final static int numHumans = 1;
@@ -55,9 +56,15 @@ public class Fives extends AppCompatActivity {
         viewPlayerScores[1] = findViewById(R.id.player2score);
         newGame();
 //        setContentView(R.layout.animation_test);
-        CardAnimation test = findViewById(R.id.slide);
-        ImageView testCard = findViewById(R.id.testCard);
-        test.cardAnimate(testCard);
+        Card testCard = findViewById(R.id.testCard);
+        testCard.updateImage(1);
+        CardAnimation test = new CardAnimation(testCard);
+        test.setVisibility(1);
+        test.cardAnimate();
+        test.setVisibility(0);
+
+
+
     }
 
     /**

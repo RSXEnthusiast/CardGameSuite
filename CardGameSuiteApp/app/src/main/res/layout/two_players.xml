@@ -5,21 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fives">
-    <view
-        android:id="@+id/slide"
-        class="com.example.cardgamesuiteapp.display.CardAnimation"
-        android:layout_width="370dp"
-        android:layout_height="698dp"
-        tools:layout_editor_absoluteX="-2dp"
-        tools:layout_editor_absoluteY="-1dp" />
 
-    <ImageView
-        android:id="@+id/testCard"
-        android:layout_width="116dp"
-        android:layout_height="138dp"
-        app:srcCompat="@drawable/ace_c"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="29dp" />
+
+
     <Button
         android:id="@+id/confirmButton"
         android:layout_width="116dp"
@@ -71,6 +59,17 @@
         app:layout_constraintHorizontal_bias="0.339"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.cardgamesuiteapp.display.Card
+        android:id="@+id/testCard"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.047"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.386" />
 
     <TextView
         android:id="@+id/instruction"
@@ -140,5 +139,7 @@
                 android:layout_weight="1"
                 android:text="0" />
         </LinearLayout>
+
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

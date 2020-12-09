@@ -1,5 +1,7 @@
 package com.example.cardgamesuiteapp.display;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,43 +15,42 @@ import androidx.annotation.Nullable;
 
 import com.example.cardgamesuiteapp.R;
 
-public class CardAnimation extends View {
+public class CardAnimation {
 
-    private Card player1;
+    protected Card discradedCard;
+    private Context context;
 
-    public CardAnimation(Context context) {
-
-        super(context);
-        init(context);
+    public CardAnimation(Card discradedCard, Context context){
+        this.discradedCard = discradedCard;
+        this.discradedCard.setVisibility(View.VISIBLE);
+        this.context = context;
     }
 
-    public CardAnimation(Context context, @Nullable AttributeSet attrs) {
-
-        super(context, attrs);
-        init(context);
-    }
-
-    private void init(Context context){
-        player1 = new Card(context);
-    }
-
-    public void cardAnimate(ImageView theview){
+    @SuppressLint("WrongConstant")
+    public void cardAnimate(){
         Animation slide = new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,Animation.ABSOLUTE,800);
-        player1.setBackgroundResource(R.drawable.ace_d);
-        this.invalidate();
+        this.discradedCard.setBackgroundResource(R.drawable.ace_d);
         slide.setDuration(2000);
         slide.setFillAfter(true);
 
-        theview.startAnimation(slide);
+        this.discradedCard.startAnimation(slide);
 
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
+    public void setVisibility(int visibility){
+        Activity act = (Activity)context;
+        act.runOnUiThread(new Runnable(){
+            @Override
+            public void run() {
 
-        super.onDraw(canvas);
-        this.setBackgroundColor(Color.TRANSPARENT);
-        player1.setBackgroundColor(Color.TRANSPARENT);
+                if(visibility == 1) {
+                    this.discradedCard.setVisibility(View.VISIBLE);
+                }else if(visibility == 0){
+                    this.discradedCard.setVisibility(View.INVISIBLE);
+                }
+
+            } });
+
     }
 
 }
