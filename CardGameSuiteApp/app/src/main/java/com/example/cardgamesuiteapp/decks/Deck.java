@@ -405,9 +405,11 @@ public abstract class Deck {
         return -1;
     }
 
-
     protected abstract boolean compareNumericalValues(Integer integer, int value);
 
+    /**
+     * @return true if the discard is empty, false if not.
+     */
     public boolean discardIsEmpty() {
         return discard.isEmpty();
     }

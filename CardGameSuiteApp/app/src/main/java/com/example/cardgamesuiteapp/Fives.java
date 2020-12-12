@@ -17,7 +17,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class Fives extends AppCompatActivity {
     final static int numHumans = 1;
-    final static int numAI = 1;
+    final static int numAI = 5;
     static Standard deck;
     static int[] totalScores;// Keeps track of the cumulative score of the game
     static Hand[] viewPlayers;// The custom player views
@@ -34,25 +34,71 @@ public class Fives extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.two_players);
+        setContentView();
+        viewPlayers = new Hand[numAI + numHumans];
+        viewPlayerNames = new TextView[numHumans + numAI];
+        viewPlayerScores = new TextView[numHumans + numAI];
+        initViewPlayers();
         totalScores = new int[numHumans + numAI];
         deck = new Standard(true, numHumans + numAI);
-        viewPlayers = new Hand[numHumans + numAI];
-        viewPlayers[0] = findViewById(R.id.player1);
-        viewPlayers[1] = findViewById(R.id.player2);
         viewDiscard = findViewById(R.id.discard);
         viewDeck = findViewById(R.id.deck);
         viewInstruction = findViewById(R.id.instruction);
         viewConfirm = findViewById(R.id.confirmButton);
         viewConfirm.setOnClickListener(v -> confirmButtonTapped());//call confirmButtonTapped when that button is tapped
-        viewPlayerNames = new TextView[numAI + numHumans];
-        viewPlayerScores = new TextView[numHumans + numAI];
-        viewPlayerNames[0] = findViewById(R.id.player1name);
-        viewPlayerNames[1] = findViewById(R.id.player2name);
-        viewPlayerScores[0] = findViewById(R.id.player1score);
-        viewPlayerScores[1] = findViewById(R.id.player2score);
         newGame();
     }
+
+    private void setContentView() {
+        switch (numHumans + numAI) {
+            case 2:
+                setContentView(R.layout.two_players);
+                break;
+            case 3:
+                setContentView(R.layout.three_players);
+                break;
+            case 4:
+                setContentView(R.layout.four_players);
+                break;
+            case 5:
+                setContentView(R.layout.five_players);
+                break;
+            case 6:
+                setContentView(R.layout.six_players);
+                break;
+        }
+    }
+
+    private void initViewPlayers() {
+        viewPlayers[0] = findViewById(R.id.player1);
+        viewPlayerNames[0] = findViewById(R.id.player1name);
+        viewPlayerScores[0] = findViewById(R.id.player1score);
+        viewPlayers[1] = findViewById(R.id.player2);
+        viewPlayerNames[1] = findViewById(R.id.player2name);
+        viewPlayerScores[1] = findViewById(R.id.player2score);
+        int numPlayers = numHumans + numAI;
+        if (numPlayers >= 3) {
+            viewPlayers[2] = findViewById(R.id.player3);
+            viewPlayerNames[2] = findViewById(R.id.player3name);
+            viewPlayerScores[2] = findViewById(R.id.player3score);
+        }
+        if (numPlayers >= 4) {
+            viewPlayers[3] = findViewById(R.id.player4);
+            viewPlayerNames[3] = findViewById(R.id.player4name);
+            viewPlayerScores[3] = findViewById(R.id.player4score);
+        }
+        if (numPlayers >= 5) {
+            viewPlayers[4] = findViewById(R.id.player5);
+            viewPlayerNames[4] = findViewById(R.id.player5name);
+            viewPlayerScores[4] = findViewById(R.id.player5score);
+        }
+        if (numPlayers >= 6) {
+            viewPlayers[5] = findViewById(R.id.player6);
+            viewPlayerNames[5] = findViewById(R.id.player6name);
+            viewPlayerScores[5] = findViewById(R.id.player6score);
+        }
+    }
+
 
     /**
      * When confirmMemorizedButton is tapped, this method is called.
