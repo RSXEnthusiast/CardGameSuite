@@ -27,6 +27,7 @@ public class Fives extends AppCompatActivity {
     static Button viewConfirm;// The button the user will press once they've memorized their cards
     static TextView[] viewPlayerNames;// The textViews of the player names
     static TextView[] viewPlayerScores;// The textView of the player scores.
+    static View viewDiscardHighlight;
     static fivesStage stage;// The current stage of play
     static int winnerIndex;
     ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -42,6 +43,9 @@ public class Fives extends AppCompatActivity {
         totalScores = new int[numHumans + numAI];
         deck = new Standard(true, numHumans + numAI);
         viewDiscard = findViewById(R.id.discard);
+        viewDiscard.bringToFront();
+        viewDiscardHighlight = findViewById(R.id.highlightDiscard);
+        viewDiscardHighlight.setVisibility(View.INVISIBLE);
         viewDeck = findViewById(R.id.deck);
         viewInstruction = findViewById(R.id.instruction);
         viewConfirm = findViewById(R.id.confirmButton);
@@ -171,6 +175,7 @@ public class Fives extends AppCompatActivity {
         if (cardNum == deck.peekTopDraw()) {
             stage = fivesStage.drewFromDraw;
             viewDeck.flipCard();
+            viewDiscardHighlight.setVisibility(View.VISIBLE);
             viewInstruction.setText(getCurInstruction());
         } else if (cardNum == deck.peekTopDiscard()) {
             stage = fivesStage.drewFromDiscard;
@@ -196,6 +201,7 @@ public class Fives extends AppCompatActivity {
             viewDiscard.updateImage(deck.peekTopDiscard());
             viewDeck.flipCard();
             viewDeck.updateImage(deck.peekTopDraw());
+            viewDiscardHighlight.setVisibility(View.INVISIBLE);
             updateViewInstruction();
         } else if (isValidTapOnCardInHand(cardNum)) {
             endTurn = true;
@@ -213,6 +219,7 @@ public class Fives extends AppCompatActivity {
             viewDeck.flipCard();
             viewDeck.updateImage(deck.peekTopDraw());
             viewDiscard.updateImage(deck.peekTopDiscard());
+            viewDiscardHighlight.setVisibility(View.INVISIBLE);
             updateViewInstruction();
         }
         if (endTurn) {
