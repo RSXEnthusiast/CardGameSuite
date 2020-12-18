@@ -16,8 +16,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class Fives extends AppCompatActivity {
-    final static int numHumans = 1;
-    final static int numAI = 5;
+    static int numHumans;
+    static int numAI;
     static Standard deck;
     static int[] totalScores;// Keeps track of the cumulative score of the game
     static Hand[] viewPlayers;// The custom player views
@@ -35,6 +35,41 @@ public class Fives extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.single_player_menu);
+        findViewById(R.id.oneAI).setOnClickListener(v -> selectedOneAI());
+        findViewById(R.id.twoAI).setOnClickListener(v -> selectedTwoAI());
+        findViewById(R.id.threeAI).setOnClickListener(v -> selectedThreeAI());
+        findViewById(R.id.fourAI).setOnClickListener(v -> selectedFourAI());
+        findViewById(R.id.fiveAI).setOnClickListener(v -> selectedFiveAI());
+    }
+
+    private void selectedOneAI() {
+        numAISelected(1);
+    }
+
+    private void selectedTwoAI() {
+        numAISelected(2);
+    }
+
+    private void selectedThreeAI() {
+        numAISelected(3);
+    }
+
+    private void selectedFourAI() {
+        numAISelected(4);
+    }
+
+    private void selectedFiveAI() {
+        numAISelected(5);
+    }
+
+    private void numAISelected(int numAI) {
+        numHumans = 1;
+        this.numAI = numAI;
+        initFives();
+    }
+
+    private void initFives() {
         setContentView();
         viewPlayers = new Hand[numAI + numHumans];
         viewPlayerNames = new TextView[numHumans + numAI];
@@ -499,7 +534,6 @@ public class Fives extends AppCompatActivity {
      * This updates the screen after the AI has decided to draw from the draw pile.
      */
     private static void AIDrawFromPile() {
-        System.out.println("AIDrawFromPile");
         viewDeck.flipCard();
     }
 
@@ -509,7 +543,6 @@ public class Fives extends AppCompatActivity {
      * @param location where the card should be swapped to
      */
     private static void AIKeptDraw(int location) {
-        System.out.println("AIKeptDraw");
         //Logic for swapped with hand
         viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDraw());
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
@@ -530,7 +563,6 @@ public class Fives extends AppCompatActivity {
      * @param location which card will be flipped up.
      */
     private static void AIDiscardedDraw(int location) {
-        System.out.println("AIDiscardedDraw");
         //logic for flipping over card in hand.
         viewDeck.flipCard();
         try {
@@ -549,7 +581,6 @@ public class Fives extends AppCompatActivity {
      * @param location where to put the card that the AI drew from this discard.
      */
     private static void AIDrewFromDiscard(int location) {
-        System.out.println("AIDrewFromDiscard");
         viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDiscard());
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
         try {
@@ -600,7 +631,6 @@ public class Fives extends AppCompatActivity {
                 }
             }
         }
-        System.out.println("curScore: " + curScore + " lowestNewScore: " + lowestNewScore);
         if (lowestNewScore - curScore < 0 || (lowestNewScore - curScore <= 3 && Standard.getNumericalValue(newCard) <= 3)) {
             return lowestNewScoreMoveIndex;
         }
