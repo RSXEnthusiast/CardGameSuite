@@ -25,22 +25,33 @@ public class Fives extends AppCompatActivity {
     static Card viewDeck;// The deck view
     static TextView viewInstruction;// The instruction view
     static Button viewConfirm;// The button the user will press once they've memorized their cards
+    static Button viewReturnToMainMenu;
     static TextView[] viewPlayerNames;// The textViews of the player names
     static TextView[] viewPlayerScores;// The textView of the player scores.
     static View viewDiscardHighlight;
+    static View[] viewAINumButtons;
     static fivesStage stage;// The current stage of play
     static int winnerIndex;
-    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_player_menu);
-        findViewById(R.id.oneAI).setOnClickListener(v -> selectedOneAI());
-        findViewById(R.id.twoAI).setOnClickListener(v -> selectedTwoAI());
-        findViewById(R.id.threeAI).setOnClickListener(v -> selectedThreeAI());
-        findViewById(R.id.fourAI).setOnClickListener(v -> selectedFourAI());
-        findViewById(R.id.fiveAI).setOnClickListener(v -> selectedFiveAI());
+        initAISelectionMenu();
+    }
+
+    private void initAISelectionMenu() {
+        viewAINumButtons = new View[5];
+        viewAINumButtons[0] = findViewById(R.id.oneAI);
+        viewAINumButtons[0].setOnClickListener(v -> selectedOneAI());
+        viewAINumButtons[1] = findViewById(R.id.twoAI);
+        viewAINumButtons[1].setOnClickListener(v -> selectedTwoAI());
+        viewAINumButtons[2] = findViewById(R.id.threeAI);
+        viewAINumButtons[2].setOnClickListener(v -> selectedThreeAI());
+        viewAINumButtons[3] = findViewById(R.id.fourAI);
+        viewAINumButtons[3].setOnClickListener(v -> selectedFourAI());
+        viewAINumButtons[4] = findViewById(R.id.fiveAI);
+        viewAINumButtons[4].setOnClickListener(v -> selectedFiveAI());
     }
 
     private void selectedOneAI() {
@@ -75,6 +86,11 @@ public class Fives extends AppCompatActivity {
         viewPlayerNames = new TextView[numHumans + numAI];
         viewPlayerScores = new TextView[numHumans + numAI];
         initViewPlayers();
+        //Temp - placeholder for player name
+        viewPlayerNames[0].setText("Human");
+        for (int i = numHumans; i <= numAI; i++) {
+            viewPlayerNames[i].setText("Computer " + i);
+        }
         totalScores = new int[numHumans + numAI];
         deck = new Standard(true, numHumans + numAI);
         viewDiscard = findViewById(R.id.discard);
@@ -85,7 +101,14 @@ public class Fives extends AppCompatActivity {
         viewInstruction = findViewById(R.id.instruction);
         viewConfirm = findViewById(R.id.confirmButton);
         viewConfirm.setOnClickListener(v -> confirmButtonTapped());//call confirmButtonTapped when that button is tapped
+        viewReturnToMainMenu = findViewById(R.id.returnToMainMenuButton);
+        viewReturnToMainMenu.setOnClickListener(v -> returnToMainMenu());
         newGame();
+    }
+
+    private void returnToMainMenu() {
+        setContentView(R.layout.single_player_menu);
+        initAISelectionMenu();
     }
 
     private void setContentView() {
@@ -159,6 +182,7 @@ public class Fives extends AppCompatActivity {
             case "New Game":
                 stage = fivesStage.memCards;
                 viewConfirm.setText("Memorized");
+                viewReturnToMainMenu.setVisibility(View.INVISIBLE);
                 newGame();
         }
     }
@@ -401,6 +425,8 @@ public class Fives extends AppCompatActivity {
                     return "Select a face down card to flip over";
                 case drewFromDiscard:
                     return "Select a face down card to swap the new card with";
+                case roundOver:
+                    return "Press continue";
                 case gameOver:
                     return viewPlayerNames[winnerIndex].getText() + " won!";
             }
@@ -421,6 +447,7 @@ public class Fives extends AppCompatActivity {
                 }
             }
         }
+        stage = fivesStage.roundOver;
         return true;
     }
 
@@ -456,6 +483,7 @@ public class Fives extends AppCompatActivity {
             stage = fivesStage.gameOver;
             updateViewInstruction();
             viewConfirm.setText("New Game");
+            viewReturnToMainMenu.setVisibility(View.VISIBLE);
         } else {
             viewConfirm.setText("Continue");
         }
@@ -742,6 +770,6 @@ public class Fives extends AppCompatActivity {
      * The stages of the fives game turn
      */
     private enum fivesStage {
-        memCards, draw, drewFromDraw, discardedFromDraw, drewFromDiscard, gameOver
+        memCards, draw, drewFromDraw, discardedFromDraw, drewFromDiscard, roundOver, gameOver
     }
 }

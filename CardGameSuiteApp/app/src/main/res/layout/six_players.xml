@@ -18,6 +18,19 @@
         app:layout_constraintStart_toEndOf="@id/player1"
         app:layout_constraintTop_toBottomOf="@id/instruction" />
 
+    <Button
+        android:id="@+id/returnToMainMenuButton"
+        android:layout_width="116dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="56dp"
+        android:gravity="center"
+        android:text="Main Menu"
+        android:textSize="11dp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@id/player1"
+        app:layout_constraintTop_toBottomOf="@id/instruction" />
+
     <com.example.cardgamesuiteapp.display.Hand
         android:id="@+id/player1"
         android:layout_width="150dp"
@@ -166,8 +179,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="0" />
+                android:layout_weight="3" />
         </LinearLayout>
 
         <LinearLayout
@@ -187,8 +199,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="0" />
+                android:layout_weight="3" />
         </LinearLayout>
 
         <LinearLayout
@@ -208,8 +219,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="0" />
+                android:layout_weight="3" />
         </LinearLayout>
 
         <LinearLayout
@@ -229,8 +239,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="0" />
+                android:layout_weight="3" />
         </LinearLayout>
 
         <LinearLayout
@@ -250,8 +259,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="0" />
+                android:layout_weight="3" />
         </LinearLayout>
 
         <LinearLayout
@@ -271,8 +279,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="0" />
+                android:layout_weight="3" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
