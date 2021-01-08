@@ -1,7 +1,10 @@
 package com.example.cardgamesuiteapp;
 
+import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -493,6 +496,12 @@ public class Fives extends AppCompatActivity {
         if (hasWon()) {
             stage = fivesStage.gameOver;
             updateViewInstruction();
+            for (int i : winnerIndex) {
+                viewPlayerNames[i].setTextColor(Color.GREEN);
+                viewPlayerScores[i].setTextColor((Color.GREEN));
+            }
+            viewPlayerNames[loserIndex].setTextColor(Color.RED);
+            viewPlayerScores[loserIndex].setTextColor((Color.RED));
             viewConfirm.setText("New Game");
             viewReturnToMainMenu.setVisibility(View.VISIBLE);
         } else {
