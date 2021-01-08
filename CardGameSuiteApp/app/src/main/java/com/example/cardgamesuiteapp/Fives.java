@@ -21,6 +21,7 @@ public class Fives extends AppCompatActivity {
     static int numAI;// Number of AI players
     static Standard deck;// The Deck object
 
+    //View object names will always be preceded by "view"
     //View objects used for every Fives game
     static Hand[] viewPlayers;// The custom player views
     static Card viewDiscard;// The discard view
@@ -504,16 +505,7 @@ public class Fives extends AppCompatActivity {
                 case roundOver:
                     return "Press continue";
                 case gameOver:
-                    String winners = "";
-                    for (int i = 0; i < winnerIndex.size(); i++) {
-                        winners += viewPlayerNames[winnerIndex.get(i)].getText();
-                        if (winnerIndex.size() > i + 1) {
-                            winners += " and ";
-                        }
-                    }
-                    winners += " won! ";
-                    winners += viewPlayerNames[loserIndex].getText() + " lost!";
-                    return winners;
+                    return "Game over!";
             }
         }
         return "Player " + deck.getCurPlayersTurn() + "'s Turn";
