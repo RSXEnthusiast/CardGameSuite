@@ -17,30 +17,35 @@ import com.example.cardgamesuiteapp.display.Hand;
 import java.util.ArrayList;
 
 public class Fives extends AppCompatActivity {
-    static int numHumans;
-    static int numAI;
-    static Standard deck;
-    static int[] totalScores;// Keeps track of the cumulative score of the game
+    static int numHumans;// Number of Human players
+    static int numAI;// Number of AI players
+    static Standard deck;// The Deck object
+
+    //View objects used for every Fives game
     static Hand[] viewPlayers;// The custom player views
     static Card viewDiscard;// The discard view
     static Card viewDeck;// The deck view
     static TextView viewInstruction;// The instruction view
     static Button viewConfirm;// The button the user will press once they've memorized their cards
-    static Button viewReturnToMainMenu;
-    static Button viewReturnToPlayerMenu;
-    static Button viewReturnToGameMainMenu;
+    static Button viewReturnToMainMenu;// The button the user will press to return to the main menu
+    static Button viewReturnToPlayerMenu;// The button the user will press to return to the player menu
+    static Button viewReturnToGameMainMenu;// The button the user will press to return to the game's main menu
     static TextView[] viewPlayerNames;// The textViews of the player names
     static TextView[] viewPlayerScores;// The textView of the player scores.
-    static View viewDiscardHighlight;
-    static View[] viewAINumButtons;
+    static View viewDiscardHighlight;// Simply the "highlight" of th discard, mainly used for setting the highlight to visible/invisible
+
+    //Additional view objects used for Fives single player
+    static View[] viewAINumButtons;// The buttons the user would press to select the number of AI
+
     static fivesStage stage;// The current stage of play
+    static int[] totalScores;// Keeps track of the cumulative score of the game
     static ArrayList<Integer> winnerIndex;
     static int loserIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.single_player_menu);
+        setContentView(R.layout.offline_player_menu);
         initAISelectionMenu();
     }
 
@@ -125,7 +130,7 @@ public class Fives extends AppCompatActivity {
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                setContentView(R.layout.single_player_menu);
+                setContentView(R.layout.offline_player_menu);
                 initAISelectionMenu();
             }
         });
