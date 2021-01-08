@@ -1,11 +1,9 @@
 package com.example.cardgamesuiteapp;
 
-import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -17,8 +15,6 @@ import com.example.cardgamesuiteapp.display.Card;
 import com.example.cardgamesuiteapp.display.Hand;
 
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class Fives extends AppCompatActivity {
     static int numHumans;
