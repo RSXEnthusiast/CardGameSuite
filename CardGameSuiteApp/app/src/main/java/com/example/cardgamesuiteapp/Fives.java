@@ -29,6 +29,8 @@ public class Fives extends AppCompatActivity {
     static TextView viewInstruction;// The instruction view
     static Button viewConfirm;// The button the user will press once they've memorized their cards
     static Button viewReturnToMainMenu;
+    static Button viewReturnToPlayerMenu;
+    static Button viewReturnToGameMainMenu;
     static TextView[] viewPlayerNames;// The textViews of the player names
     static TextView[] viewPlayerScores;// The textView of the player scores.
     static View viewDiscardHighlight;
@@ -107,13 +109,28 @@ public class Fives extends AppCompatActivity {
         viewConfirm.setOnClickListener(v -> confirmButtonTapped());//call confirmButtonTapped when that button is tapped
         viewReturnToMainMenu = findViewById(R.id.returnToMainMenuButton);
         viewReturnToMainMenu.setOnClickListener(v -> returnToMainMenu());
+        viewReturnToPlayerMenu = findViewById(R.id.returnToPlayerMenuButton);
+        viewReturnToPlayerMenu.setOnClickListener(v -> returnToPlayerMenu());
+        viewReturnToMainMenu.setOnClickListener(v -> returnToMainMenu());
+        viewReturnToGameMainMenu = findViewById(R.id.returnToGameMainMenuButton);
+        viewReturnToGameMainMenu.setOnClickListener(v -> returnToGameMainMenu());
         winnerIndex = new ArrayList<Integer>();
         newGame();
     }
 
-    private void returnToMainMenu() {
+    private void returnToGameMainMenu() {
+        //This is where code would be to return to the main menu of the game, probably where one would select AI/Online.
+        //For now it does nothing
+    }
+
+    private void returnToPlayerMenu() {
         setContentView(R.layout.single_player_menu);
         initAISelectionMenu();
+    }
+
+    private void returnToMainMenu() {
+        //This is where code would be to return to jennifer's main menu.
+        //For now it does nothing
     }
 
     private void setContentView() {
@@ -504,6 +521,8 @@ public class Fives extends AppCompatActivity {
             viewPlayerScores[loserIndex].setTextColor((Color.RED));
             viewConfirm.setText("New Game");
             viewReturnToMainMenu.setVisibility(View.VISIBLE);
+            viewReturnToPlayerMenu.setVisibility(View.VISIBLE);
+            viewReturnToGameMainMenu.setVisibility(View.VISIBLE);
         } else {
             viewConfirm.setText("Continue");
         }
