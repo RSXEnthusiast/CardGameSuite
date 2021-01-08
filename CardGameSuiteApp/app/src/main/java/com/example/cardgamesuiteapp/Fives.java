@@ -31,7 +31,8 @@ public class Fives extends AppCompatActivity {
     static View viewDiscardHighlight;
     static View[] viewAINumButtons;
     static fivesStage stage;// The current stage of play
-    static int winnerIndex;
+    static ArrayList<Integer> winnerIndex;
+    static int loserIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +90,7 @@ public class Fives extends AppCompatActivity {
         //Temp - placeholder for player name
         viewPlayerNames[0].setText("Human");
         for (int i = numHumans; i <= numAI; i++) {
-            viewPlayerNames[i].setText("Computer " + i);
+            viewPlayerNames[i].setText("CPU" + i);
         }
         totalScores = new int[numHumans + numAI];
         deck = new Standard(true, numHumans + numAI);
@@ -103,6 +104,7 @@ public class Fives extends AppCompatActivity {
         viewConfirm.setOnClickListener(v -> confirmButtonTapped());//call confirmButtonTapped when that button is tapped
         viewReturnToMainMenu = findViewById(R.id.returnToMainMenuButton);
         viewReturnToMainMenu.setOnClickListener(v -> returnToMainMenu());
+        winnerIndex = new ArrayList<Integer>();
         newGame();
     }
 
@@ -428,7 +430,16 @@ public class Fives extends AppCompatActivity {
                 case roundOver:
                     return "Press continue";
                 case gameOver:
-                    return viewPlayerNames[winnerIndex].getText() + " won!";
+                    String winners = "";
+                    for (int i = 0; i < winnerIndex.size(); i++) {
+                        winners += viewPlayerNames[winnerIndex.get(i)].getText();
+                        if (winnerIndex.size() > i + 1) {
+                            winners += " and ";
+                        }
+                    }
+                    winners += " won! ";
+                    winners += viewPlayerNames[loserIndex].getText() + " lost!";
+                    return winners;
             }
         }
         return "Player " + deck.getCurPlayersTurn() + "'s Turn";
@@ -511,24 +522,34 @@ public class Fives extends AppCompatActivity {
      * @return true if a player has won
      */
     private static boolean hasWon() {
-        int maxScore = 0;
+        int maxScore = -100;
+        int minScore = 100;
+        winnerIndex.clear();
         for (int i = 0; i < totalScores.length; i++) {
             if (totalScores[i] > maxScore) {
                 maxScore = totalScores[i];
+            }
+            if (totalScores[i] < minScore) {
+                minScore = totalScores[i];
+            }
+        }
+        for (int i = 0; i < totalScores.length; i++) {
+            if (totalScores[i] <= minScore) {
+                winnerIndex.add(i);
             }
         }
         if (maxScore < 50) {
             return false;
         }
-        int numWinners = 0;
-        winnerIndex = 0;
+        int numLosers = 0;
+        loserIndex = 0;
         for (int i = 0; i < totalScores.length; i++) {
             if (totalScores[i] == maxScore) {
-                numWinners++;
-                winnerIndex = i;
+                numLosers++;
+                loserIndex = i;
             }
         }
-        if (numWinners > 1) {
+        if (numLosers > 1) {
             return false;
         }
         return true;
