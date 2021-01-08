@@ -86,6 +86,7 @@ public class Fives extends AppCompatActivity {
 
     private void initFives() {
         setContentView();
+        ((TextView) findViewById(R.id.scoresText)).setTextColor(Color.LTGRAY);
         viewPlayers = new Hand[numAI + numHumans];
         viewPlayerNames = new TextView[numHumans + numAI];
         viewPlayerScores = new TextView[numHumans + numAI];
@@ -103,6 +104,7 @@ public class Fives extends AppCompatActivity {
         viewDiscardHighlight.setVisibility(View.INVISIBLE);
         viewDeck = findViewById(R.id.deck);
         viewInstruction = findViewById(R.id.instruction);
+        viewInstruction.setTextColor(Color.LTGRAY);
         viewConfirm = findViewById(R.id.confirmButton);
         viewConfirm.setOnClickListener(v -> confirmButtonTapped());//call confirmButtonTapped when that button is tapped
         viewReturnToMainMenu = findViewById(R.id.returnToMainMenuButton);
@@ -119,7 +121,7 @@ public class Fives extends AppCompatActivity {
     private void returnToPlayerMenu() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Return To Player Menu");
-        builder.setMessage("Are you sure?");
+        builder.setMessage("All current game progress will be lost.\n\nAre you sure?");
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -140,7 +142,7 @@ public class Fives extends AppCompatActivity {
     private void returnToGameMainMenu() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Return To Game Main Menu");
-        builder.setMessage("Are you sure?");
+        builder.setMessage("All current game progress will be lost.\n\nAre you sure?");
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -161,7 +163,7 @@ public class Fives extends AppCompatActivity {
     private void returnToMainMenu() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Return To Main Menu");
-        builder.setMessage("Are you sure?");
+        builder.setMessage("All current game progress will be lost.\n\nAre you sure?");
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -250,7 +252,6 @@ public class Fives extends AppCompatActivity {
             case "New Game":
                 stage = fivesStage.memCards;
                 viewConfirm.setText("Memorized");
-                viewReturnToMainMenu.setVisibility(View.INVISIBLE);
                 newGame();
         }
     }
@@ -439,6 +440,8 @@ public class Fives extends AppCompatActivity {
         deck.shuffleDiscardIntoDeck();
         for (int i = 0; i < totalScores.length; i++) {
             totalScores[i] = 0;
+            viewPlayerNames[i].setTextColor(Color.LTGRAY);
+            viewPlayerScores[i].setTextColor(Color.LTGRAY);
         }
         updateViewScores();
         newRound();
@@ -603,10 +606,18 @@ public class Fives extends AppCompatActivity {
             if (totalScores[i] < minScore) {
                 minScore = totalScores[i];
             }
+            viewPlayerNames[i].setTextColor(Color.LTGRAY);
+            viewPlayerScores[i].setTextColor(Color.LTGRAY);
         }
         for (int i = 0; i < totalScores.length; i++) {
             if (totalScores[i] <= minScore) {
                 winnerIndex.add(i);
+                viewPlayerNames[i].setTextColor(Color.GREEN);
+                viewPlayerScores[i].setTextColor(Color.GREEN);
+            }
+            if (totalScores[i] >= maxScore) {
+                viewPlayerNames[i].setTextColor(Color.RED);
+                viewPlayerScores[i].setTextColor(Color.RED);
             }
         }
         if (maxScore < 50) {

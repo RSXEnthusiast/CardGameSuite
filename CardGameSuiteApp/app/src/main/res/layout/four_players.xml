@@ -25,7 +25,7 @@
         android:layout_marginEnd="288dp"
         android:layout_marginBottom="92dp"
         android:gravity="center"
-        android:text="AI Selection Menu"
+        android:text="Player Selection"
         android:textSize="11dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -38,7 +38,7 @@
         android:layout_marginEnd="288dp"
         android:layout_marginBottom="4dp"
         android:gravity="center"
-        android:text="Main Menu"
+        android:text="App Collection"
         android:textSize="11dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -154,6 +154,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/scoresText"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:gravity="center_horizontal"
