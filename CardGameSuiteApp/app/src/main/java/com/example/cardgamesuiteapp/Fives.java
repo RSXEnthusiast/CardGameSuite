@@ -1,8 +1,10 @@
 package com.example.cardgamesuiteapp;
 
 import androidx.annotation.ColorInt;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -118,19 +120,67 @@ public class Fives extends AppCompatActivity {
         newGame();
     }
 
-    private void returnToGameMainMenu() {
-        //This is where code would be to return to the main menu of the game, probably where one would select AI/Online.
-        //For now it does nothing
+    private void returnToPlayerMenu() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Return To Player Menu");
+        builder.setMessage("Are you sure?");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                setContentView(R.layout.single_player_menu);
+                initAISelectionMenu();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Do Nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
-    private void returnToPlayerMenu() {
-        setContentView(R.layout.single_player_menu);
-        initAISelectionMenu();
+    private void returnToGameMainMenu() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Return To Game Main Menu");
+        builder.setMessage("Are you sure?");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //This is where code would be to return to the main menu of the game, probably where one would select AI/Online.
+                //For now it does nothing
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Do Nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void returnToMainMenu() {
-        //This is where code would be to return to jennifer's main menu.
-        //For now it does nothing
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Return To Main Menu");
+        builder.setMessage("Are you sure?");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //This is where code would be to return to jennifer's main menu.
+                //For now it does nothing
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Do Nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void setContentView() {
@@ -520,9 +570,6 @@ public class Fives extends AppCompatActivity {
             viewPlayerNames[loserIndex].setTextColor(Color.RED);
             viewPlayerScores[loserIndex].setTextColor((Color.RED));
             viewConfirm.setText("New Game");
-            viewReturnToMainMenu.setVisibility(View.VISIBLE);
-            viewReturnToPlayerMenu.setVisibility(View.VISIBLE);
-            viewReturnToGameMainMenu.setVisibility(View.VISIBLE);
         } else {
             viewConfirm.setText("Continue");
         }
