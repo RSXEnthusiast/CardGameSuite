@@ -31,7 +31,7 @@ public class Fives extends AppCompatActivity {
     static View viewDiscardHighlight;
     static View[] viewAINumButtons;
     static fivesStage stage;// The current stage of play
-    static int winnerIndex[];
+    static ArrayList<Integer> winnerIndex;
     static int loserIndex;
 
     @Override
@@ -104,6 +104,7 @@ public class Fives extends AppCompatActivity {
         viewConfirm.setOnClickListener(v -> confirmButtonTapped());//call confirmButtonTapped when that button is tapped
         viewReturnToMainMenu = findViewById(R.id.returnToMainMenuButton);
         viewReturnToMainMenu.setOnClickListener(v -> returnToMainMenu());
+        winnerIndex = new ArrayList<Integer>();
         newGame();
     }
 
@@ -430,9 +431,9 @@ public class Fives extends AppCompatActivity {
                     return "Press continue";
                 case gameOver:
                     String winners = "";
-                    for (int i = 0; i < winnerIndex.length; i++) {
-                        winners += viewPlayerNames[winnerIndex[i]].getText();
-                        if (winnerIndex.length > i + 1) {
+                    for (int i = 0; i < winnerIndex.size(); i++) {
+                        winners += viewPlayerNames[winnerIndex.get(i)].getText();
+                        if (winnerIndex.size() > i + 1) {
                             winners += " and ";
                         }
                     }
@@ -523,18 +524,18 @@ public class Fives extends AppCompatActivity {
     private static boolean hasWon() {
         int maxScore = -100;
         int minScore = 100;
-        int numWinners = 0;
+        winnerIndex.clear();
         for (int i = 0; i < totalScores.length; i++) {
             if (totalScores[i] > maxScore) {
                 maxScore = totalScores[i];
             }
             if (totalScores[i] < minScore) {
                 minScore = totalScores[i];
-                winnerIndex[numWinners] = i;
-                numWinners++;
-            } else if (totalScores[i] == minScore) {
-                winnerIndex[numWinners] = i;
-                numWinners++;
+            }
+        }
+        for (int i = 0; i < totalScores.length; i++) {
+            if (totalScores[i] <= minScore) {
+                winnerIndex.add(i);
             }
         }
         if (maxScore < 50) {
