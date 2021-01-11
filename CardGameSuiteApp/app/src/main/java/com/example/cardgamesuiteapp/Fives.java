@@ -36,8 +36,7 @@ public class Fives extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_page);
-        setContentView(R.layout.content_main_page);
+        setContentView(R.layout.single_player_menu);
         initAISelectionMenu();
     }
 

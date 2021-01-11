@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.gamemainmenu;
+package com.example.cardgamesuiteapp;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.cardgamesuiteapp.DisplayFivesRulesActivity;
 import com.example.cardgamesuiteapp.R;
 
 public class DisplayMainPageActivity extends AppCompatActivity {
@@ -21,6 +22,11 @@ public class DisplayMainPageActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    public void clickPlayFivesButton(View view) {
+        Intent intent = new Intent(this, Fives.class);
+        startActivity(intent);
     }
 
     public void clickFivesRulesButton(View view) {

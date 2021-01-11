@@ -44,6 +44,7 @@
                 android:layout_gravity="center"
                 android:text="@string/fives"
                 android:textColor="@color/white"
+                android:onClick="clickPlayFivesButton"
                 android:textSize="32sp"/>
 
             <ImageButton
@@ -52,7 +53,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="start"
                 android:src="@drawable/red_info_icon"
-                android:onClick="clickInfoButton"
+                android:onClick="clickFivesRulesButton"
                 android:contentDescription="@string/infoIcon" />
 
         </LinearLayout>

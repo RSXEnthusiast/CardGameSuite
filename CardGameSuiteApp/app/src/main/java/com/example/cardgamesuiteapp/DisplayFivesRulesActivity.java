@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.gamemainmenu;
+package com.example.cardgamesuiteapp;
 
 import android.os.Bundle;
 
