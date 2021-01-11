@@ -2,4 +2,16 @@
 <resources>
     <string name="app_name">Fives</string>
     <string name="action_settings">Settings</string>
+    <string name="info">Select a card game to play</string>
+    <string name="fives_description">here I describe how to play fives</string>
+    <string name="settings_button">Settings Button</string>
+    <string name="fives">Fives</string>
+    <string name="fivesImage">fivesImage</string>
+    <string name="infoIcon">InfoIcon</string>
+    <string name="settings_cog_icon">Settings Cog Icon</string>
+    <string name="fives_rules_text">DISPLAY RULES</string>
+    <string name="regularCard">Regular</string>
+    <string name="largeCardFont">Large</string>
+    <string name="mustacheCard">Mustache</string>
+    <string name="goal">Goal: Obtain the lowest scored hand before someone reaches 50</string>
 </resources>
