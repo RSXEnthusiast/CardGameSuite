@@ -1,7 +1,10 @@
 package com.example.cardgamesuiteapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,31 +15,38 @@ import com.example.cardgamesuiteapp.display.Card;
 import com.example.cardgamesuiteapp.display.Hand;
 
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class Fives extends AppCompatActivity {
-    static int numHumans;
-    static int numAI;
-    static Standard deck;
-    static int[] totalScores;// Keeps track of the cumulative score of the game
+    static int numHumans;// Number of Human players
+    static int numAI;// Number of AI players
+    static Standard deck;// The Deck object
+
+    //View object names will always be preceded by "view"
+    //View objects used for every Fives game
     static Hand[] viewPlayers;// The custom player views
     static Card viewDiscard;// The discard view
     static Card viewDeck;// The deck view
     static TextView viewInstruction;// The instruction view
     static Button viewConfirm;// The button the user will press once they've memorized their cards
-    static Button viewReturnToMainMenu;
+    static Button viewReturnToMainMenu;// The button the user will press to return to the main menu
+    static Button viewReturnToPlayerMenu;// The button the user will press to return to the player menu
+    static Button viewReturnToGameMainMenu;// The button the user will press to return to the game's main menu
     static TextView[] viewPlayerNames;// The textViews of the player names
     static TextView[] viewPlayerScores;// The textView of the player scores.
-    static View viewDiscardHighlight;
-    static View[] viewAINumButtons;
+    static View viewDiscardHighlight;// Simply the "highlight" of th discard, mainly used for setting the highlight to visible/invisible
+
+    //Additional view objects used for Fives single player
+    static View[] viewAINumButtons;// The buttons the user would press to select the number of AI
+
     static fivesStage stage;// The current stage of play
-    static int winnerIndex;
+    static int[] totalScores;// Keeps track of the cumulative score of the game
+    static ArrayList<Integer> winnerIndex;
+    static int loserIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.single_player_menu);
+        setContentView(R.layout.offline_player_menu);
         initAISelectionMenu();
     }
 
@@ -82,6 +92,7 @@ public class Fives extends AppCompatActivity {
 
     private void initFives() {
         setContentView();
+        ((TextView) findViewById(R.id.scoresText)).setTextColor(Color.LTGRAY);
         viewPlayers = new Hand[numAI + numHumans];
         viewPlayerNames = new TextView[numHumans + numAI];
         viewPlayerScores = new TextView[numHumans + numAI];
@@ -89,7 +100,7 @@ public class Fives extends AppCompatActivity {
         //Temp - placeholder for player name
         viewPlayerNames[0].setText("Human");
         for (int i = numHumans; i <= numAI; i++) {
-            viewPlayerNames[i].setText("Computer " + i);
+            viewPlayerNames[i].setText("CPU" + i);
         }
         totalScores = new int[numHumans + numAI];
         deck = new Standard(true, numHumans + numAI);
@@ -99,16 +110,81 @@ public class Fives extends AppCompatActivity {
         viewDiscardHighlight.setVisibility(View.INVISIBLE);
         viewDeck = findViewById(R.id.deck);
         viewInstruction = findViewById(R.id.instruction);
+        viewInstruction.setTextColor(Color.LTGRAY);
         viewConfirm = findViewById(R.id.confirmButton);
         viewConfirm.setOnClickListener(v -> confirmButtonTapped());//call confirmButtonTapped when that button is tapped
         viewReturnToMainMenu = findViewById(R.id.returnToMainMenuButton);
         viewReturnToMainMenu.setOnClickListener(v -> returnToMainMenu());
+        viewReturnToPlayerMenu = findViewById(R.id.returnToPlayerMenuButton);
+        viewReturnToPlayerMenu.setOnClickListener(v -> returnToPlayerMenu());
+        viewReturnToMainMenu.setOnClickListener(v -> returnToMainMenu());
+        viewReturnToGameMainMenu = findViewById(R.id.returnToGameMainMenuButton);
+        viewReturnToGameMainMenu.setOnClickListener(v -> returnToGameMainMenu());
+        winnerIndex = new ArrayList<Integer>();
         newGame();
     }
 
+    private void returnToPlayerMenu() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Return To Player Menu");
+        builder.setMessage("All current game progress will be lost.\n\nAre you sure?");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                setContentView(R.layout.offline_player_menu);
+                initAISelectionMenu();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Do Nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void returnToGameMainMenu() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Return To Game Main Menu");
+        builder.setMessage("All current game progress will be lost.\n\nAre you sure?");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //This is where code would be to return to the main menu of the game, probably where one would select AI/Online.
+                //For now it does nothing
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Do Nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     private void returnToMainMenu() {
-        setContentView(R.layout.single_player_menu);
-        initAISelectionMenu();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Return To Main Menu");
+        builder.setMessage("All current game progress will be lost.\n\nAre you sure?");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //This is where code would be to return to jennifer's main menu.
+                //For now it does nothing
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Do Nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void setContentView() {
@@ -182,7 +258,6 @@ public class Fives extends AppCompatActivity {
             case "New Game":
                 stage = fivesStage.memCards;
                 viewConfirm.setText("Memorized");
-                viewReturnToMainMenu.setVisibility(View.INVISIBLE);
                 newGame();
         }
     }
@@ -371,6 +446,8 @@ public class Fives extends AppCompatActivity {
         deck.shuffleDiscardIntoDeck();
         for (int i = 0; i < totalScores.length; i++) {
             totalScores[i] = 0;
+            viewPlayerNames[i].setTextColor(Color.LTGRAY);
+            viewPlayerScores[i].setTextColor(Color.LTGRAY);
         }
         updateViewScores();
         newRound();
@@ -428,7 +505,7 @@ public class Fives extends AppCompatActivity {
                 case roundOver:
                     return "Press continue";
                 case gameOver:
-                    return viewPlayerNames[winnerIndex].getText() + " won!";
+                    return "Game over!";
             }
         }
         return "Player " + deck.getCurPlayersTurn() + "'s Turn";
@@ -482,8 +559,13 @@ public class Fives extends AppCompatActivity {
         if (hasWon()) {
             stage = fivesStage.gameOver;
             updateViewInstruction();
+            for (int i : winnerIndex) {
+                viewPlayerNames[i].setTextColor(Color.GREEN);
+                viewPlayerScores[i].setTextColor((Color.GREEN));
+            }
+            viewPlayerNames[loserIndex].setTextColor(Color.RED);
+            viewPlayerScores[loserIndex].setTextColor((Color.RED));
             viewConfirm.setText("New Game");
-            viewReturnToMainMenu.setVisibility(View.VISIBLE);
         } else {
             viewConfirm.setText("Continue");
         }
@@ -511,24 +593,42 @@ public class Fives extends AppCompatActivity {
      * @return true if a player has won
      */
     private static boolean hasWon() {
-        int maxScore = 0;
+        int maxScore = -100;
+        int minScore = 100;
+        winnerIndex.clear();
         for (int i = 0; i < totalScores.length; i++) {
             if (totalScores[i] > maxScore) {
                 maxScore = totalScores[i];
+            }
+            if (totalScores[i] < minScore) {
+                minScore = totalScores[i];
+            }
+            viewPlayerNames[i].setTextColor(Color.LTGRAY);
+            viewPlayerScores[i].setTextColor(Color.LTGRAY);
+        }
+        for (int i = 0; i < totalScores.length; i++) {
+            if (totalScores[i] <= minScore) {
+                winnerIndex.add(i);
+                viewPlayerNames[i].setTextColor(Color.GREEN);
+                viewPlayerScores[i].setTextColor(Color.GREEN);
+            }
+            if (totalScores[i] >= maxScore) {
+                viewPlayerNames[i].setTextColor(Color.RED);
+                viewPlayerScores[i].setTextColor(Color.RED);
             }
         }
         if (maxScore < 50) {
             return false;
         }
-        int numWinners = 0;
-        winnerIndex = 0;
+        int numLosers = 0;
+        loserIndex = 0;
         for (int i = 0; i < totalScores.length; i++) {
             if (totalScores[i] == maxScore) {
-                numWinners++;
-                winnerIndex = i;
+                numLosers++;
+                loserIndex = i;
             }
         }
-        if (numWinners > 1) {
+        if (numLosers > 1) {
             return false;
         }
         return true;

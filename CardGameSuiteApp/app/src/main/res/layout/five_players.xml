@@ -19,17 +19,43 @@
         app:layout_constraintTop_toBottomOf="@id/instruction" />
 
     <Button
+        android:id="@+id/returnToPlayerMenuButton"
+        android:layout_width="116dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="288dp"
+        android:layout_marginBottom="92dp"
+        android:gravity="center"
+        android:text="Player Selection"
+        android:textSize="11dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
         android:id="@+id/returnToMainMenuButton"
         android:layout_width="116dp"
         android:layout_height="45dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginEnd="288dp"
+        android:layout_marginBottom="4dp"
         android:gravity="center"
-        android:text="Main Menu"
+        android:text="App Collection"
         android:textSize="11dp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toEndOf="@id/player1"
-        app:layout_constraintTop_toBottomOf="@id/instruction" />
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/returnToGameMainMenuButton"
+        android:layout_width="116dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="288dp"
+        android:layout_marginBottom="48dp"
+        android:gravity="center"
+        android:text="Game Main Menu"
+        android:textSize="11dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.example.cardgamesuiteapp.display.Hand
         android:id="@+id/player1"
@@ -111,7 +137,7 @@
         android:id="@+id/highlightDiscard"
         android:layout_width="80dp"
         android:layout_height="112dp"
-        android:background="#FFFF00"
+        android:background="@drawable/rounded"
         app:layout_constraintBottom_toBottomOf="@id/discard"
         app:layout_constraintEnd_toEndOf="@id/discard"
         app:layout_constraintStart_toStartOf="@id/discard"
@@ -120,7 +146,7 @@
     <TextView
         android:id="@+id/instruction"
         android:layout_width="400dp"
-        android:layout_height="30dp"
+        android:layout_height="60dp"
         android:gravity="center"
         app:layout_constraintBottom_toTopOf="@id/player1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -140,6 +166,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/scoresText"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:gravity="center_horizontal"
