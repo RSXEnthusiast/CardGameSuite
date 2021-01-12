@@ -14,4 +14,7 @@
     <string name="largeCardFont">Large</string>
     <string name="mustacheCard">Mustache</string>
     <string name="goal">Goal: Obtain the lowest scored hand before someone reaches 50</string>
+    <string name="solitaireImage">Solitaire</string>
+    <string name="solitaire">Solitaire</string>
+
 </resources>
