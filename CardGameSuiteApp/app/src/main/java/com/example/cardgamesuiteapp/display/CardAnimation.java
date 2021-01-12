@@ -36,6 +36,7 @@ public class CardAnimation {
             public void onAnimationStart(Animation a){}
             public void onAnimationRepeat(Animation a){}
             public void onAnimationEnd(Animation a){
+                System.out.println("test");
             }
         });
         this.discardedCard.startAnimation(slide);
