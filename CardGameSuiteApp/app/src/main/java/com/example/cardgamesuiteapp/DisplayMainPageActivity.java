@@ -21,6 +21,11 @@ public class DisplayMainPageActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void clickSettingsButton(View view) {
+        Intent intent = new Intent(this, DisplaySettingsActivity.class);
+        startActivity(intent);
+    }
+
     public void clickPlayFivesButton(View view) {
         Intent intent = new Intent(this, Fives.class);
         startActivity(intent);
@@ -31,8 +36,13 @@ public class DisplayMainPageActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void clickSettingsButton(View view) {
-        Intent intent = new Intent(this, DisplaySettingsActivity.class);
+    public void clickPlaySolitaireButton(View view) {
+        Intent intent = new Intent(this, Solitaire.class);
+        startActivity(intent);
+    }
+
+    public void clickSolitaireRulesButton(View view) {
+        Intent intent = new Intent(this, DisplaySolitaireRulesActivity.class);
         startActivity(intent);
     }
 

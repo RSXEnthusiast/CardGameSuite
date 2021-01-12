@@ -48,12 +48,45 @@
                 android:textSize="32sp"/>
 
             <ImageButton
-                android:id="@+id/info_button"
+                android:id="@+id/fives_info_button"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="start"
                 android:src="@drawable/red_info_icon"
                 android:onClick="clickFivesRulesButton"
+                android:contentDescription="@string/infoIcon" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/solitaireImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="107dp"
+            android:contentDescription="@string/solitaireImage"
+            android:src="@drawable/solitaire_cover" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:layout_width="340dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:text="@string/solitaire"
+                android:textColor="@color/white"
+                android:onClick="clickPlaySolitaireButton"
+                android:textSize="32sp"/>
+
+            <ImageButton
+                android:id="@+id/solitaire_info_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="start"
+                android:src="@drawable/red_info_icon"
+                android:onClick="clickSolitaireRulesButton"
                 android:contentDescription="@string/infoIcon" />
 
         </LinearLayout>
