@@ -58,8 +58,7 @@ public class Fives extends AppCompatActivity {
 //        setContentView(R.layout.animation_test);
         Card testCard = findViewById(R.id.testCard);
         testCard.updateImage(1);
-        CardAnimation test = new CardAnimation(testCard,this);
-        test.setVisibility(1);
+        CardAnimation test = new CardAnimation(testCard, this);
         test.cardAnimate();
         test.setVisibility(0);
     }
