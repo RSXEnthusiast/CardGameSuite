@@ -7,9 +7,6 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cardgamesuiteapp.DisplayFivesRulesActivity;
-import com.example.cardgamesuiteapp.R;
-
 public class DisplayMainPageActivity extends AppCompatActivity {
 
     @Override

@@ -12,8 +12,6 @@ import com.example.cardgamesuiteapp.display.Card;
 import com.example.cardgamesuiteapp.display.Hand;
 
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class Fives extends AppCompatActivity {
     static int numHumans;
