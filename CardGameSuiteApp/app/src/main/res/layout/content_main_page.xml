@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".DisplayMainPageActivity"
+    tools:showIn="@layout/activity_main_page">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/settings_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end"
+            android:onClick="clickSettingsButton"
+            android:src="@drawable/red_cog_icon"
+            android:contentDescription="@string/settings_cog_icon" />
+
+        <ImageView
+            android:id="@+id/fivesImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="107dp"
+            android:contentDescription="@string/fivesImage"
+            android:src="@drawable/fives_cover" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:layout_width="350dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:text="@string/fives"
+                android:textColor="@color/white"
+                android:onClick="clickPlayFivesButton"
+                android:textSize="32sp"/>
+
+            <ImageButton
+                android:id="@+id/info_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="start"
+                android:src="@drawable/red_info_icon"
+                android:onClick="clickFivesRulesButton"
+                android:contentDescription="@string/infoIcon" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
