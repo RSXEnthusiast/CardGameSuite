@@ -32,10 +32,13 @@ public class CardAnimation {
         this.discardedCard.setBackgroundResource(R.drawable.ace_d);
         slide.setDuration(2000);
         slide.setFillAfter(true);
-
+        slide.setAnimationListener(new Animation.AnimationListener(){
+            public void onAnimationStart(Animation a){}
+            public void onAnimationRepeat(Animation a){}
+            public void onAnimationEnd(Animation a){
+            }
+        });
         this.discardedCard.startAnimation(slide);
-
-
     }
 
     public Card getCard(){
