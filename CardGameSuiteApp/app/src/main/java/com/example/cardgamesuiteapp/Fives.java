@@ -505,7 +505,16 @@ public class Fives extends AppCompatActivity {
                 case roundOver:
                     return "Press continue";
                 case gameOver:
-                    return "Game over!";
+                    String winners = "";
+                    for (int i = 0; i < winnerIndex.size(); i++) {
+                        winners += viewPlayerNames[winnerIndex.get(i)].getText();
+                        if (winnerIndex.size() > i + 1) {
+                            winners += " and ";
+                        }
+                    }
+                    winners += " won! ";
+                    winners += viewPlayerNames[loserIndex].getText() + " lost!";
+                    return winners;
             }
         }
         return "Player " + deck.getCurPlayersTurn() + "'s Turn";
