@@ -42,12 +42,22 @@ public class Fives extends AppCompatActivity {
     static int[] totalScores;// Keeps track of the cumulative score of the game
     static ArrayList<Integer> winnerIndex;
     static int loserIndex;
+    static boolean backButtonEnabled = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.offline_player_menu);
         initAISelectionMenu();
+    }
+
+    @Override
+    public void onBackPressed(){
+        if (backButtonEnabled){
+            super.onBackPressed();
+        } else {
+            //do nothing
+        }
     }
 
     private void initAISelectionMenu() {
@@ -87,6 +97,7 @@ public class Fives extends AppCompatActivity {
     private void numAISelected(int numAI) {
         numHumans = 1;
         this.numAI = numAI;
+        backButtonEnabled = false;
         initFives();
     }
 
