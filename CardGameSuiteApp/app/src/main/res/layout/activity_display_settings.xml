@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Theme.CardGameSuiteApp">
 
     <TableRow
         android:layout_width="match_parent"
@@ -15,7 +16,7 @@
             android:layout_height="wrap_content"
             android:text="Card Style"
             android:textAllCaps="true"
-            android:textColor="@color/lavender"
+            android:textColor="?colorPrimary"
             android:textSize="30sp"
             android:textStyle="bold" />
     </TableRow>

@@ -2,15 +2,15 @@
     <!-- Base application theme. -->
     <style name="Theme.CardGameSuiteApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/red</item>
-        <item name="colorPrimaryVariant">@color/lilac</item>
+        <item name="colorPrimary">@color/pale_red</item>
+        <item name="colorPrimaryVariant">@color/paler_red</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/white</item>
-        <item name="colorSecondaryVariant">@color/lavender</item>
-        <item name="colorOnSecondary">@color/red</item>
+        <item name="colorSecondaryVariant">@color/crimson</item>
+        <item name="colorOnSecondary">@color/dark_crimson</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSecondaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>
