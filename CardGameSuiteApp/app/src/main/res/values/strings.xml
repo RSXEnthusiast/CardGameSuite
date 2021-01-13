@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Fives</string>
+    <string name="app_name">Cards</string>
     <string name="action_settings">Settings</string>
     <string name="info">Select a card game to play</string>
     <string name="fives_description">here I describe how to play fives</string>
