@@ -127,6 +127,12 @@ public class Fives extends AppCompatActivity {
         viewReturnToGameMainMenu.setOnClickListener(v -> returnToGameMainMenu());
         winnerIndex = new ArrayList<Integer>();
         newGame();
+//        setContentView(R.layout.animation_test);
+        Card testCard = findViewById(R.id.testCard);
+        testCard.updateImage(1);
+        CardAnimation test = new CardAnimation(testCard, this);
+        test.cardAnimate();
+        test.setVisibility(0);
     }
 
     private void returnToPlayerMenu() {
@@ -219,13 +225,6 @@ public class Fives extends AppCompatActivity {
         viewPlayers[1] = findViewById(R.id.player2);
         viewPlayerNames[1] = findViewById(R.id.player2name);
         viewPlayerScores[1] = findViewById(R.id.player2score);
-        newGame();
-//        setContentView(R.layout.animation_test);
-        Card testCard = findViewById(R.id.testCard);
-        testCard.updateImage(1);
-        CardAnimation test = new CardAnimation(testCard, this);
-        test.cardAnimate();
-        test.setVisibility(0);
         int numPlayers = numHumans + numAI;
         if (numPlayers >= 3) {
             viewPlayers[2] = findViewById(R.id.player3);
