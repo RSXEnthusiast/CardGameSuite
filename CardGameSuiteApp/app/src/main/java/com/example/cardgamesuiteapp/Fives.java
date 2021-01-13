@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -28,7 +29,7 @@ public class Fives extends AppCompatActivity {
     static Card viewDeck;// The deck view
     static TextView viewInstruction;// The instruction view
     static Button viewConfirm;// The button the user will press once they've memorized their cards
-    static Button viewReturnToMainMenu;// The button the user will press to return to the main menu
+    static Button viewReturnToAppCollection;// The button the user will press to return to the main menu
     static Button viewReturnToPlayerMenu;// The button the user will press to return to the player menu
     static Button viewReturnToGameMainMenu;// The button the user will press to return to the game's main menu
     static TextView[] viewPlayerNames;// The textViews of the player names
@@ -42,18 +43,19 @@ public class Fives extends AppCompatActivity {
     static int[] totalScores;// Keeps track of the cumulative score of the game
     static ArrayList<Integer> winnerIndex;
     static int loserIndex;
-    static boolean backButtonEnabled = true;
+    static boolean backButtonEnabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.offline_player_menu);
+        backButtonEnabled = true;
         initAISelectionMenu();
     }
 
     @Override
-    public void onBackPressed(){
-        if (backButtonEnabled){
+    public void onBackPressed() {
+        if (backButtonEnabled) {
             super.onBackPressed();
         } else {
             //do nothing
@@ -122,15 +124,19 @@ public class Fives extends AppCompatActivity {
         viewDeck = findViewById(R.id.deck);
         viewInstruction = findViewById(R.id.instruction);
         viewInstruction.setTextColor(Color.LTGRAY);
+
         viewConfirm = findViewById(R.id.confirmButton);
-        viewConfirm.setOnClickListener(v -> confirmButtonTapped());//call confirmButtonTapped when that button is tapped
-        viewReturnToMainMenu = findViewById(R.id.returnToMainMenuButton);
-        viewReturnToMainMenu.setOnClickListener(v -> returnToMainMenu());
+        viewConfirm.setOnClickListener(v -> confirmButtonTapped());
+
+        viewReturnToAppCollection = findViewById(R.id.returnToGameCollectionButton);
+        viewReturnToAppCollection.setOnClickListener(v -> returnToGameCollection());
+
         viewReturnToPlayerMenu = findViewById(R.id.returnToPlayerMenuButton);
         viewReturnToPlayerMenu.setOnClickListener(v -> returnToPlayerMenu());
-        viewReturnToMainMenu.setOnClickListener(v -> returnToMainMenu());
+
         viewReturnToGameMainMenu = findViewById(R.id.returnToGameMainMenuButton);
         viewReturnToGameMainMenu.setOnClickListener(v -> returnToGameMainMenu());
+
         winnerIndex = new ArrayList<Integer>();
         newGame();
     }
@@ -143,6 +149,7 @@ public class Fives extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 setContentView(R.layout.offline_player_menu);
+                backButtonEnabled = true;
                 initAISelectionMenu();
             }
         });
@@ -163,7 +170,7 @@ public class Fives extends AppCompatActivity {
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //This is where code would be to return to the main menu of the game, probably where one would select AI/Online.
+                //This is where code would be to return to the main menu of the game, probably where one would select AI/Online/Online public.
                 //For now it does nothing
             }
         });
@@ -177,15 +184,15 @@ public class Fives extends AppCompatActivity {
         dialog.show();
     }
 
-    private void returnToMainMenu() {
+    private void returnToGameCollection() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Return To Main Menu");
         builder.setMessage("All current game progress will be lost.\n\nAre you sure?");
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //This is where code would be to return to jennifer's main menu.
-                //For now it does nothing
+                Intent intent = new Intent(getBaseContext(), DisplayMainPageActivity.class);
+                startActivity(intent);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
