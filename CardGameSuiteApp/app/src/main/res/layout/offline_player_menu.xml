@@ -19,7 +19,8 @@
             android:text="How many AI would you like to play against?"
             android:textAlignment="center"
             android:layout_marginVertical="40dp"
-            android:textSize="35dp" />
+            android:textSize="35dp"
+            android:textColor="?colorPrimary"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,7 +35,8 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
                 android:text="ONE"
-                android:textSize="40dp" />
+                android:textSize="40dp"
+                android:backgroundTint="?colorPrimaryVariant"/>
 
             <Button
                 android:id="@+id/twoAI"
@@ -43,7 +45,8 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
                 android:text="TWO"
-                android:textSize="40dp" />
+                android:textSize="40dp"
+                android:backgroundTint="?colorPrimaryVariant"/>
         </LinearLayout>
 
         <LinearLayout
@@ -59,7 +62,8 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
                 android:text="THREE"
-                android:textSize="40dp" />
+                android:textSize="40dp"
+                android:backgroundTint="?colorPrimaryVariant"/>
 
             <Button
                 android:id="@+id/fourAI"
@@ -68,7 +72,8 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
                 android:text="FOUR"
-                android:textSize="40dp" />
+                android:textSize="40dp"
+                android:backgroundTint="?colorPrimaryVariant"/>
         </LinearLayout>
 
         <LinearLayout
@@ -84,7 +89,8 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
                 android:text="FIVE"
-                android:textSize="40dp" />
+                android:textSize="40dp"
+                android:backgroundTint="?colorPrimaryVariant"/>
 
         </LinearLayout>
     </LinearLayout>

@@ -68,7 +68,8 @@
             android:id="@+id/button2"
             android:layout_width="115dp"
             android:layout_height="wrap_content"
-            android:text="@string/regularCard" />
+            android:text="@string/regularCard"
+            android:backgroundTint="?colorPrimaryVariant"/>
 
         <Space
             android:layout_width="15dp"
@@ -78,7 +79,8 @@
             android:id="@+id/button3"
             android:layout_width="115dp"
             android:layout_height="wrap_content"
-            android:text="@string/largeCardFont" />
+            android:text="@string/largeCardFont"
+            android:backgroundTint="?colorPrimaryVariant"/>
 
         <Space
             android:layout_width="15dp"
@@ -88,6 +90,7 @@
             android:id="@+id/button4"
             android:layout_width="115dp"
             android:layout_height="wrap_content"
-            android:text="@string/mustacheCard" />
+            android:text="@string/funkyCard"
+            android:backgroundTint="?colorPrimaryVariant"/>
     </TableRow>
 </LinearLayout>
