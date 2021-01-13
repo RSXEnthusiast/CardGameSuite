@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Theme.CardGameSuiteApp">
 
     <TableRow
         android:layout_width="match_parent"
@@ -15,7 +16,7 @@
             android:layout_height="wrap_content"
             android:text="Card Style"
             android:textAllCaps="true"
-            android:textColor="@color/lavender"
+            android:textColor="?colorPrimary"
             android:textSize="30sp"
             android:textStyle="bold" />
     </TableRow>
@@ -67,7 +68,8 @@
             android:id="@+id/button2"
             android:layout_width="115dp"
             android:layout_height="wrap_content"
-            android:text="@string/regularCard" />
+            android:text="@string/regularCard"
+            android:backgroundTint="?colorPrimaryVariant"/>
 
         <Space
             android:layout_width="15dp"
@@ -77,7 +79,8 @@
             android:id="@+id/button3"
             android:layout_width="115dp"
             android:layout_height="wrap_content"
-            android:text="@string/largeCardFont" />
+            android:text="@string/largeCardFont"
+            android:backgroundTint="?colorPrimaryVariant"/>
 
         <Space
             android:layout_width="15dp"
@@ -87,6 +90,7 @@
             android:id="@+id/button4"
             android:layout_width="115dp"
             android:layout_height="wrap_content"
-            android:text="@string/mustacheCard" />
+            android:text="@string/funkyCard"
+            android:backgroundTint="?colorPrimaryVariant"/>
     </TableRow>
 </LinearLayout>

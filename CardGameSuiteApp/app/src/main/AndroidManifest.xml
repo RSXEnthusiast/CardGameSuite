@@ -10,8 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CardGameSuiteApp">
         <activity android:name=".DisplaySettingsActivity"></activity>
-        <activity android:name=".DisplayFivesRulesActivity"></activity>
         <activity android:name=".Fives"></activity>
+        <activity android:name=".DisplayFivesRulesActivity"></activity>
+        <activity android:name=".Solitaire"></activity>
+        <activity android:name=".DisplaySolitaireRulesActivity"></activity>
         <activity android:name=".DisplayMainPageActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
