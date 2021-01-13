@@ -2,4 +2,22 @@
 <resources>
     <string name="app_name">Fives</string>
     <string name="action_settings">Settings</string>
+    <string name="info">Select a card game to play</string>
+    <string name="fives_description">here I describe how to play fives</string>
+    <string name="settings_button">Settings Button</string>
+    <string name="fives">Fives</string>
+    <string name="fivesImage">fivesImage</string>
+    <string name="infoIcon">InfoIcon</string>
+    <string name="settings_cog_icon">Settings Cog Icon</string>
+    <string name="fives_rules_text">DISPLAY RULES</string>
+    <string name="regularCard">Regular</string>
+    <string name="largeCardFont">Large</string>
+    <string name="solitaireImage">Solitaire</string>
+    <string name="solitaire">Solitaire</string>
+    <string name="funkyCard">Funky</string>
+    <string name="fivesRulesGoal">Goal: Obtain the lowest scored hand before someone reaches 50</string>
+    <string name="fivesRulesExplained">Each player\'s starting hand consists of four face-down cards. You will be allowed to view two cards before play begins. Use your best judgement when choosing cards from the draw or discard pile and choosing which card in your hand to replace to win the game. After a card is exchanged it will remain face up.</string>
+    <string name="fivesScoring">Scoring\n\n5s are worth -5\nPairs (excluding 5s) are worth 0\nTrios (excluding 5s) are worth 0\nQuads (excluding 5s) are worth 0\nKings are worth 0\nJacks and Queens are worth 10\nAces are worth 1\nNumerical cards (excluding 5s) are worth face value</string>
+    <string name="solitaireRulesGoal">Goal: End the game by moving all four aces to the top row</string>
+    <string name="solitaireRulesExplained">Once I remember how to play the game Im putting the rules here</string>
 </resources>

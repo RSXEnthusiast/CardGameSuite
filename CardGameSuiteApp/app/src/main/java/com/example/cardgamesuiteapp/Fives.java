@@ -1,7 +1,10 @@
 package com.example.cardgamesuiteapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,40 +22,202 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Fives extends AppCompatActivity {
-    final static int numHumans = 1;
-    final static int numAI = 1;
-    static Standard deck;
-    static int[] totalScores;// Keeps track of the cumulative score of the game
+    static int numHumans;// Number of Human players
+    static int numAI;// Number of AI players
+    static Standard deck;// The Deck object
+
+    //View object names will always be preceded by "view"
+    //View objects used for every Fives game
     static Hand[] viewPlayers;// The custom player views
     static Card viewDiscard;// The discard view
     static Card viewDeck;// The deck view
     static TextView viewInstruction;// The instruction view
     static Button viewConfirm;// The button the user will press once they've memorized their cards
+    static Button viewReturnToMainMenu;// The button the user will press to return to the main menu
+    static Button viewReturnToPlayerMenu;// The button the user will press to return to the player menu
+    static Button viewReturnToGameMainMenu;// The button the user will press to return to the game's main menu
     static TextView[] viewPlayerNames;// The textViews of the player names
     static TextView[] viewPlayerScores;// The textView of the player scores.
+    static View viewDiscardHighlight;// Simply the "highlight" of th discard, mainly used for setting the highlight to visible/invisible
+
+    //Additional view objects used for Fives single player
+    static View[] viewAINumButtons;// The buttons the user would press to select the number of AI
+
     static fivesStage stage;// The current stage of play
-    static int winnerIndex;
-    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    static int[] totalScores;// Keeps track of the cumulative score of the game
+    static ArrayList<Integer> winnerIndex;
+    static int loserIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.two_players);
+        setContentView(R.layout.offline_player_menu);
+        initAISelectionMenu();
+    }
+
+    private void initAISelectionMenu() {
+        viewAINumButtons = new View[5];
+        viewAINumButtons[0] = findViewById(R.id.oneAI);
+        viewAINumButtons[0].setOnClickListener(v -> selectedOneAI());
+        viewAINumButtons[1] = findViewById(R.id.twoAI);
+        viewAINumButtons[1].setOnClickListener(v -> selectedTwoAI());
+        viewAINumButtons[2] = findViewById(R.id.threeAI);
+        viewAINumButtons[2].setOnClickListener(v -> selectedThreeAI());
+        viewAINumButtons[3] = findViewById(R.id.fourAI);
+        viewAINumButtons[3].setOnClickListener(v -> selectedFourAI());
+        viewAINumButtons[4] = findViewById(R.id.fiveAI);
+        viewAINumButtons[4].setOnClickListener(v -> selectedFiveAI());
+    }
+
+    private void selectedOneAI() {
+        numAISelected(1);
+    }
+
+    private void selectedTwoAI() {
+        numAISelected(2);
+    }
+
+    private void selectedThreeAI() {
+        numAISelected(3);
+    }
+
+    private void selectedFourAI() {
+        numAISelected(4);
+    }
+
+    private void selectedFiveAI() {
+        numAISelected(5);
+    }
+
+    private void numAISelected(int numAI) {
+        numHumans = 1;
+        this.numAI = numAI;
+        initFives();
+    }
+
+    private void initFives() {
+        setContentView();
+        ((TextView) findViewById(R.id.scoresText)).setTextColor(Color.LTGRAY);
+        viewPlayers = new Hand[numAI + numHumans];
+        viewPlayerNames = new TextView[numHumans + numAI];
+        viewPlayerScores = new TextView[numHumans + numAI];
+        initViewPlayers();
+        //Temp - placeholder for player name
+        viewPlayerNames[0].setText("Human");
+        for (int i = numHumans; i <= numAI; i++) {
+            viewPlayerNames[i].setText("CPU" + i);
+        }
         totalScores = new int[numHumans + numAI];
         deck = new Standard(true, numHumans + numAI);
-        viewPlayers = new Hand[numHumans + numAI];
-        viewPlayers[0] = findViewById(R.id.player1);
-        viewPlayers[1] = findViewById(R.id.player2);
         viewDiscard = findViewById(R.id.discard);
+        viewDiscard.bringToFront();
+        viewDiscardHighlight = findViewById(R.id.highlightDiscard);
+        viewDiscardHighlight.setVisibility(View.INVISIBLE);
         viewDeck = findViewById(R.id.deck);
         viewInstruction = findViewById(R.id.instruction);
+        viewInstruction.setTextColor(Color.LTGRAY);
         viewConfirm = findViewById(R.id.confirmButton);
         viewConfirm.setOnClickListener(v -> confirmButtonTapped());//call confirmButtonTapped when that button is tapped
-        viewPlayerNames = new TextView[numAI + numHumans];
-        viewPlayerScores = new TextView[numHumans + numAI];
+        viewReturnToMainMenu = findViewById(R.id.returnToMainMenuButton);
+        viewReturnToMainMenu.setOnClickListener(v -> returnToMainMenu());
+        viewReturnToPlayerMenu = findViewById(R.id.returnToPlayerMenuButton);
+        viewReturnToPlayerMenu.setOnClickListener(v -> returnToPlayerMenu());
+        viewReturnToMainMenu.setOnClickListener(v -> returnToMainMenu());
+        viewReturnToGameMainMenu = findViewById(R.id.returnToGameMainMenuButton);
+        viewReturnToGameMainMenu.setOnClickListener(v -> returnToGameMainMenu());
+        winnerIndex = new ArrayList<Integer>();
+        newGame();
+    }
+
+    private void returnToPlayerMenu() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Return To Player Menu");
+        builder.setMessage("All current game progress will be lost.\n\nAre you sure?");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                setContentView(R.layout.offline_player_menu);
+                initAISelectionMenu();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Do Nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void returnToGameMainMenu() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Return To Game Main Menu");
+        builder.setMessage("All current game progress will be lost.\n\nAre you sure?");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //This is where code would be to return to the main menu of the game, probably where one would select AI/Online.
+                //For now it does nothing
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Do Nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void returnToMainMenu() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Return To Main Menu");
+        builder.setMessage("All current game progress will be lost.\n\nAre you sure?");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //This is where code would be to return to jennifer's main menu.
+                //For now it does nothing
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Do Nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void setContentView() {
+        switch (numHumans + numAI) {
+            case 2:
+                setContentView(R.layout.two_players);
+                break;
+            case 3:
+                setContentView(R.layout.three_players);
+                break;
+            case 4:
+                setContentView(R.layout.four_players);
+                break;
+            case 5:
+                setContentView(R.layout.five_players);
+                break;
+            case 6:
+                setContentView(R.layout.six_players);
+                break;
+        }
+    }
+
+    private void initViewPlayers() {
+        viewPlayers[0] = findViewById(R.id.player1);
         viewPlayerNames[0] = findViewById(R.id.player1name);
-        viewPlayerNames[1] = findViewById(R.id.player2name);
         viewPlayerScores[0] = findViewById(R.id.player1score);
+        viewPlayers[1] = findViewById(R.id.player2);
+        viewPlayerNames[1] = findViewById(R.id.player2name);
         viewPlayerScores[1] = findViewById(R.id.player2score);
         newGame();
 //        setContentView(R.layout.animation_test);
@@ -61,7 +226,29 @@ public class Fives extends AppCompatActivity {
         CardAnimation test = new CardAnimation(testCard, this);
         test.cardAnimate();
         test.setVisibility(0);
+        int numPlayers = numHumans + numAI;
+        if (numPlayers >= 3) {
+            viewPlayers[2] = findViewById(R.id.player3);
+            viewPlayerNames[2] = findViewById(R.id.player3name);
+            viewPlayerScores[2] = findViewById(R.id.player3score);
+        }
+        if (numPlayers >= 4) {
+            viewPlayers[3] = findViewById(R.id.player4);
+            viewPlayerNames[3] = findViewById(R.id.player4name);
+            viewPlayerScores[3] = findViewById(R.id.player4score);
+        }
+        if (numPlayers >= 5) {
+            viewPlayers[4] = findViewById(R.id.player5);
+            viewPlayerNames[4] = findViewById(R.id.player5name);
+            viewPlayerScores[4] = findViewById(R.id.player5score);
+        }
+        if (numPlayers >= 6) {
+            viewPlayers[5] = findViewById(R.id.player6);
+            viewPlayerNames[5] = findViewById(R.id.player6name);
+            viewPlayerScores[5] = findViewById(R.id.player6score);
+        }
     }
+
 
     /**
      * When confirmMemorizedButton is tapped, this method is called.
@@ -134,6 +321,7 @@ public class Fives extends AppCompatActivity {
         if (cardNum == deck.peekTopDraw()) {
             stage = fivesStage.drewFromDraw;
             viewDeck.flipCard();
+            viewDiscardHighlight.setVisibility(View.VISIBLE);
             viewInstruction.setText(getCurInstruction());
         } else if (cardNum == deck.peekTopDiscard()) {
             stage = fivesStage.drewFromDiscard;
@@ -151,10 +339,15 @@ public class Fives extends AppCompatActivity {
         if (deck.peekTopDiscard() == cardNum) {
             stage = fivesStage.discardedFromDraw;
             //Logic for discarded from draw
-            deck.discardFromDeck();
+            try {
+                deck.discardFromDeck();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             viewDiscard.updateImage(deck.peekTopDiscard());
             viewDeck.flipCard();
             viewDeck.updateImage(deck.peekTopDraw());
+            viewDiscardHighlight.setVisibility(View.INVISIBLE);
             updateViewInstruction();
         } else if (isValidTapOnCardInHand(cardNum)) {
             endTurn = true;
@@ -172,6 +365,7 @@ public class Fives extends AppCompatActivity {
             viewDeck.flipCard();
             viewDeck.updateImage(deck.peekTopDraw());
             viewDiscard.updateImage(deck.peekTopDiscard());
+            viewDiscardHighlight.setVisibility(View.INVISIBLE);
             updateViewInstruction();
         }
         if (endTurn) {
@@ -264,6 +458,8 @@ public class Fives extends AppCompatActivity {
         deck.shuffleDiscardIntoDeck();
         for (int i = 0; i < totalScores.length; i++) {
             totalScores[i] = 0;
+            viewPlayerNames[i].setTextColor(Color.LTGRAY);
+            viewPlayerScores[i].setTextColor(Color.LTGRAY);
         }
         updateViewScores();
         newRound();
@@ -276,11 +472,11 @@ public class Fives extends AppCompatActivity {
     public static void newRound() {
         try {
             deck.deal(4);
+            deck.discardFromDeck();
         } catch (Exception e) {
             e.printStackTrace();
         }
         //Flipping up discard card
-        deck.discardFromDeck();
         stage = fivesStage.memCards;
         viewConfirm.setVisibility(View.VISIBLE);
         updateEntireScreen();
@@ -290,9 +486,6 @@ public class Fives extends AppCompatActivity {
      * This method updates every single dynamic item on the screen.
      */
     private static void updateEntireScreen() {
-        if (deck.discardIsEmpty()) {
-            deck.discardFromDeck();
-        }
         viewDiscard.updateImage(deck.peekTopDiscard());
         viewDeck.updateImage(deck.peekTopDraw());
         viewDeck.setFaceUp(false);
@@ -321,8 +514,19 @@ public class Fives extends AppCompatActivity {
                     return "Select a face down card to flip over";
                 case drewFromDiscard:
                     return "Select a face down card to swap the new card with";
+                case roundOver:
+                    return "Press continue";
                 case gameOver:
-                    return viewPlayerNames[winnerIndex].getText() + " won!";
+                    String winners = "";
+                    for (int i = 0; i < winnerIndex.size(); i++) {
+                        winners += viewPlayerNames[winnerIndex.get(i)].getText();
+                        if (winnerIndex.size() > i + 1) {
+                            winners += " and ";
+                        }
+                    }
+                    winners += " won! ";
+                    winners += viewPlayerNames[loserIndex].getText() + " lost!";
+                    return winners;
             }
         }
         return "Player " + deck.getCurPlayersTurn() + "'s Turn";
@@ -341,6 +545,7 @@ public class Fives extends AppCompatActivity {
                 }
             }
         }
+        stage = fivesStage.roundOver;
         return true;
     }
 
@@ -375,6 +580,12 @@ public class Fives extends AppCompatActivity {
         if (hasWon()) {
             stage = fivesStage.gameOver;
             updateViewInstruction();
+            for (int i : winnerIndex) {
+                viewPlayerNames[i].setTextColor(Color.GREEN);
+                viewPlayerScores[i].setTextColor((Color.GREEN));
+            }
+            viewPlayerNames[loserIndex].setTextColor(Color.RED);
+            viewPlayerScores[loserIndex].setTextColor((Color.RED));
             viewConfirm.setText("New Game");
         } else {
             viewConfirm.setText("Continue");
@@ -403,24 +614,42 @@ public class Fives extends AppCompatActivity {
      * @return true if a player has won
      */
     private static boolean hasWon() {
-        int maxScore = 0;
+        int maxScore = -100;
+        int minScore = 100;
+        winnerIndex.clear();
         for (int i = 0; i < totalScores.length; i++) {
             if (totalScores[i] > maxScore) {
                 maxScore = totalScores[i];
+            }
+            if (totalScores[i] < minScore) {
+                minScore = totalScores[i];
+            }
+            viewPlayerNames[i].setTextColor(Color.LTGRAY);
+            viewPlayerScores[i].setTextColor(Color.LTGRAY);
+        }
+        for (int i = 0; i < totalScores.length; i++) {
+            if (totalScores[i] <= minScore) {
+                winnerIndex.add(i);
+                viewPlayerNames[i].setTextColor(Color.GREEN);
+                viewPlayerScores[i].setTextColor(Color.GREEN);
+            }
+            if (totalScores[i] >= maxScore) {
+                viewPlayerNames[i].setTextColor(Color.RED);
+                viewPlayerScores[i].setTextColor(Color.RED);
             }
         }
         if (maxScore < 50) {
             return false;
         }
-        int numWinners = 0;
-        winnerIndex = 0;
+        int numLosers = 0;
+        loserIndex = 0;
         for (int i = 0; i < totalScores.length; i++) {
             if (totalScores[i] == maxScore) {
-                numWinners++;
-                winnerIndex = i;
+                numLosers++;
+                loserIndex = i;
             }
         }
-        if (numWinners > 1) {
+        if (numLosers > 1) {
             return false;
         }
         return true;
@@ -477,7 +706,6 @@ public class Fives extends AppCompatActivity {
      * This updates the screen after the AI has decided to draw from the draw pile.
      */
     private static void AIDrawFromPile() {
-        System.out.println("AIDrawFromPile");
         viewDeck.flipCard();
     }
 
@@ -487,7 +715,6 @@ public class Fives extends AppCompatActivity {
      * @param location where the card should be swapped to
      */
     private static void AIKeptDraw(int location) {
-        System.out.println("AIKeptDraw");
         //Logic for swapped with hand
         viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDraw());
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
@@ -508,10 +735,13 @@ public class Fives extends AppCompatActivity {
      * @param location which card will be flipped up.
      */
     private static void AIDiscardedDraw(int location) {
-        System.out.println("AIDiscardedDraw");
         //logic for flipping over card in hand.
         viewDeck.flipCard();
-        deck.discardFromDeck();
+        try {
+            deck.discardFromDeck();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         viewDeck.updateImage(deck.peekTopDraw());
         viewDiscard.updateImage(deck.peekTopDiscard());
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
@@ -523,7 +753,6 @@ public class Fives extends AppCompatActivity {
      * @param location where to put the card that the AI drew from this discard.
      */
     private static void AIDrewFromDiscard(int location) {
-        System.out.println("AIDrewFromDiscard");
         viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDiscard());
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
         try {
@@ -574,7 +803,6 @@ public class Fives extends AppCompatActivity {
                 }
             }
         }
-        System.out.println("curScore: " + curScore + " lowestNewScore: " + lowestNewScore);
         if (lowestNewScore - curScore < 0 || (lowestNewScore - curScore <= 3 && Standard.getNumericalValue(newCard) <= 3)) {
             return lowestNewScoreMoveIndex;
         }
@@ -686,6 +914,6 @@ public class Fives extends AppCompatActivity {
      * The stages of the fives game turn
      */
     private enum fivesStage {
-        memCards, draw, drewFromDraw, discardedFromDraw, drewFromDiscard, gameOver
+        memCards, draw, drewFromDraw, discardedFromDraw, drewFromDiscard, roundOver, gameOver
     }
 }

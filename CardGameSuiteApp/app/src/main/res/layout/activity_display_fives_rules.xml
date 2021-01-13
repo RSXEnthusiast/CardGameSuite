@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".DisplayFivesRulesActivity"
+    tools:showIn="@layout/activity_display_fives_rules"
+    android:theme="@style/Theme.CardGameSuiteApp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="130dp"
+            android:layout_height="56dp"
+            android:gravity="center"
+            android:text="Fives"
+            android:textAllCaps="true"
+            android:textColor="?colorPrimary"
+            android:textSize="35sp"
+            android:textStyle="bold">
+        </TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/fivesRulesGoal"
+            android:textSize="25sp"
+            android:textColor="?colorPrimary">
+        </TextView>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="25dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:text="@string/fivesRulesExplained"
+            android:textColor="?colorOnSecondary"
+            android:textSize="20sp">
+        </TextView>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:text="@string/fivesScoring"
+            android:textSize="20sp"
+            android:textColor="?colorPrimaryVariant">
+        </TextView>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

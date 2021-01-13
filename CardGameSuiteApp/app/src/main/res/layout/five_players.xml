@@ -6,78 +6,270 @@
     android:layout_height="match_parent"
     tools:context=".Fives">
 
-    <GridView
-        android:id="@+id/player1"
-        android:layout_width="200dp"
-        android:layout_height="275dp"
-        android:layout_marginStart="104dp"
+    <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="116dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:text="Memorized"
+        android:textSize="11dp"
+        app:layout_constraintStart_toEndOf="@id/player1"
+        app:layout_constraintTop_toBottomOf="@id/instruction" />
+
+    <Button
+        android:id="@+id/returnToPlayerMenuButton"
+        android:layout_width="116dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="288dp"
+        android:layout_marginBottom="92dp"
+        android:gravity="center"
+        android:text="Player Selection"
+        android:textSize="11dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/returnToMainMenuButton"
+        android:layout_width="116dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="288dp"
         android:layout_marginBottom="4dp"
-        android:columnWidth="80dp"
-        android:gravity="center_horizontal"
-        android:horizontalSpacing="10dp"
-        android:numColumns="2"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="5dp"
+        android:gravity="center"
+        android:text="App Collection"
+        android:textSize="11dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <GridView
+    <Button
+        android:id="@+id/returnToGameMainMenuButton"
+        android:layout_width="116dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="288dp"
+        android:layout_marginBottom="48dp"
+        android:gravity="center"
+        android:text="Game Main Menu"
+        android:textSize="11dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.example.cardgamesuiteapp.display.Hand
+        android:id="@+id/player1"
+        android:layout_width="150dp"
+        android:layout_height="210dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.99" />
+
+    <com.example.cardgamesuiteapp.display.Hand
         android:id="@+id/player2"
-        android:layout_width="200dp"
-        android:layout_height="275dp"
-        android:layout_marginBottom="252dp"
-        android:columnWidth="60dp"
-        android:gravity="center_horizontal"
-        android:horizontalSpacing="10dp"
-        android:numColumns="2"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_width="110dp"
+        android:layout_height="154dp"
+        app:layout_constraintBottom_toTopOf="@id/instruction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.023"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scores"
+        app:layout_constraintVertical_bias="0.463" />
 
-    <GridView
+    <com.example.cardgamesuiteapp.display.Hand
         android:id="@+id/player3"
-        android:layout_width="200dp"
-        android:layout_height="275dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="460dp"
-        android:columnWidth="60dp"
-        android:gravity="center_horizontal"
-        android:horizontalSpacing="10dp"
-        android:numColumns="2"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="5dp"
+        android:layout_width="110dp"
+        android:layout_height="154dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.027" />
 
-    <GridView
+    <com.example.cardgamesuiteapp.display.Hand
         android:id="@+id/player4"
-        android:layout_width="200dp"
-        android:layout_height="275dp"
-        android:layout_marginStart="210dp"
-        android:layout_marginBottom="456dp"
-        android:columnWidth="60dp"
-        android:gravity="center_horizontal"
-        android:horizontalSpacing="10dp"
-        android:numColumns="2"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="5dp"
+        android:layout_width="110dp"
+        android:layout_height="154dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.933"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.027" />
 
-    <GridView
+    <com.example.cardgamesuiteapp.display.Hand
         android:id="@+id/player5"
-        android:layout_width="200dp"
-        android:layout_height="275dp"
-        android:layout_marginStart="210dp"
-        android:layout_marginBottom="252dp"
-        android:columnWidth="60dp"
-        android:gravity="center_horizontal"
-        android:horizontalSpacing="10dp"
-        android:numColumns="2"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_width="110dp"
+        android:layout_height="154dp"
+        app:layout_constraintBottom_toTopOf="@id/instruction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.96"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scores"
+        app:layout_constraintVertical_bias="0.463" />
 
+    <com.example.cardgamesuiteapp.display.Card
+        android:id="@+id/deck"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.613"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.503" />
+
+    <com.example.cardgamesuiteapp.display.Card
+        android:id="@+id/discard"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.38"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.503" />
+
+    <View
+        android:id="@+id/highlightDiscard"
+        android:layout_width="80dp"
+        android:layout_height="112dp"
+        android:background="@drawable/rounded"
+        app:layout_constraintBottom_toBottomOf="@id/discard"
+        app:layout_constraintEnd_toEndOf="@id/discard"
+        app:layout_constraintStart_toStartOf="@id/discard"
+        app:layout_constraintTop_toTopOf="@id/discard" />
+
+    <TextView
+        android:id="@+id/instruction"
+        android:layout_width="400dp"
+        android:layout_height="60dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@id/player1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.636"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player3"
+        app:layout_constraintVertical_bias="0.975" />
+
+    <LinearLayout
+        android:id="@+id/scores"
+        android:layout_width="116dp"
+        android:layout_height="210dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/scoresText"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center_horizontal"
+            android:text="Scores" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/player1name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/player1score"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/player2name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/player2score"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/player3name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/player3score"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/player4name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/player4score"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/player5name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/player5score"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="3" />
+        </LinearLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,6 +34,12 @@ public class Hand extends ViewGroup {
         deviceWidth = deviceDisplay.x;
     }
 
+    /**
+     * Add all the cards in a hand from an ArrayList to the local array as Cards
+     * Also adds the cards to the viewgroup
+     *
+     * @param hand the hand to be put into the array
+     */
     public void initHand(ArrayList<Integer> hand) {
         removeAllCards();
         for (int card : hand) {
@@ -44,6 +50,9 @@ public class Hand extends ViewGroup {
         }
     }
 
+    /**
+     * clears the card array and removes all views from the viewgroup
+     */
     public void removeAllCards() {
         int tempLength = cards.size();
         for (int i = 0; i < tempLength; i++) {
@@ -114,20 +123,39 @@ public class Hand extends ViewGroup {
                 resolveSizeAndState(maxHeight, heightMeasureSpec, childState << MEASURED_HEIGHT_STATE_SHIFT));
     }
 
+    /**
+     * Updates a card based on the integer value
+     *
+     * @param i    The index at which the card to update is
+     * @param card The value of the card to update to.
+     */
     public void updateCard(int i, int card) {
         cards.get(i).updateImage(card);
     }
 
+    /**
+     * Flips over a card by index
+     *
+     * @param i The index at which to flip the card.
+     */
     public void flipCardByIndex(int i) {
         cards.get(i).flipCard();
     }
 
+    /**
+     * Flips all cards in the hand
+     */
     public void flipAllCards() {
         for (Card card : cards) {
             card.flipCard();
         }
     }
 
+    /**
+     * Removes a card from the viewgroup and array
+     *
+     * @param card the card to be removed
+     */
     public void removeCard(int card) {
         for (int i = 0; i < cards.size(); i++) {
             if (cards.get(i).getCardNum() == card) {
@@ -137,6 +165,11 @@ public class Hand extends ViewGroup {
         }
     }
 
+    /**
+     * adds a card to the array and viewgroup
+     *
+     * @param card the card to be added
+     */
     public void addCard(int card) {
         Card cardView = new Card(getContext());
         cardView.updateImage(card);
@@ -144,6 +177,11 @@ public class Hand extends ViewGroup {
         cards.add(cardView);
     }
 
+    /**
+     * Flips a card by the card value
+     *
+     * @param cardNum The card to be flipped over.
+     */
     public void flipCardByNum(int cardNum) {
         for (Card card : cards) {
             if (card.getCardNum() == cardNum) {
@@ -152,10 +190,19 @@ public class Hand extends ViewGroup {
         }
     }
 
+    /**
+     * Checks whether a card is flipped up or not.
+     *
+     * @param index the index at which to check
+     * @return true if card is face up, false if not.
+     */
     public boolean isCardFaceUp(int index) {
         return cards.get(index).isFaceUp();
     }
 
+    /**
+     * @return The number of cards in the array and viewgroup
+     */
     public int getNumCards() {
         return cards.size();
     }

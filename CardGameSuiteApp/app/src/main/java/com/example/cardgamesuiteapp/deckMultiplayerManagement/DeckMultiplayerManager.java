@@ -149,7 +149,7 @@ public abstract class DeckMultiplayerManager {
 		deck.initializeFromPeer(deck);
 	}
 
-	private void discardFromDeckReceived() {
+	private void discardFromDeckReceived() throws Exception {
 		deck.discardFromDeck();
 	}
 
