@@ -297,31 +297,35 @@ public class Fives extends AppCompatActivity {
      * @param cardNum the value of the card that was tapped on
      */
     public static void cardTouched(int cardNum) {
-        if (!isAnimating) {
-            lastTouchedCardNum = cardNum;
-            if (!deck.isMyTurn()) {
-                return;//Not your turn
-            }
-            switch (stage) {
-                case draw:
-                    stageDraw(cardNum);
-                    break;
-                case drewFromDeck:
-                    stageDrewFromDeck(cardNum);
-                    break;
-                case discardedFromDeck:
-                    stageDiscardFromDraw(cardNum);
-                    break;
-                case drewFromDiscard:
-                    stageDrewFromDiscard(cardNum);
-                    break;
-            }
+        if (!deck.isMyTurn() || isAnimating) {
+            return;
+        }
+        lastTouchedCardNum = cardNum;
+        switch (stage) {
+            case draw:
+                stageDraw(cardNum);
+                break;
+            case drewFromDeck:
+                stageDrewFromDeck(cardNum);
+                break;
+            case discardedFromDeck:
+                stageDiscardFromDraw(cardNum);
+                break;
+            case drewFromDiscard:
+                stageDrewFromDiscard(cardNum);
+                break;
         }
     }
 
     public static void postAnimation() {
         isAnimating = false;
-        cardTouched(lastTouchedCardNum);
+        if (deck.isMyTurn()) {
+            System.out.println("Test1");
+            cardTouched(lastTouchedCardNum);
+        } else {
+            System.out.println("Test2");
+            postAnimationAI();
+        }
     }
 
     /**
@@ -379,7 +383,7 @@ public class Fives extends AppCompatActivity {
                 viewAnimation1.cardAnimate(viewDeck.getX(), getCardInHandX(cardNum), viewDeck.getY(), getCardInHandY(cardNum));
                 viewPlayers[deck.getMyPlayerNum()].getCard(cardNum).setVisibility(View.INVISIBLE);
                 viewAnimatedCard2.updateImage(cardNum);
-                viewAnimation2.cardAnimate(getCardInHandX(cardNum),viewDiscard.getX(),getCardInHandY(cardNum),viewDiscard.getY());
+                viewAnimation2.cardAnimate(getCardInHandX(cardNum), viewDiscard.getX(), getCardInHandY(cardNum), viewDiscard.getY());
                 viewDeck.flipCard();
             } else {
                 stage = fivesStage.draw;//reset stage, turn over.
@@ -454,7 +458,7 @@ public class Fives extends AppCompatActivity {
                 viewDiscard.updateImage(deck.getCardUnderDiscard());
                 viewPlayers[deck.getMyPlayerNum()].getCard(cardNum).setVisibility(View.INVISIBLE);
                 viewAnimatedCard2.updateImage(cardNum);
-                viewAnimation2.cardAnimate(getCardInHandX(cardNum),viewDiscard.getX(),getCardInHandY(cardNum),viewDiscard.getY());
+                viewAnimation2.cardAnimate(getCardInHandX(cardNum), viewDiscard.getX(), getCardInHandY(cardNum), viewDiscard.getY());
             } else {
                 endTurn = true;
                 stage = fivesStage.draw;//reset stage, turn over.
@@ -483,11 +487,11 @@ public class Fives extends AppCompatActivity {
     }
 
     private static float getCardInHandX(int cardNum) {
-        return viewPlayers[deck.getMyPlayerNum()].getX() + viewPlayers[deck.getMyPlayerNum()].getCard(cardNum).getX();
+        return viewPlayers[deck.getCurPlayersTurn()].getX() + viewPlayers[deck.getCurPlayersTurn()].getCard(cardNum).getX();
     }
 
     private static float getCardInHandY(int cardNum) {
-        return viewPlayers[deck.getMyPlayerNum()].getY() + viewPlayers[deck.getMyPlayerNum()].getCard(cardNum).getY();
+        return viewPlayers[deck.getCurPlayersTurn()].getY() + viewPlayers[deck.getCurPlayersTurn()].getCard(cardNum).getY();
     }
 
     /**
@@ -709,47 +713,28 @@ public class Fives extends AppCompatActivity {
      * Called when it's the AI turns
      */
     private static void runAITurns() {
-        //@Evan
-        //You'll probably have to add your code in the methods that are called under my comments,
-        //as you'll need numbers n such out of them. I just left comments in this method so that
-        //they'll be all in once place.
-        //As always, feel free to ask questions n such.
         for (int i = numHumans; i < numAI + numHumans; i++) {
             int drawFromDiscard = getAIDrawFromDiscard();
             if (drawFromDiscard != -1) {
-                //@Evan
-                //This is where the AI has chosen to draw from the discard,
-                //so the discard needs to be animated moving from the discard pile to the hand,
-                //then the card that it replaced needs to be moved to the discard.
                 AIDrewFromDiscard(drawFromDiscard);
             } else {
-                //@Evan
-                //This is where the AI has chosen to draw from the pile,
-                //so you could also animate the card flipping over, but probably do that last.
-                //Otherwise you don't need to touch this method.
                 AIDrawFromPile();
                 int drawFromPile = getAIKeepDrawSelection();
                 if (drawFromPile != -1) {
-                    //@Evan
-                    //This is where the AI has chosen to keep the card from the draw pile,
-                    //so the discard needs to be animated moving from the draw pile to the hand,
-                    //then the card that it replaced needs to be moved to the discard.
-                    //Should be pretty similar to the AIDrewFromDiscard animation stuff.
                     AIKeptDraw(drawFromPile);
                 } else {
-                    //@Evan
-                    //This is where the AI has chosen to discard the card it drew,
-                    //so the card needs to be moved from the draw pile to the discard pile.
-                    //Then the card at the location passed into the method needs to be flipped over.
-                    //Probably don't need a wait after this, as it is the end of the AI's turn.
                     AIDiscardedDraw(getAIFlipLocation());
                 }
             }
-            deck.nextPlayer();
         }
         if (roundOver()) {
             scoreRound();
         }
+    }
+
+    private static void postAnimationAI() {
+        viewPlayers[deck.getCurPlayersTurn()].allCardsVisible();
+        deck.nextPlayer();
     }
 
     /**
@@ -766,6 +751,11 @@ public class Fives extends AppCompatActivity {
      */
     private static void AIKeptDraw(int location) {
         //Logic for swapped with hand
+        int cardNum = deck.getHand(deck.getCurPlayersTurn()).get(location);
+        viewAnimation1.cardAnimate(viewDeck.getX(), getCardInHandX(cardNum), viewDeck.getY(), getCardInHandY(cardNum));
+        viewPlayers[deck.getCurPlayersTurn()].getCard(cardNum).setVisibility(View.INVISIBLE);
+        viewAnimatedCard2.updateImage(cardNum);
+        viewAnimation2.cardAnimate(getCardInHandX(cardNum), viewDiscard.getX(), getCardInHandY(cardNum), viewDiscard.getY());
         viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDraw());
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
         try {
@@ -786,6 +776,11 @@ public class Fives extends AppCompatActivity {
      */
     private static void AIDiscardedDraw(int location) {
         //logic for flipping over card in hand.
+        viewAnimatedCard1.updateImage(deck.peekTopDraw());
+        isAnimating = true;
+        preAnimation = false;
+        viewDeck.flipCard();
+        viewAnimation1.cardAnimate(viewDeck.getX(), viewDiscard.getX(), viewDeck.getY(), viewDiscard.getY());
         viewDeck.flipCard();
         try {
             deck.discardFromDeck();
@@ -803,6 +798,12 @@ public class Fives extends AppCompatActivity {
      * @param location where to put the card that the AI drew from this discard.
      */
     private static void AIDrewFromDiscard(int location) {
+        int cardNum = deck.getHand(deck.getCurPlayersTurn()).get(location);
+        viewAnimation1.cardAnimate(viewDiscard.getX(), getCardInHandX(cardNum), viewDiscard.getY(), getCardInHandY(cardNum));
+        viewDiscard.updateImage(deck.getCardUnderDiscard());
+        viewPlayers[deck.getCurPlayersTurn()].getCard(cardNum).setVisibility(View.INVISIBLE);
+        viewAnimatedCard2.updateImage(cardNum);
+        viewAnimation2.cardAnimate(getCardInHandX(cardNum), viewDiscard.getX(), getCardInHandY(cardNum), viewDiscard.getY());
         viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDiscard());
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
         try {

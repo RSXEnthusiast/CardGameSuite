@@ -151,6 +151,12 @@ public class Hand extends ViewGroup {
         }
     }
 
+    public void allCardsVisible(){
+        for (Card card : cards){
+            card.setVisibility(VISIBLE);
+        }
+    }
+
     /**
      * Removes a card from the viewgroup and array
      *

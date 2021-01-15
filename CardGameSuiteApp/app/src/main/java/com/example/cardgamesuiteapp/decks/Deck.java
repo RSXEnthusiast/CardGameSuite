@@ -15,7 +15,6 @@ public abstract class Deck {
     private ArrayList<Integer>[] hands;
     int numPlayers;
     int myPlayerNum = 0;
-    int playersTurn;
     int curPlayersTurn;
 
     /**
@@ -60,15 +59,7 @@ public abstract class Deck {
         this.shuffleOnEmptyDeck = deck.getShuffleOnEmptyDeck();
         this.hands = deck.getHands();
         this.numPlayers = deck.getNumPlayers();
-        this.playersTurn = deck.getPlayersTurn();
         this.curPlayersTurn = deck.getCurPlayersTurn();
-    }
-
-    /**
-     * @return who's turn it is
-     */
-    protected int getPlayersTurn() {
-        return playersTurn;
     }
 
     /**
@@ -370,7 +361,7 @@ public abstract class Deck {
      * @return which hand in the array who's turn it is
      */
     public boolean isMyTurn() {
-        return playersTurn == myPlayerNum;
+        return curPlayersTurn == myPlayerNum;
     }
 
     /**
