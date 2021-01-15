@@ -405,9 +405,12 @@ public abstract class Deck {
         return discard.isEmpty();
     }
 
-    public int getCardUnderDiscard() {
-        if (discard.size() >= 2) {
-            return discard.get(1);
+    public int getDiscardedCard(int i){
+        if(discard.size()>i){
+            int temp = discard.pop();
+            int result = discard.peek();
+            discard.push(temp);
+            return result;
         } else {
             return -1;
         }

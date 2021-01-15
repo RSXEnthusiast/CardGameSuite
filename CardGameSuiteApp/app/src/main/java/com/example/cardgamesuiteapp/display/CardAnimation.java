@@ -12,10 +12,12 @@ import com.example.cardgamesuiteapp.R;
 public class CardAnimation {
 
     final Card cardToAnimate;
+    final boolean callPostAnimation;
     private Context context;
 
-    public CardAnimation(Card card, Context context) {
+    public CardAnimation(Card card, boolean callPostAnimation, Context context) {
         this.cardToAnimate = card;
+        this.callPostAnimation = callPostAnimation;
         this.cardToAnimate.animate().alpha(0f);
         this.cardToAnimate.setVisibility(View.VISIBLE);
         this.context = context;
@@ -40,10 +42,13 @@ public class CardAnimation {
 
             public void onAnimationEnd(Animation a) {
                 cardToAnimate.animate().alpha(0f).setDuration(0);
-                Fives.postAnimation();
+                if (callPostAnimation) {
+                    Fives.postAnimation();
+                }
             }
         });
     }
+
     public Card getCard() {
         return this.cardToAnimate;
     }

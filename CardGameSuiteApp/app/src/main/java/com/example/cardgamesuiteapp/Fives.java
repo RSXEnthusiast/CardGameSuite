@@ -16,6 +16,7 @@ import com.example.cardgamesuiteapp.display.CardAnimation;
 import com.example.cardgamesuiteapp.display.Hand;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class Fives extends AppCompatActivity {
     static int numHumans;// Number of Human players
@@ -131,10 +132,10 @@ public class Fives extends AppCompatActivity {
         winnerIndex = new ArrayList<Integer>();
         viewAnimatedCard1 = findViewById(R.id.animatedCard1);
         viewAnimatedCard1.bringToFront();
-        viewAnimation1 = new CardAnimation(viewAnimatedCard1, this);
+        viewAnimation1 = new CardAnimation(viewAnimatedCard1, true, this);
         viewAnimatedCard2 = findViewById(R.id.animatedCard2);
         viewAnimatedCard2.bringToFront();
-        viewAnimation2 = new CardAnimation(viewAnimatedCard2, this);
+        viewAnimation2 = new CardAnimation(viewAnimatedCard2, false, this);
         isAnimating = false;
         preAnimation = true;
         newGame();
@@ -453,14 +454,20 @@ public class Fives extends AppCompatActivity {
                 isAnimating = true;
                 preAnimation = false;
                 viewAnimation1.cardAnimate(viewDiscard.getX(), getCardInHandX(cardNum), viewDiscard.getY(), getCardInHandY(cardNum));
-                viewDiscard.updateImage(deck.getCardUnderDiscard());
                 viewPlayers[deck.getMyPlayerNum()].getCard(cardNum).setVisibility(View.INVISIBLE);
+                if (deck.getDiscardedCard(1) == -1) {
+                    viewDiscard.setVisibility(View.INVISIBLE);
+                } else {
+                    viewDiscard.updateImage(deck.getDiscardedCard(1));
+                }
                 viewAnimatedCard2.updateImage(cardNum);
                 viewAnimation2.cardAnimate(getCardInHandX(cardNum), viewDiscard.getX(), getCardInHandY(cardNum), viewDiscard.getY());
             } else {
                 endTurn = true;
                 stage = fivesStage.draw;//reset stage, turn over.
                 preAnimation = true;
+                viewDiscard.setVisibility(View.VISIBLE);
+                viewDiscard.updateImage(viewAnimatedCard2.getCardNum());
                 viewPlayers[deck.getMyPlayerNum()].getCard(cardNum).setVisibility(View.VISIBLE);
                 try {
                     deck.drawFromDiscard(deck.getMyPlayerNum(), cardLocation);
@@ -735,13 +742,9 @@ public class Fives extends AppCompatActivity {
                 }
             }
         }
-        if (roundOver()) {
-            scoreRound();
-        }
     }
 
     private static void postAnimationAI() {
-        viewPlayers[deck.getCurPlayersTurn()].allCardsVisible();
         switch (AIStage) {
             case drewFromDiscard:
                 AIDrewFromDiscard(lastLocation);
@@ -770,15 +773,21 @@ public class Fives extends AppCompatActivity {
      */
     private static void AIKeptDraw(int location) {
         //Logic for swapped with hand
+        System.out.println("Ai Kept Draw");
+        int cardNum = deck.getHand(deck.getCurPlayersTurn()).get(location);
         if (beforeAnimationAI) {
+            beforeAnimationAI = false;
             lastLocation = location;
-            int cardNum = deck.getHand(deck.getCurPlayersTurn()).get(location);
+            viewAnimatedCard1.updateImage(deck.peekTopDraw());
             viewAnimation1.cardAnimate(viewDeck.getX(), getCardInHandX(cardNum), viewDeck.getY(), getCardInHandY(cardNum));
             viewPlayers[deck.getCurPlayersTurn()].getCard(cardNum).setVisibility(View.INVISIBLE);
+            viewDeck.flipCard();
             viewAnimatedCard2.updateImage(cardNum);
             viewAnimation2.cardAnimate(getCardInHandX(cardNum), viewDiscard.getX(), getCardInHandY(cardNum), viewDiscard.getY());
         } else {
+            System.out.println("Test");
             beforeAnimationAI = true;
+            viewPlayers[deck.getCurPlayersTurn()].getCard(cardNum).setVisibility(View.VISIBLE);
             viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDraw());
             viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
             try {
@@ -787,9 +796,11 @@ public class Fives extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            viewDeck.flipCard();
             viewDeck.updateImage(deck.peekTopDraw());
             viewDiscard.updateImage(deck.peekTopDiscard());
+        }
+        if (roundOver()) {
+            scoreRound();
         }
     }
 
@@ -800,12 +811,13 @@ public class Fives extends AppCompatActivity {
      */
     private static void AIDiscardedDraw(int location) {
         //logic for flipping over card in hand.
+        System.out.println("AI Discarded Draw");
         if (beforeAnimationAI) {
+            beforeAnimationAI = false;
             lastLocation = location;
             viewAnimatedCard1.updateImage(deck.peekTopDraw());
             viewDeck.flipCard();
             viewAnimation1.cardAnimate(viewDeck.getX(), viewDiscard.getX(), viewDeck.getY(), viewDiscard.getY());
-            viewDeck.flipCard();
         } else {
             beforeAnimationAI = true;
             try {
@@ -817,6 +829,9 @@ public class Fives extends AppCompatActivity {
             viewDiscard.updateImage(deck.peekTopDiscard());
             viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
         }
+        if (roundOver()) {
+            scoreRound();
+        }
     }
 
     /**
@@ -825,16 +840,25 @@ public class Fives extends AppCompatActivity {
      * @param location where to put the card that the AI drew from this discard.
      */
     private static void AIDrewFromDiscard(int location) {
+        System.out.println("AI Drew From Discard");
+        int cardNum = deck.getHand(deck.getCurPlayersTurn()).get(location);
         if (beforeAnimationAI) {
+            beforeAnimationAI = false;
             lastLocation = location;
-            int cardNum = deck.getHand(deck.getCurPlayersTurn()).get(location);
+            viewAnimatedCard1.updateImage(deck.peekTopDiscard());
             viewAnimation1.cardAnimate(viewDiscard.getX(), getCardInHandX(cardNum), viewDiscard.getY(), getCardInHandY(cardNum));
-            viewDiscard.updateImage(deck.getCardUnderDiscard());
             viewPlayers[deck.getCurPlayersTurn()].getCard(cardNum).setVisibility(View.INVISIBLE);
             viewAnimatedCard2.updateImage(cardNum);
             viewAnimation2.cardAnimate(getCardInHandX(cardNum), viewDiscard.getX(), getCardInHandY(cardNum), viewDiscard.getY());
+            if (deck.getDiscardedCard(1) == -1) {
+                viewDiscard.setVisibility(View.INVISIBLE);
+            } else {
+                viewDiscard.updateImage(deck.getDiscardedCard(1));
+            }
         } else {
-            beforeAnimationAI = true;
+            viewDiscard.setVisibility(View.VISIBLE);
+            viewDiscard.updateImage(viewAnimatedCard2.getCardNum());
+            viewPlayers[deck.getCurPlayersTurn()].getCard(cardNum).setVisibility(View.VISIBLE);
             viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDiscard());
             viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
             try {
@@ -844,6 +868,9 @@ public class Fives extends AppCompatActivity {
                 e.printStackTrace();
             }
             viewDiscard.updateImage(deck.peekTopDiscard());
+        }
+        if (roundOver()) {
+            scoreRound();
         }
     }
 
