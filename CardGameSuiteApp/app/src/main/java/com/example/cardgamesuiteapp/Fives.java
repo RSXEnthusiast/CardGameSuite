@@ -722,24 +722,22 @@ public class Fives extends AppCompatActivity {
      * Called when it's the AI turns
      */
     private static void runAITurns() {
-        for (int i = numHumans; i < numAI + numHumans; i++) {
-            AIStage = fivesStage.draw;
-            beforeAnimationAI = true;
-            int drawFromDiscard = getAIDrawFromDiscard();
-            if (drawFromDiscard != -1) {
-                AIStage = fivesStage.drewFromDiscard;
-                AIDrewFromDiscard(drawFromDiscard);
-            } else {
+        AIStage = fivesStage.draw;
+        beforeAnimationAI = true;
+        int drawFromDiscard = getAIDrawFromDiscard();
+        if (drawFromDiscard != -1) {
+            AIStage = fivesStage.drewFromDiscard;
+            AIDrewFromDiscard(drawFromDiscard);
+        } else {
+            AIStage = fivesStage.drewFromDeck;
+            AIDrawFromPile();
+            int drawFromPile = getAIKeepDrawSelection();
+            if (drawFromPile != -1) {
                 AIStage = fivesStage.drewFromDeck;
-                AIDrawFromPile();
-                int drawFromPile = getAIKeepDrawSelection();
-                if (drawFromPile != -1) {
-                    AIStage = fivesStage.drewFromDeck;
-                    AIKeptDraw(drawFromPile);
-                } else {
-                    AIStage = fivesStage.discardedFromDeck;
-                    AIDiscardedDraw(getAIFlipLocation());
-                }
+                AIKeptDraw(drawFromPile);
+            } else {
+                AIStage = fivesStage.discardedFromDeck;
+                AIDiscardedDraw(getAIFlipLocation());
             }
         }
     }
@@ -757,6 +755,9 @@ public class Fives extends AppCompatActivity {
                 break;
         }
         deck.nextPlayer();
+        if (!deck.isMyTurn()) {
+            runAITurns();
+        }
     }
 
     /**
@@ -773,7 +774,6 @@ public class Fives extends AppCompatActivity {
      */
     private static void AIKeptDraw(int location) {
         //Logic for swapped with hand
-        System.out.println("Ai Kept Draw");
         int cardNum = deck.getHand(deck.getCurPlayersTurn()).get(location);
         if (beforeAnimationAI) {
             beforeAnimationAI = false;
@@ -785,7 +785,6 @@ public class Fives extends AppCompatActivity {
             viewAnimatedCard2.updateImage(cardNum);
             viewAnimation2.cardAnimate(getCardInHandX(cardNum), viewDiscard.getX(), getCardInHandY(cardNum), viewDiscard.getY());
         } else {
-            System.out.println("Test");
             beforeAnimationAI = true;
             viewPlayers[deck.getCurPlayersTurn()].getCard(cardNum).setVisibility(View.VISIBLE);
             viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDraw());
@@ -802,6 +801,7 @@ public class Fives extends AppCompatActivity {
         if (roundOver()) {
             scoreRound();
         }
+//        deck.nextPlayer();
     }
 
     /**
@@ -811,7 +811,6 @@ public class Fives extends AppCompatActivity {
      */
     private static void AIDiscardedDraw(int location) {
         //logic for flipping over card in hand.
-        System.out.println("AI Discarded Draw");
         if (beforeAnimationAI) {
             beforeAnimationAI = false;
             lastLocation = location;
@@ -832,6 +831,7 @@ public class Fives extends AppCompatActivity {
         if (roundOver()) {
             scoreRound();
         }
+//        deck.nextPlayer();
     }
 
     /**
@@ -840,7 +840,6 @@ public class Fives extends AppCompatActivity {
      * @param location where to put the card that the AI drew from this discard.
      */
     private static void AIDrewFromDiscard(int location) {
-        System.out.println("AI Drew From Discard");
         int cardNum = deck.getHand(deck.getCurPlayersTurn()).get(location);
         if (beforeAnimationAI) {
             beforeAnimationAI = false;
@@ -872,6 +871,7 @@ public class Fives extends AppCompatActivity {
         if (roundOver()) {
             scoreRound();
         }
+//        deck.nextPlayer();
     }
 
     /**
