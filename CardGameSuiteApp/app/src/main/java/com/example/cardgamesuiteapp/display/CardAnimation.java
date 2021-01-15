@@ -44,7 +44,6 @@ public class CardAnimation {
             }
         });
     }
-
     public Card getCard() {
         return this.cardToAnimate;
     }
