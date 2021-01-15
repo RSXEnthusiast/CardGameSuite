@@ -7,7 +7,6 @@
     tools:context=".Fives">
 
 
-
     <Button
         android:id="@+id/confirmButton"
         android:layout_width="116dp"
@@ -100,15 +99,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.example.cardgamesuiteapp.display.Card
-        android:id="@+id/testCard"
+        android:id="@+id/animatedCard1"
         android:layout_width="75dp"
         android:layout_height="105dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.047"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.386" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.cardgamesuiteapp.display.Card
+        android:id="@+id/animatedCard2"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/highlightDiscard"

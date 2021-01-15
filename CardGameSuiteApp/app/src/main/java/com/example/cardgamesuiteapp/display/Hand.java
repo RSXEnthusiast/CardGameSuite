@@ -206,4 +206,13 @@ public class Hand extends ViewGroup {
     public int getNumCards() {
         return cards.size();
     }
+
+    public Card getCard(int cardValue) {
+        for (Card card : cards) {
+            if (card.getCardNum() == cardValue) {
+                return card;
+            }
+        }
+        return null;
+    }
 }

@@ -1,59 +1,51 @@
 package com.example.cardgamesuiteapp.display;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
 
-import androidx.annotation.Nullable;
-
+import com.example.cardgamesuiteapp.Fives;
 import com.example.cardgamesuiteapp.R;
 
 public class CardAnimation {
 
-    private Card discardedCard;
+    final Card cardToAnimate;
     private Context context;
 
-    public CardAnimation(Card discardedCard, Context context){
-        this.discardedCard = discardedCard;
-        this.discardedCard.setVisibility(View.VISIBLE);
+    public CardAnimation(Card card, Context context) {
+        this.cardToAnimate = card;
+        this.cardToAnimate.animate().alpha(0f);
+        this.cardToAnimate.setVisibility(View.VISIBLE);
         this.context = context;
     }
 
     @SuppressLint("WrongConstant")
-    public void cardAnimate(){
-        Animation slide = new TranslateAnimation(Animation.ABSOLUTE,Animation.ABSOLUTE,Animation.ABSOLUTE,800);
-        this.discardedCard.setBackgroundResource(R.drawable.ace_d);
+    public void cardAnimate(float xStart, float xEnd, float yStart, float yEnd) {
+        cardToAnimate.setX(0);
+        cardToAnimate.setY(0);
+        Animation slide = new TranslateAnimation(xStart, xEnd, yStart, yEnd);
+        this.cardToAnimate.setBackgroundResource(R.drawable.ace_d);
         slide.setDuration(2000);
         slide.setFillAfter(true);
-        slide.setAnimationListener(new Animation.AnimationListener(){
-            public void onAnimationStart(Animation a){}
-            public void onAnimationRepeat(Animation a){}
-            public void onAnimationEnd(Animation a){
-                System.out.println("test");
+        this.cardToAnimate.startAnimation(slide);
+        slide.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation a) {
+                cardToAnimate.animate().alpha(1f);
+            }
+
+            public void onAnimationRepeat(Animation a) {
+            }
+
+            public void onAnimationEnd(Animation a) {
+                cardToAnimate.animate().alpha(0f).setDuration(0);
+                Fives.postAnimation();
             }
         });
-        this.discardedCard.startAnimation(slide);
     }
 
-    public Card getCard(){
-        return this.discardedCard;
+    public Card getCard() {
+        return this.cardToAnimate;
     }
-
-    public void setVisibility(int visibility){
-
-        if (visibility == 0){
-            this.discardedCard.animate().alpha(0f).setDuration(3000);
-        }
-        if(visibility == 1){
-            this.discardedCard.animate().alpha(1f);
-        }
-    }
-
 }

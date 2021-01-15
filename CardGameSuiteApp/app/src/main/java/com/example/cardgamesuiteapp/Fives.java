@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cardgamesuiteapp.decks.Standard;
@@ -17,9 +16,6 @@ import com.example.cardgamesuiteapp.display.CardAnimation;
 import com.example.cardgamesuiteapp.display.Hand;
 
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class Fives extends AppCompatActivity {
     static int numHumans;// Number of Human players
@@ -39,6 +35,10 @@ public class Fives extends AppCompatActivity {
     static TextView[] viewPlayerNames;// The textViews of the player names
     static TextView[] viewPlayerScores;// The textView of the player scores.
     static View viewDiscardHighlight;// Simply the "highlight" of th discard, mainly used for setting the highlight to visible/invisible
+    static Card viewAnimatedCard1;
+    static CardAnimation viewAnimation1;
+    static Card viewAnimatedCard2;
+    static CardAnimation viewAnimation2;
 
     //Additional view objects used for Fives single player
     static View[] viewAINumButtons;// The buttons the user would press to select the number of AI
@@ -47,6 +47,9 @@ public class Fives extends AppCompatActivity {
     static int[] totalScores;// Keeps track of the cumulative score of the game
     static ArrayList<Integer> winnerIndex;
     static int loserIndex;
+    static boolean isAnimating;
+    static boolean preAnimation;
+    static int lastTouchedCardNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,13 +129,15 @@ public class Fives extends AppCompatActivity {
         viewReturnToGameMainMenu = findViewById(R.id.returnToGameMainMenuButton);
         viewReturnToGameMainMenu.setOnClickListener(v -> returnToGameMainMenu());
         winnerIndex = new ArrayList<Integer>();
+        viewAnimatedCard1 = findViewById(R.id.animatedCard1);
+        viewAnimatedCard1.bringToFront();
+        viewAnimation1 = new CardAnimation(viewAnimatedCard1, this);
+        viewAnimatedCard2 = findViewById(R.id.animatedCard2);
+        viewAnimatedCard2.bringToFront();
+        viewAnimation2 = new CardAnimation(viewAnimatedCard2, this);
+        isAnimating = false;
+        preAnimation = true;
         newGame();
-//        setContentView(R.layout.animation_test);
-        Card testCard = findViewById(R.id.testCard);
-        testCard.updateImage(1);
-        CardAnimation test = new CardAnimation(testCard, this);
-        test.cardAnimate();
-        test.setVisibility(0);
     }
 
     private void returnToPlayerMenu() {
@@ -292,23 +297,31 @@ public class Fives extends AppCompatActivity {
      * @param cardNum the value of the card that was tapped on
      */
     public static void cardTouched(int cardNum) {
-        if (!deck.isMyTurn()) {
-            return;//Not your turn
+        if (!isAnimating) {
+            lastTouchedCardNum = cardNum;
+            if (!deck.isMyTurn()) {
+                return;//Not your turn
+            }
+            switch (stage) {
+                case draw:
+                    stageDraw(cardNum);
+                    break;
+                case drewFromDeck:
+                    stageDrewFromDeck(cardNum);
+                    break;
+                case discardedFromDeck:
+                    stageDiscardFromDraw(cardNum);
+                    break;
+                case drewFromDiscard:
+                    stageDrewFromDiscard(cardNum);
+                    break;
+            }
         }
-        switch (stage) {
-            case draw:
-                stageDraw(cardNum);
-                break;
-            case drewFromDraw:
-                stageDrewFromDraw(cardNum);
-                break;
-            case discardedFromDraw:
-                stageDiscardFromDraw(cardNum);
-                break;
-            case drewFromDiscard:
-                stageDrewFromDiscard(cardNum);
-                break;
-        }
+    }
+
+    public static void postAnimation() {
+        isAnimating = false;
+        cardTouched(lastTouchedCardNum);
     }
 
     /**
@@ -318,7 +331,7 @@ public class Fives extends AppCompatActivity {
      */
     private static void stageDraw(int cardNum) {
         if (cardNum == deck.peekTopDraw()) {
-            stage = fivesStage.drewFromDraw;
+            stage = fivesStage.drewFromDeck;
             viewDeck.flipCard();
             viewDiscardHighlight.setVisibility(View.VISIBLE);
             viewInstruction.setText(getCurInstruction());
@@ -333,39 +346,59 @@ public class Fives extends AppCompatActivity {
      *
      * @param cardNum the value of the card that was tapped on
      */
-    private static void stageDrewFromDraw(int cardNum) {
+    private static void stageDrewFromDeck(int cardNum) {
         boolean endTurn = false;
         if (deck.peekTopDiscard() == cardNum) {
-            stage = fivesStage.discardedFromDraw;
-            //Logic for discarded from draw
-            try {
-                deck.discardFromDeck();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (preAnimation) {
+                //Logic for discarded from draw
+                viewAnimatedCard1.updateImage(deck.peekTopDraw());
+                isAnimating = true;
+                preAnimation = false;
+                viewDeck.flipCard();
+                viewAnimation1.cardAnimate(viewDeck.getX(), viewDiscard.getX(), viewDeck.getY(), viewDiscard.getY());
+            } else {
+                preAnimation = true;
+                stage = fivesStage.discardedFromDeck;
+                try {
+                    deck.discardFromDeck();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                viewDiscard.updateImage(deck.peekTopDiscard());
+                viewDeck.updateImage(deck.peekTopDraw());
+                viewDiscardHighlight.setVisibility(View.INVISIBLE);
+                updateViewInstruction();
             }
-            viewDiscard.updateImage(deck.peekTopDiscard());
-            viewDeck.flipCard();
-            viewDeck.updateImage(deck.peekTopDraw());
-            viewDiscardHighlight.setVisibility(View.INVISIBLE);
-            updateViewInstruction();
         } else if (isValidTapOnCardInHand(cardNum)) {
-            endTurn = true;
-            stage = fivesStage.draw;//reset stage, turn over.
-            //Logic for swapped with hand
             int cardLocation = deck.getCardLocation(deck.getMyPlayerNum(), cardNum);
-            viewPlayers[deck.getMyPlayerNum()].updateCard(cardLocation, deck.peekTopDraw());
-            viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(cardLocation);
-            try {
-                deck.discardByValue(deck.getMyPlayerNum(), cardNum);
-                deck.draw(deck.getMyPlayerNum(), cardLocation);
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (preAnimation) {
+                //Logic for swapped with hand
+                isAnimating = true;
+                preAnimation = false;
+                viewAnimatedCard1.updateImage(deck.peekTopDraw());
+                viewAnimation1.cardAnimate(viewDeck.getX(), getCardInHandX(cardNum), viewDeck.getY(), getCardInHandY(cardNum));
+                viewPlayers[deck.getMyPlayerNum()].getCard(cardNum).setVisibility(View.INVISIBLE);
+                viewAnimatedCard2.updateImage(cardNum);
+                viewAnimation2.cardAnimate(getCardInHandX(cardNum),viewDiscard.getX(),getCardInHandY(cardNum),viewDiscard.getY());
+                viewDeck.flipCard();
+            } else {
+                stage = fivesStage.draw;//reset stage, turn over.
+                endTurn = true;
+                preAnimation = true;
+                viewPlayers[deck.getMyPlayerNum()].getCard(cardNum).setVisibility(View.VISIBLE);
+                viewPlayers[deck.getMyPlayerNum()].updateCard(cardLocation, deck.peekTopDraw());
+                viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(cardLocation);
+                try {
+                    deck.discardByValue(deck.getMyPlayerNum(), cardNum);
+                    deck.draw(deck.getMyPlayerNum(), cardLocation);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                viewDeck.updateImage(deck.peekTopDraw());
+                viewDiscard.updateImage(deck.peekTopDiscard());
+                viewDiscardHighlight.setVisibility(View.INVISIBLE);
+                updateViewInstruction();
             }
-            viewDeck.flipCard();
-            viewDeck.updateImage(deck.peekTopDraw());
-            viewDiscard.updateImage(deck.peekTopDiscard());
-            viewDiscardHighlight.setVisibility(View.INVISIBLE);
-            updateViewInstruction();
         }
         if (endTurn) {
             if (roundOver()) {
@@ -412,20 +445,31 @@ public class Fives extends AppCompatActivity {
     private static void stageDrewFromDiscard(int cardNum) {
         boolean endTurn = false;
         if (isValidTapOnCardInHand(cardNum)) {
-            endTurn = true;
-            stage = fivesStage.draw; //reset stage, turn over.
-            //logic for drawn from discard
             int cardLocation = deck.getCardLocation(deck.getMyPlayerNum(), cardNum);
-            viewPlayers[deck.getMyPlayerNum()].updateCard(cardLocation, deck.peekTopDiscard());
-            viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(cardLocation);
-            try {
-                deck.drawFromDiscard(deck.getMyPlayerNum(), cardLocation);
-                deck.discardByValue(deck.getMyPlayerNum(), cardNum);
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (preAnimation) {
+                viewAnimatedCard1.updateImage(deck.peekTopDiscard());
+                isAnimating = true;
+                preAnimation = false;
+                viewAnimation1.cardAnimate(viewDiscard.getX(), getCardInHandX(cardNum), viewDiscard.getY(), getCardInHandY(cardNum));
+                viewDiscard.updateImage(deck.getCardUnderDiscard());
+                viewPlayers[deck.getMyPlayerNum()].getCard(cardNum).setVisibility(View.INVISIBLE);
+                viewAnimatedCard2.updateImage(cardNum);
+                viewAnimation2.cardAnimate(getCardInHandX(cardNum),viewDiscard.getX(),getCardInHandY(cardNum),viewDiscard.getY());
+            } else {
+                endTurn = true;
+                stage = fivesStage.draw;//reset stage, turn over.
+                preAnimation = true;
+                viewPlayers[deck.getMyPlayerNum()].getCard(cardNum).setVisibility(View.VISIBLE);
+                try {
+                    deck.drawFromDiscard(deck.getMyPlayerNum(), cardLocation);
+                    deck.discardByValue(deck.getMyPlayerNum(), cardNum);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                viewPlayers[deck.getMyPlayerNum()].updateCard(cardLocation, deck.getHand(deck.getMyPlayerNum()).get(cardLocation));
+                viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(cardLocation);
+                updateViewInstruction();
             }
-            viewDiscard.updateImage(deck.peekTopDiscard());
-            updateViewInstruction();
         }
         if (endTurn) {
             if (roundOver()) {
@@ -438,6 +482,13 @@ public class Fives extends AppCompatActivity {
         }
     }
 
+    private static float getCardInHandX(int cardNum) {
+        return viewPlayers[deck.getMyPlayerNum()].getX() + viewPlayers[deck.getMyPlayerNum()].getCard(cardNum).getX();
+    }
+
+    private static float getCardInHandY(int cardNum) {
+        return viewPlayers[deck.getMyPlayerNum()].getY() + viewPlayers[deck.getMyPlayerNum()].getCard(cardNum).getY();
+    }
 
     /**
      * @param cardNum the value of the card that was tapped on
@@ -507,9 +558,9 @@ public class Fives extends AppCompatActivity {
                     return "Memorize your bottom two cards";
                 case draw:
                     return "Draw a card";
-                case drewFromDraw:
+                case drewFromDeck:
                     return "Discard the new card, or swap it with a face down card";
-                case discardedFromDraw:
+                case discardedFromDeck:
                     return "Select a face down card to flip over";
                 case drewFromDiscard:
                     return "Select a face down card to swap the new card with";
@@ -913,6 +964,6 @@ public class Fives extends AppCompatActivity {
      * The stages of the fives game turn
      */
     private enum fivesStage {
-        memCards, draw, drewFromDraw, discardedFromDraw, drewFromDiscard, roundOver, gameOver
+        memCards, draw, drewFromDeck, discardedFromDeck, drewFromDiscard, roundOver, gameOver
     }
 }
