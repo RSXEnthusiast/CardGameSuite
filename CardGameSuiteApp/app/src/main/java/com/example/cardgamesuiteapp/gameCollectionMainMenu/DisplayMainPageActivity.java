@@ -16,8 +16,8 @@ public class DisplayMainPageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_page);
-        setContentView(R.layout.content_main_page);
+        setContentView(R.layout.app_collection_activity_main_page);
+        setContentView(R.layout.app_collection_content_main_page);
     }
 
     @Override

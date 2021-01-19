@@ -58,7 +58,7 @@ public class Fives extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.offline_player_menu);
+        setContentView(R.layout.fives_offline_player_menu);
         backButtonEnabled = true;
         initAISelectionMenu();
     }
@@ -166,7 +166,7 @@ public class Fives extends AppCompatActivity {
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                setContentView(R.layout.offline_player_menu);
+                setContentView(R.layout.fives_offline_player_menu);
                 backButtonEnabled = true;
                 initAISelectionMenu();
             }
@@ -226,19 +226,19 @@ public class Fives extends AppCompatActivity {
     private void setContentView() {
         switch (numHumans + numAI) {
             case 2:
-                setContentView(R.layout.two_players);
+                setContentView(R.layout.fives_two_players);
                 break;
             case 3:
-                setContentView(R.layout.three_players);
+                setContentView(R.layout.fives_three_players);
                 break;
             case 4:
-                setContentView(R.layout.four_players);
+                setContentView(R.layout.fives_four_players);
                 break;
             case 5:
-                setContentView(R.layout.five_players);
+                setContentView(R.layout.fives_five_players);
                 break;
             case 6:
-                setContentView(R.layout.six_players);
+                setContentView(R.layout.fives_six_players);
                 break;
         }
     }

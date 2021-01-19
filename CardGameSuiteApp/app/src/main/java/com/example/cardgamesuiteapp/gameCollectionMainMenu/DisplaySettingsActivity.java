@@ -11,7 +11,7 @@ public class DisplaySettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_settings);
+        setContentView(R.layout.app_collection_settings);
     }
 
 }
