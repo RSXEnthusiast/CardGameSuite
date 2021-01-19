@@ -10,6 +10,6 @@ public class DisplaySolitaireRulesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_solitaire_rules);
+        setContentView(R.layout.rules_solitaire);
     }
 }
