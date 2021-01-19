@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp;
+package com.example.cardgamesuiteapp.gameCollectionMainMenu;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.cardgamesuiteapp.games.Fives;
+import com.example.cardgamesuiteapp.R;
+import com.example.cardgamesuiteapp.games.Solitaire;
 
 public class DisplayMainPageActivity extends AppCompatActivity {
 
