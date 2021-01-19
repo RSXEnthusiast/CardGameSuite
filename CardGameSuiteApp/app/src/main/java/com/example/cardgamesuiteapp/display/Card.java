@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.cardgamesuiteapp.Fives;
+import com.example.cardgamesuiteapp.games.Fives;
 import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.decks.Standard;
 

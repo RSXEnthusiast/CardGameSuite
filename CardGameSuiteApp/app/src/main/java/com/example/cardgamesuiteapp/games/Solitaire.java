@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp;
+package com.example.cardgamesuiteapp.games;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;

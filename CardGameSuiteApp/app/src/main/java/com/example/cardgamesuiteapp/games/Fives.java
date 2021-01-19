@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp;
+package com.example.cardgamesuiteapp.games;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,13 +11,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.decks.Standard;
 import com.example.cardgamesuiteapp.display.Card;
 import com.example.cardgamesuiteapp.display.CardAnimation;
 import com.example.cardgamesuiteapp.display.Hand;
+import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplayMainPageActivity;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class Fives extends AppCompatActivity {
     static int numHumans;// Number of Human players
