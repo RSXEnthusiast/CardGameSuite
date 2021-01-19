@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Fives">
 
+
     <Button
         android:id="@+id/confirmButton"
         android:layout_width="116dp"
@@ -97,6 +98,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.example.cardgamesuiteapp.display.Card
+        android:id="@+id/animatedCard1"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.cardgamesuiteapp.display.Card
+        android:id="@+id/animatedCard2"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <View
         android:id="@+id/highlightDiscard"
         android:layout_width="80dp"
@@ -174,5 +189,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="3" />
         </LinearLayout>
+
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
