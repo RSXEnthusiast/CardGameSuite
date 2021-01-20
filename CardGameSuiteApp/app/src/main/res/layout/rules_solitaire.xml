@@ -46,9 +46,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="left"
-            android:text="@string/solitaireRulesExplained"
+            android:text="Discard cards that are matching in suite and have a face value less than another card in play. Move cards to empty columns and deal more cards from deck as desired"
             android:textColor="?colorOnSecondary"
             android:textSize="20sp">
+        </TextView>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:text="Card Values\n\nJacks = 11\nQueens = 12\nKings = 13\nAces = 14\nAll Other Cards Are Face Value"
+            android:textSize="20sp"
+            android:textColor="?colorPrimaryVariant">
         </TextView>
 
     </LinearLayout>
