@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- drawable/card.xml -->
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="336dp"
+    android:height="624dp"
+    android:viewportWidth="336"
+    android:viewportHeight="624"
+    >
+
+    <group>
+
+        <clip-path
+            android:pathData="M28 4H308C321.255 4 332 14.7452 332 28V596C332 609.255 321.255 620 308 620H28C14.7452 620 4 609.255 4 596V28C4 14.7452 14.7452 4 28 4Z"
+            />
+
+        <path
+            android:pathData="M4 4V620H332V4"
+            android:fillColor="#FF8577"
+            />
+
+    </group>
+
+    <group>
+
+        <clip-path
+            android:pathData="M0 0V624H336V0M28 4H308C321.255 4 332 14.7452 332 28V596C332 609.255 321.255 620 308 620H28C14.7452 620 4 609.255 4 596V28C4 14.7452 14.7452 4 28 4Z"
+            />
+
+        <path
+            android:pathData="M28 4H308C321.255 4 332 14.7452 332 28V596C332 609.255 321.255 620 308 620H28C14.7452 620 4 609.255 4 596V28C4 14.7452 14.7452 4 28 4Z"
+            android:strokeWidth="8"
+            android:strokeColor="#000000"
+            />
+
+    </group>
+
+</vector>
