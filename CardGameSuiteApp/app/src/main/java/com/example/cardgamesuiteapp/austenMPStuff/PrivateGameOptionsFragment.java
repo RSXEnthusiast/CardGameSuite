@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp;
+package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.os.Bundle;
 import android.view.View;
@@ -7,9 +7,11 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.cardgamesuiteapp.R;
+
 public class PrivateGameOptionsFragment extends Fragment {
     public PrivateGameOptionsFragment() {
-        super(R.layout.fragment_private_options);
+        super(R.layout.austen_fragment_private_options);
     }
 
 

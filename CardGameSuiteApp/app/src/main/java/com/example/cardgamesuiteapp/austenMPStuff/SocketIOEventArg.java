@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp;
+package com.example.cardgamesuiteapp.austenMPStuff;
 
 public class SocketIOEventArg {
 

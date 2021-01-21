@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp;
+package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.cardgamesuiteapp.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +25,7 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
     private static final String TAG = PublicGameWaitingRoom.class.getSimpleName();
 
     public PublicGameWaitingRoom() {
-        super(R.layout.fragment_public_game_waiting_room);
+        super(R.layout.austen_fragment_public_game_waiting_room);
         SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
 
     }

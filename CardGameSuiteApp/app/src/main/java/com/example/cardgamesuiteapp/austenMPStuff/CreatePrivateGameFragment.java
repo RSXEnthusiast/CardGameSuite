@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp;
+package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.example.cardgamesuiteapp.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +21,7 @@ import io.socket.client.Socket;
 
 public class CreatePrivateGameFragment extends Fragment implements IMultiplayerConnectorSocketEventUser {
     public CreatePrivateGameFragment() {
-        super(R.layout.fragment_create_private_game);
+        super(R.layout.austen_fragment_create_private_game);
         _MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
     }
 

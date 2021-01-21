@@ -1,6 +1,8 @@
-package com.example.cardgamesuiteapp;
+package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.util.Log;
+
+import com.example.cardgamesuiteapp.BuildConfig;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

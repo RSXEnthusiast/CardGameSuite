@@ -1,10 +1,11 @@
-package com.example.cardgamesuiteapp;
+package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import com.example.cardgamesuiteapp.R;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AlertDialog;
@@ -40,7 +41,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_multiplayer_waiting_room);
+        setContentView(R.layout.austen_activity_multiplayer_waiting_room);
         initializeFragmentResultListeners();
         _UIHandler = new Handler();
 

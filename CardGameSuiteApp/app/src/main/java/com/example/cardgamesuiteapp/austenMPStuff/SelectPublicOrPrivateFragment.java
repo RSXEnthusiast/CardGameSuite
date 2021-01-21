@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp;
+package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.cardgamesuiteapp.R;
+
 import io.socket.client.Socket;
 
 public class SelectPublicOrPrivateFragment extends Fragment implements IMultiplayerConnectorSocketEventUser {
@@ -17,7 +19,7 @@ public class SelectPublicOrPrivateFragment extends Fragment implements IMultipla
     private static final String TAG = SelectPublicOrPrivateFragment.class.getSimpleName();
 
     public SelectPublicOrPrivateFragment() {
-        super(R.layout.fragment_select_public_or_private_buttons);
+        super(R.layout.austen_fragment_select_public_or_private_buttons);
     }
 
     @Override

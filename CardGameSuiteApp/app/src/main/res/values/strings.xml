@@ -20,4 +20,16 @@
     <string name="fivesScoring">Scoring\n\n5s are worth -5\nPairs (excluding 5s) are worth 0\nTrios (excluding 5s) are worth 0\nQuads (excluding 5s) are worth 0\nKings are worth 0\nJacks and Queens are worth 10\nAces are worth 1\nNumerical cards (excluding 5s) are worth face value</string>
     <string name="solitaireRulesGoal">Goal: End the game by moving all four aces to the top row</string>
     <string name="solitaireRulesExplained">Once I remember how to play the game Im putting the rules here</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_multiplayer_waiting_room">MultiplayerWaitingRoom</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

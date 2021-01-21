@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp;
+package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+
+import com.example.cardgamesuiteapp.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,7 +23,7 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
 
 
     public JoinPrivateGameFragment() {
-        super(R.layout.fragment_join_private_game);
+        super(R.layout.austen_fragment_join_private_game);
         SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
 
     }
