@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp;
+package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,12 +10,14 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.example.cardgamesuiteapp.R;
+
 import java.util.Observable;
 import java.util.Observer;
 
 public class JoiningPrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivityFragment {
     public JoiningPrivateGameWaitingRoomFragment() {
-        super(R.layout.fragment_initiators_private_game_waiting_room);
+        super(R.layout.austen_fragment_initiators_private_game_waiting_room);
         SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
     }
 
