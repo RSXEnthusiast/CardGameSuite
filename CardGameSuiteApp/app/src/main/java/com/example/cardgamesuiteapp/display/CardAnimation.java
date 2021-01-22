@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
-import com.example.cardgamesuiteapp.games.Fives;
+import com.example.cardgamesuiteapp.games.FivesGame;
 import com.example.cardgamesuiteapp.R;
 
 public class CardAnimation {
@@ -43,7 +43,7 @@ public class CardAnimation {
             public void onAnimationEnd(Animation a) {
                 cardToAnimate.animate().alpha(0f).setDuration(0);
                 if (callPostAnimation) {
-                    Fives.postAnimation();
+                    FivesGame.postAnimation();
                 }
             }
         });

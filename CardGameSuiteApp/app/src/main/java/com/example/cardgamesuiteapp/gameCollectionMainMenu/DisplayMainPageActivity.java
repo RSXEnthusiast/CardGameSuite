@@ -7,11 +7,14 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cardgamesuiteapp.games.Fives;
+import com.example.cardgamesuiteapp.austenMPStuff.MainActivity;
+import com.example.cardgamesuiteapp.games.FivesGame;
 import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.games.Solitaire;
 
-public class DisplayMainPageActivity extends AppCompatActivity {
+import java.io.Serializable;
+
+public class DisplayMainPageActivity extends AppCompatActivity implements Serializable {
 
 
     @Override
@@ -40,7 +43,9 @@ public class DisplayMainPageActivity extends AppCompatActivity {
     }
 
     public void clickPlayFivesButton(View view) {
-        Intent intent = new Intent(this, Fives.class);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("Class", FivesGame.class);
+        intent.putExtra("GameName", "Fives");
         startActivity(intent);
     }
 

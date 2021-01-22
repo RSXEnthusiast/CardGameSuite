@@ -12,15 +12,17 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.cardgamesuiteapp.R;
+import com.example.cardgamesuiteapp.austenMPStuff.MainActivity;
 import com.example.cardgamesuiteapp.decks.Standard;
 import com.example.cardgamesuiteapp.display.Card;
 import com.example.cardgamesuiteapp.display.CardAnimation;
 import com.example.cardgamesuiteapp.display.Hand;
 import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplayMainPageActivity;
+import com.example.cardgamesuiteapp.singlePlayerMenus.FivesSinglePlayerMenu;
 
 import java.util.ArrayList;
 
-public class Fives extends AppCompatActivity {
+public class FivesGame extends AppCompatActivity {
     static int numHumans;// Number of Human players
     static int numAI;// Number of AI players
     static Standard deck;// The Deck object
@@ -43,9 +45,6 @@ public class Fives extends AppCompatActivity {
     static Card viewAnimatedCard2;
     static CardAnimation viewAnimation2;
 
-    //Additional view objects used for Fives single player
-    static View[] viewAINumButtons;// The buttons the user would press to select the number of AI
-
     static fivesStage stage;// The current stage of play
     static int[] totalScores;// Keeps track of the cumulative score of the game
     static ArrayList<Integer> winnerIndex;
@@ -53,67 +52,20 @@ public class Fives extends AppCompatActivity {
     static boolean isAnimating;
     static boolean preAnimation;
     static int lastTouchedCardNum;
-    static boolean backButtonEnabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fives_offline_player_menu);
-        backButtonEnabled = true;
-        initAISelectionMenu();
+        initFives();
     }
 
     @Override
     public void onBackPressed() {
-        if (backButtonEnabled) {
-            super.onBackPressed();
-        } else {
-            //do nothing
-        }
-    }
-
-    private void initAISelectionMenu() {
-        viewAINumButtons = new View[5];
-        viewAINumButtons[0] = findViewById(R.id.oneAI);
-        viewAINumButtons[0].setOnClickListener(v -> selectedOneAI());
-        viewAINumButtons[1] = findViewById(R.id.twoAI);
-        viewAINumButtons[1].setOnClickListener(v -> selectedTwoAI());
-        viewAINumButtons[2] = findViewById(R.id.threeAI);
-        viewAINumButtons[2].setOnClickListener(v -> selectedThreeAI());
-        viewAINumButtons[3] = findViewById(R.id.fourAI);
-        viewAINumButtons[3].setOnClickListener(v -> selectedFourAI());
-        viewAINumButtons[4] = findViewById(R.id.fiveAI);
-        viewAINumButtons[4].setOnClickListener(v -> selectedFiveAI());
-    }
-
-    private void selectedOneAI() {
-        numAISelected(1);
-    }
-
-    private void selectedTwoAI() {
-        numAISelected(2);
-    }
-
-    private void selectedThreeAI() {
-        numAISelected(3);
-    }
-
-    private void selectedFourAI() {
-        numAISelected(4);
-    }
-
-    private void selectedFiveAI() {
-        numAISelected(5);
-    }
-
-    private void numAISelected(int numAI) {
-        numHumans = 1;
-        this.numAI = numAI;
-        backButtonEnabled = false;
-        initFives();
     }
 
     private void initFives() {
+        numHumans = (int) getIntent().getSerializableExtra("numHumans");
+        numAI = (int) getIntent().getSerializableExtra("numAI");
         setContentView();
         ((TextView) findViewById(R.id.scoresText)).setTextColor(Color.LTGRAY);
         viewPlayers = new Hand[numAI + numHumans];
@@ -166,9 +118,8 @@ public class Fives extends AppCompatActivity {
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                setContentView(R.layout.fives_offline_player_menu);
-                backButtonEnabled = true;
-                initAISelectionMenu();
+                Intent intent = new Intent(FivesGame.this, FivesSinglePlayerMenu.class);
+                startActivity(intent);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -188,8 +139,8 @@ public class Fives extends AppCompatActivity {
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //This is where code would be to return to the main menu of the game, probably where one would select AI/Online/Online public.
-                //For now it does nothing
+                Intent intent = new Intent(FivesGame.this,MainActivity.class);
+                startActivity(intent);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

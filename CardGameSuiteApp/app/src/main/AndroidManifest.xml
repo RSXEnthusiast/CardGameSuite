@@ -11,14 +11,18 @@
         android:theme="@style/Theme.CardGameSuiteApp"
         android:usesCleartextTraffic="true">
         <activity android:name=".gameCollectionMainMenu.DisplaySettingsActivity" />
-        <activity android:name=".games.Fives" />
+        <activity android:name=".games.FivesGame" />
         <activity android:name=".gameCollectionMainMenu.DisplayFivesRulesActivity" />
         <activity android:name=".games.Solitaire" />
         <activity android:name=".gameCollectionMainMenu.DisplaySolitaireRulesActivity" />
+        <activity android:name=".singlePlayerMenus.FivesSinglePlayerMenu" />
         <activity
             android:name=".austenMPStuff.MultiplayerWaitingRoomActivity"
             android:label="@string/title_activity_multiplayer_waiting_room"
             android:parentActivityName=".austenMPStuff.MainActivity" />
+        <activity
+            android:name=".austenMPStuff.MainActivity"
+            android:label="@string/app_name"/>
         <activity
             android:name=".gameCollectionMainMenu.DisplayMainPageActivity"
             android:screenOrientation="portrait">

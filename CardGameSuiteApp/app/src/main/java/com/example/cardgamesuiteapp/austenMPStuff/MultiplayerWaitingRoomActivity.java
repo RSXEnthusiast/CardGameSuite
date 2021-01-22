@@ -46,8 +46,6 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
         _UIHandler = new Handler();
 
         // get notified on updates from the MultiplayerConnector
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         Intent intent = getIntent();
         _GameType = intent.getStringExtra(MainActivity.GAME_TYPE);
 

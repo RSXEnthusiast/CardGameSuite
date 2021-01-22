@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.cardgamesuiteapp.games.Fives;
+import com.example.cardgamesuiteapp.games.FivesGame;
 import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.decks.Standard;
 
@@ -33,7 +33,7 @@ public class Card extends View implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        Fives.cardTouched(cardNum);
+        FivesGame.cardTouched(cardNum);
         return false;
     }
 

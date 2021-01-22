@@ -4,14 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.cardgamesuiteapp.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.cardgamesuiteapp.singlePlayerMenus.FivesSinglePlayerMenu;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -21,20 +24,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.austen_activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                startGame(view);
-            }
-        });
+        setContentView(R.layout.austen_fragment_first);
+        TextView title = findViewById(R.id.gameTitle);
+        title.setText((String) getIntent().getSerializableExtra("GameName"));
+        Button viewOfflineSinglePlayer = findViewById(R.id.offlineSinglePlayer);
+        Button viewOnlineMultiplayer = findViewById(R.id.onlineMultiplayer);
+        viewOfflineSinglePlayer.setOnClickListener(v -> startOfflineSinglePlayer());
+        viewOnlineMultiplayer.setOnClickListener(v -> startOnlineMultiplayer());
     }
 
+    private void startOfflineSinglePlayer() {
+        Intent intent = new Intent(this, FivesSinglePlayerMenu.class);
+        startActivity(intent);
+    }
+
+    private void startOnlineMultiplayer() {
+        Intent intent = new Intent(this, MultiplayerWaitingRoomActivity.class);
+        String selectedGame= "fives";
+        intent.putExtra(GAME_TYPE, selectedGame);
+        startActivity(intent);
+    }
 
     public void startGame(View view) {
         Intent intent = new Intent(this, MultiplayerWaitingRoomActivity.class);
