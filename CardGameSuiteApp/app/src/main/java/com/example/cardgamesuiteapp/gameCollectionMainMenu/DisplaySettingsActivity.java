@@ -11,9 +11,6 @@ import com.example.cardgamesuiteapp.R;
 
 public class DisplaySettingsActivity extends AppCompatActivity {
 
-    static SharedPreferences.Editor editor;
-    static SharedPreferences sp;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
