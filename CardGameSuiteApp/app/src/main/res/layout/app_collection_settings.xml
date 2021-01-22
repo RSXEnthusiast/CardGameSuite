@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -12,13 +11,13 @@
 
         <Space
             android:layout_width="15dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/textView7"
             android:layout_width="255dp"
             android:layout_height="wrap_content"
-            android:text="Card Style"
+            android:text="@string/card_style"
             android:textAllCaps="true"
             android:textColor="?colorPrimary"
             android:textSize="25sp"
@@ -27,76 +26,88 @@
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="140dp">
+        android:layout_height="140dp"
+        android:gravity="center">
 
-        <Space
-            android:layout_width="15dp"
-            android:layout_height="wrap_content" />
+        <com.example.cardgamesuiteapp.display.VerticalTextView
+            android:id="@+id/selectedLight"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:text="SELECTED"
+            android:textSize="29dp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="115dp"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/deck1" />
+        <ImageButton
+            android:id="@+id/buttonLightStyle"
+            android:layout_width="100dp"
+            android:background="@drawable/light_ace_h" />
 
-        <Space
-            android:layout_width="15dp"
-            android:layout_height="wrap_content" />
+        <Space android:layout_width="30dp" />
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="115dp"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/deck2" />
+        <com.example.cardgamesuiteapp.display.VerticalTextView
+            android:id="@+id/selectedBig"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:text="SELECTED"
+            android:textSize="29dp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
 
-        <Space
-            android:layout_width="15dp"
-            android:layout_height="wrap_content" />
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="115dp"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/deck3" />
+        <ImageButton
+            android:id="@+id/buttonBigStyle"
+            android:layout_width="100dp"
+            android:background="@drawable/big_ace_h" />
     </TableRow>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="15dp" />
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="100dp" >
+        android:layout_height="140dp"
+        android:gravity="center">
 
-        <Space
-            android:layout_width="15dp"
-            android:layout_height="wrap_content" />
+        <com.example.cardgamesuiteapp.display.VerticalTextView
+            android:id="@+id/selectedDark"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:text="SELECTED"
+            android:textSize="29dp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="115dp"
-            android:layout_height="wrap_content"
-            android:text="@string/regularCard"
-            android:backgroundTint="?colorPrimaryVariant"/>
+        <ImageButton
+            android:id="@+id/buttonDarkStyle"
+            android:layout_width="100dp"
+            android:background="@drawable/dark_ace_h" />
 
-        <Space
-            android:layout_width="15dp"
-            android:layout_height="wrap_content" />
+        <Space android:layout_width="30dp" />
 
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="115dp"
-            android:layout_height="wrap_content"
-            android:text="@string/largeCardFont"
-            android:backgroundTint="?colorPrimaryVariant"/>
+        <com.example.cardgamesuiteapp.display.VerticalTextView
+            android:id="@+id/selectedBigDark"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:text="SELECTED"
+            android:textSize="29dp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
 
-        <Space
-            android:layout_width="15dp"
-            android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/buttonBigDarkStyle"
+            android:layout_width="100dp"
+            android:background="@drawable/bigdark_ace_h" />
 
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="115dp"
-            android:layout_height="wrap_content"
-            android:text="@string/funkyCard"
-            android:backgroundTint="?colorPrimaryVariant"/>
     </TableRow>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="15dp" />
 
     <TableRow
         android:layout_width="match_parent"
@@ -104,13 +115,13 @@
 
         <Space
             android:layout_width="15dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/textView8"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
-            android:text="Card Animation Speed"
+            android:text="Card Movement Speed"
             android:textAllCaps="true"
             android:textColor="?colorPrimary"
             android:textSize="25sp"
@@ -119,11 +130,11 @@
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="140dp">
+        android:layout_height="59dp">
 
         <Space
             android:layout_width="15dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
 
         <com.google.android.material.slider.Slider
             android:layout_width="350dp"
@@ -132,5 +143,4 @@
             android:valueFrom="1"
             android:valueTo="5" />
     </TableRow>
-
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.cardgamesuiteapp.gameCollectionMainMenu;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,9 @@ public class DisplayMainPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_collection_activity_main_page);
         setContentView(R.layout.app_collection_content_main_page);
+        if (getSharedPreferences("preferences",MODE_PRIVATE).getString("cardStyle","default").equals("default")){
+            getSharedPreferences("preferences",MODE_PRIVATE).edit().putString("cardStyle","dark_").apply();
+        }
     }
 
     @Override
