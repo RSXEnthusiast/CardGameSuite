@@ -68,7 +68,7 @@ public class Card extends View implements View.OnTouchListener {
      */
     public void flipCard() {
         if (isFaceUp) {
-            imageId = R.drawable.card_back;
+            imageId = R.drawable.big_back;
             this.isFaceUp = false;
         } else {
             imageId = getImageId(Standard.getCardImageFileName(cardNum));
