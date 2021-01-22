@@ -28,7 +28,6 @@ public class CardAnimation {
         cardToAnimate.setX(0);
         cardToAnimate.setY(0);
         Animation slide = new TranslateAnimation(xStart, xEnd, yStart, yEnd);
-        this.cardToAnimate.setBackgroundResource(R.drawable.ace_d);
         slide.setDuration(2000);
         slide.setFillAfter(true);
         this.cardToAnimate.startAnimation(slide);
