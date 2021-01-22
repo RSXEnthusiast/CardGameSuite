@@ -19,9 +19,10 @@ public class DisplayMainPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_collection_activity_main_page);
         setContentView(R.layout.app_collection_content_main_page);
-        if (getSharedPreferences("preferences", MODE_PRIVATE).getString("cardStyle","default").equals("default")){
-            getSharedPreferences("preferences", MODE_PRIVATE).edit().putString("cardStyle", "dark_").apply();
-            getSharedPreferences("preferences", MODE_PRIVATE).edit().putInt("animationSpeed", 2000).apply();
+        SharedPreferences sp = getSharedPreferences("preferences", MODE_PRIVATE);
+        if (sp.getString("cardStyle", "default").equals("default") || sp.getInt("animationSpeed", 0) == 0) {
+            sp.edit().putString("cardStyle", "dark_").apply();
+            sp.edit().putInt("animationSpeed", 2000).apply();
         }
     }
 
