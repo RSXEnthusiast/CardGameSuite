@@ -106,7 +106,7 @@ public class MultiPlayerConnector extends Observable {
                 Log.d(TAG, args[i].toString());
 
             }
-            notifyObservers(new SocketIOEventArg("EVENT_CONNECT_ERROR", null));
+            notifyObservers(new SocketIOEventArg(ServerConfig.eventConnectError, args));
 
         }).on("token-offer", args -> {
             Log.d(TAG, "tokens for twilio recieved");
@@ -171,11 +171,16 @@ public class MultiPlayerConnector extends Observable {
                 Log.d(TAG, "connectToSignallingServer: disconnect");
             });*/
 
-        _Socket.on(ServerConfig.publicGameReadyToPlay, args -> {
+        _Socket.on(ServerConfig.startGame, args -> {
             Log.d(TAG, "starting Public game");
-            notifyObservers(ServerConfig.publicGameReadyToPlay);
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.startGame,null);
+            notifyObservers(socketIOEventArg);
         });
-
+        _Socket.on(ServerConfig.gameData, args -> {
+            Log.d(TAG, "starting Public game");
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.gameData,args);
+            notifyObservers(socketIOEventArg);
+        });
     }
 
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.example.cardgamesuiteapp.R;
+import com.example.cardgamesuiteapp.games.FivesGame;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AlertDialog;
@@ -31,6 +32,18 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
 
     String _GameCode = "";
     private static final String TAG = MultiplayerWaitingRoomActivity.class.getSimpleName();
+
+    /**
+     * Probably need to have parameters for specifying what type of game to start and and how many players,
+     * like an array of player names if its a private game.
+     */
+    public void GoToGameActivity() {
+ //switch on game type. Then load the correct game...
+            Intent intent = new Intent(this, FivesGame.class);
+            intent.putExtra("numHumans",1);
+            intent.putExtra("numAI",1); // put number of players that are playing the game. (Number of players in room)
+            startActivity(intent);
+    }
 
     static class PlayerStatus {
         static boolean _initiator = false;

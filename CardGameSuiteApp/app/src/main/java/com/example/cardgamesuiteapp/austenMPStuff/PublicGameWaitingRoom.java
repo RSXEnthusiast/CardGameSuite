@@ -1,6 +1,7 @@
 package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.cardgamesuiteapp.R;
+import com.example.cardgamesuiteapp.games.FivesGame;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -87,10 +89,11 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
             switch (socketIOEventArg._EventName) {
 
                 case ServerConfig.NUM_ACTIVE_PUBLIC_PLAYERS:
-                    updatePublicWaitingRoomActivePlayerCount(socketIOEventArg._Arg);
+                    updatePublicWaitingRoomActivePlayerCount(socketIOEventArg._JsonObject);
                     break;
-                case ServerConfig.publicGameReadyToPlay:
+                case ServerConfig.startGame:
                     //go to game
+                    _MultiplayerWaitingRoomActivity.GoToGameActivity();
                     break;
                 case ServerConfig.eventConnectError:
                     _MultiplayerWaitingRoomActivity.changeFragment(SelectPublicOrPrivateFragment.class.getCanonicalName(), null);
@@ -104,10 +107,12 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
     };
 
 
-    public void updatePublicWaitingRoomActivePlayerCount(Object args) {
 
-        JSONObject arg = (JSONObject) args;
-        int numberOfPlayers = (int) arg.opt("numPlayers");
+
+    public void updatePublicWaitingRoomActivePlayerCount(JSONObject jsonObject) {
+
+
+        int numberOfPlayers = (int) jsonObject.opt("numPlayers");
 
         _MultiplayerWaitingRoomActivity._UIHandler.post(new Runnable() {
             @Override
@@ -147,12 +152,12 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
         socket.on(ServerConfig.NUM_ACTIVE_PUBLIC_PLAYERS, args -> {
             Log.d(TAG, "num active players received");
 
-            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.NUM_ACTIVE_PUBLIC_PLAYERS, args[0]);
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.NUM_ACTIVE_PUBLIC_PLAYERS, args);
             multiPlayerConnector.notifyObservers(socketIOEventArg);
         });
         socket.on(ServerConfig.publicGameRoomRequestComplete, args -> {
             Log.d(TAG, "public game room found");
-            multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.publicGameRoomRequestComplete, null));
+            multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.publicGameRoomRequestComplete, args));
         });
 
 

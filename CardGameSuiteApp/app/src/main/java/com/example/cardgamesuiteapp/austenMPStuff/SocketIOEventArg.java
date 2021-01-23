@@ -1,13 +1,33 @@
 package com.example.cardgamesuiteapp.austenMPStuff;
 
+import android.os.Message;
+
+import org.json.JSONObject;
+
 public class SocketIOEventArg {
 
     public String _EventName;
-    public Object _Arg;//JSONObject
+    public JSONObject _JsonObject;
+    public Exception _Exception;
 
-    public SocketIOEventArg(String eventName, Object arg) {
+    public SocketIOEventArg(String eventName, Object[] args) {
         _EventName = eventName;
-        _Arg = arg;
+        if(args!=null) {
+            try {
+                _JsonObject = (JSONObject) args[0];
+            } catch (Exception notAJsonObjectException) {
+
+                try {
+                    _Exception = (Exception) args[0];
+
+                } catch (Exception notAnExceptionException) {
+                    _JsonObject = null;
+                }
+
+            }
+        }
+
+
 
     }
 
