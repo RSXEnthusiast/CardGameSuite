@@ -15,7 +15,7 @@ import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.decks.Standard;
 import com.example.cardgamesuiteapp.display.Card;
 import com.example.cardgamesuiteapp.display.CardAnimation;
-import com.example.cardgamesuiteapp.display.Hand;
+import com.example.cardgamesuiteapp.display.FivesHand;
 import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplayMainPageActivity;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class Fives extends AppCompatActivity {
 
     //View object names will always be preceded by "view"
     //View objects used for every Fives game
-    static Hand[] viewPlayers;// The custom player views
+    static FivesHand[] viewPlayers;// The custom player views
     static Card viewDiscard;// The discard view
     static Card viewDeck;// The deck view
     static TextView viewInstruction;// The instruction view
@@ -116,7 +116,7 @@ public class Fives extends AppCompatActivity {
     private void initFives() {
         setContentView();
         ((TextView) findViewById(R.id.scoresText)).setTextColor(Color.LTGRAY);
-        viewPlayers = new Hand[numAI + numHumans];
+        viewPlayers = new FivesHand[numAI + numHumans];
         viewPlayerNames = new TextView[numHumans + numAI];
         viewPlayerScores = new TextView[numHumans + numAI];
         initViewPlayers();
