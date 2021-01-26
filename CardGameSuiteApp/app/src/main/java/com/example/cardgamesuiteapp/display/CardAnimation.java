@@ -53,6 +53,6 @@ public class CardAnimation {
     }
 
     public int getAnimationSpeed() {
-        return 1000*context.getSharedPreferences("preferences", Context.MODE_PRIVATE).getInt("animationSpeed", 0);
+        return 500*(-1*context.getSharedPreferences("preferences", Context.MODE_PRIVATE).getInt("animationSpeed", 0)+6);
     }
 }
