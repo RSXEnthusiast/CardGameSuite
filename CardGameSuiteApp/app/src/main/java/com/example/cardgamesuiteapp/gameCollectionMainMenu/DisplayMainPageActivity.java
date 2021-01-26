@@ -22,7 +22,7 @@ public class DisplayMainPageActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("preferences", MODE_PRIVATE);
         if (sp.getString("cardStyle", "default").equals("default") || sp.getInt("animationSpeed", 0) == 0) {
             sp.edit().putString("cardStyle", "dark_").apply();
-            sp.edit().putInt("animationSpeed", 2000).apply();
+            sp.edit().putInt("animationSpeed", 2).apply();
         }
     }
 
