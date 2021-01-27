@@ -23,7 +23,7 @@ public class DisplayMainPageActivity extends AppCompatActivity {
         if (sp.getString("cardStyle", "default").equals("default") || sp.getInt("animationSpeed", 0) == 0 || sp.getString("backStyle", "default").equals("default")) {
             sp.edit().putString("cardStyle", "light_").apply();
             sp.edit().putInt("animationSpeed", 2).apply();
-            sp.edit().putString("backStyle", "light_");
+            sp.edit().putString("backStyle", "light_").apply();
         }
     }
 
