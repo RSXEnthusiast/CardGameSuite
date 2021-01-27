@@ -12,5 +12,4 @@ public class DisplayFivesRulesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rules_fives);
     }
-
 }

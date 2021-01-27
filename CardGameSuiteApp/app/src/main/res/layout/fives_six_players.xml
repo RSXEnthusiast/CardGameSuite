@@ -178,7 +178,8 @@
         app:layout_constraintHorizontal_bias="0.636"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player3"
-        app:layout_constraintVertical_bias="0.975" />
+        app:layout_constraintVertical_bias="0.975"
+        android:text="?colorPrimaryVariant"/>
 
     <TextView
         android:id="@+id/scoresText"
@@ -191,6 +192,7 @@
         app:layout_constraintHorizontal_bias="0.226"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player3"
+        android:textColor="?colorPrimaryVariant"
         app:layout_constraintVertical_bias="0.024" />
 
     <LinearLayout

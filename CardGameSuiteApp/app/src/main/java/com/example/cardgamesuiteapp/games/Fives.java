@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ public class Fives extends AppCompatActivity {
     static boolean preAnimation;
     static int lastTouchedCardNum;
     static boolean backButtonEnabled;
+    static int textColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +117,8 @@ public class Fives extends AppCompatActivity {
 
     private void initFives() {
         setContentView();
-        ((TextView) findViewById(R.id.scoresText)).setTextColor(Color.LTGRAY);
         viewPlayers = new FivesHand[numAI + numHumans];
+        textColor = getThemePrimaryVariant();
         viewPlayerNames = new TextView[numHumans + numAI];
         viewPlayerScores = new TextView[numHumans + numAI];
         initViewPlayers();
@@ -133,7 +135,6 @@ public class Fives extends AppCompatActivity {
         viewDiscardHighlight.setVisibility(View.INVISIBLE);
         viewDeck = findViewById(R.id.deck);
         viewInstruction = findViewById(R.id.instruction);
-        viewInstruction.setTextColor(Color.LTGRAY);
 
         viewConfirm = findViewById(R.id.confirmButton);
         viewConfirm.setOnClickListener(v -> confirmButtonTapped());
@@ -536,11 +537,18 @@ public class Fives extends AppCompatActivity {
         deck.shuffleDiscardIntoDeck();
         for (int i = 0; i < totalScores.length; i++) {
             totalScores[i] = 0;
-            viewPlayerNames[i].setTextColor(Color.LTGRAY);
-            viewPlayerScores[i].setTextColor(Color.LTGRAY);
+            viewPlayerNames[i].setTextColor(getThemePrimaryVariant());
+            viewPlayerScores[i].setTextColor(getThemePrimaryVariant());
         }
         updateViewScores();
         newRound();
+    }
+
+    private int getThemePrimaryVariant() {
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(R.attr.colorPrimaryVariant, typedValue, true);
+        textColor = typedValue.data;
+        return typedValue.data;
     }
 
 
@@ -702,8 +710,8 @@ public class Fives extends AppCompatActivity {
             if (totalScores[i] < minScore) {
                 minScore = totalScores[i];
             }
-            viewPlayerNames[i].setTextColor(Color.LTGRAY);
-            viewPlayerScores[i].setTextColor(Color.LTGRAY);
+            viewPlayerNames[i].setTextColor(textColor);
+            viewPlayerScores[i].setTextColor(textColor);
         }
         for (int i = 0; i < totalScores.length; i++) {
             if (totalScores[i] <= minScore) {
@@ -890,7 +898,6 @@ public class Fives extends AppCompatActivity {
         if (roundOver()) {
             scoreRound();
         }
-//        deck.nextPlayer();
     }
 
     /**
