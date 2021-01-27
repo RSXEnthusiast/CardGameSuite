@@ -7,7 +7,6 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
 import com.example.cardgamesuiteapp.games.Fives;
-import com.example.cardgamesuiteapp.R;
 
 public class CardAnimation {
 

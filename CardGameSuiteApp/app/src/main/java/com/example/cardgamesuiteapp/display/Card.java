@@ -81,10 +81,11 @@ public class Card extends View implements View.OnTouchListener {
 
     private String getCardResourceName(int cardNum) {
         String stringBuilder = "";
-        stringBuilder += getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE).getString("cardStyle", "cardStyle not found");
         if (cardNum == -1) {
+            stringBuilder += getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE).getString("backStyle", "cardStyle not found");
             stringBuilder += "back";
         } else {
+            stringBuilder += getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE).getString("cardStyle", "cardStyle not found");
             stringBuilder += Standard.getCardImageFileName(cardNum);
         }
         return stringBuilder;

@@ -108,7 +108,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="33dp" />
+        android:layout_height="30dp" />
 
     <TableRow
         android:layout_width="match_parent"
@@ -119,7 +119,63 @@
             android:layout_height="match_parent" />
 
         <TextView
-            android:id="@+id/textView8"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:text="Card Back"
+            android:textAllCaps="true"
+            android:textColor="?colorPrimary"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"/>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:gravity="center">
+
+        <com.example.cardgamesuiteapp.display.VerticalTextView
+            android:id="@+id/selectedLightBack"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:text="SELECTED"
+            android:textSize="29dp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+        <ImageButton
+            android:id="@+id/buttonLightBack"
+            android:layout_width="100dp"
+            android:background="@drawable/light_back" />
+
+        <Space android:layout_width="30dp" />
+
+        <com.example.cardgamesuiteapp.display.VerticalTextView
+            android:id="@+id/selectedDarkBack"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:text="SELECTED"
+            android:textSize="29dp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+        <ImageButton
+            android:id="@+id/buttonDarkBack"
+            android:layout_width="100dp"
+            android:background="@drawable/dark_back" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="55dp">
+
+        <Space
+            android:layout_width="15dp"
+            android:layout_height="match_parent" />
+
+        <TextView
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:text="Card Movement Speed"
