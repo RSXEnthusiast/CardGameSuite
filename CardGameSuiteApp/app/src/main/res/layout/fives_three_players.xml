@@ -137,6 +137,7 @@
         android:layout_width="400dp"
         android:layout_height="60dp"
         android:gravity="center"
+        android:textColor="?colorPrimaryVariant"
         app:layout_constraintBottom_toTopOf="@id/player1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.636"
@@ -159,7 +160,8 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:gravity="center_horizontal"
-            android:text="Scores" />
+            android:text="Scores"
+            android:textColor="?colorPrimaryVariant" />
 
         <LinearLayout
             android:layout_width="match_parent"

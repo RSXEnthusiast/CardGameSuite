@@ -17,4 +17,5 @@
     <string name="funkyCard">Funky</string>
     <string name="fivesRulesGoal">Goal: Obtain the lowest scored hand before someone reaches 50</string>
     <string name="solitaireRulesGoal">Goal: Win the game by moving all four aces to the top row and discarding all other cards</string>
+    <string name="card_style">Card Style</string>
 </resources>

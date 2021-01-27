@@ -9,11 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CardGameSuiteApp">
-        <activity android:name=".gameCollectionMainMenu.DisplaySettingsActivity"></activity>
-        <activity android:name=".games.Fives"></activity>
-        <activity android:name=".gameCollectionMainMenu.DisplayFivesRulesActivity"></activity>
-        <activity android:name=".games.Solitaire"></activity>
-        <activity android:name=".gameCollectionMainMenu.DisplaySolitaireRulesActivity"></activity>
+        <activity android:name=".gameCollectionMainMenu.DisplaySettingsActivity" />
+        <activity android:name=".games.Fives" />
+        <activity android:name=".gameCollectionMainMenu.DisplayFivesRulesActivity" />
+        <activity android:name=".games.Solitaire" />
+        <activity android:name=".gameCollectionMainMenu.DisplaySolitaireRulesActivity" />
         <activity android:name=".gameCollectionMainMenu.DisplayMainPageActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
