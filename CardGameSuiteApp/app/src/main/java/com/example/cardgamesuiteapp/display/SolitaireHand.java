@@ -6,6 +6,14 @@ import android.view.View;
 
 public class SolitaireHand extends Hand {
 
+    public SolitaireHand(Context context) {
+        this(context, null, 0);
+    }
+
+    public SolitaireHand(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
     public SolitaireHand(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);

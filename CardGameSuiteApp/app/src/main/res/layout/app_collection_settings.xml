@@ -106,10 +106,6 @@
 
     </TableRow>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="30dp" />
-
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="55dp">
