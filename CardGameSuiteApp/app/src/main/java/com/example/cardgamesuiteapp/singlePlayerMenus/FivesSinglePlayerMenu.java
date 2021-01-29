@@ -55,8 +55,8 @@ public class FivesSinglePlayerMenu extends AppCompatActivity {
 
     private void numAISelected(int numAI) {
         Intent intent = new Intent(this, FivesGame.class);
-        intent.putExtra("numHumans",1);
-        intent.putExtra("numAI",numAI);
+        intent.putExtra("numAI", numAI);
+        intent.putExtra("numOnlineOpponents", 0);
         startActivity(intent);
     }
 }

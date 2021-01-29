@@ -2,8 +2,8 @@ package com.example.cardgamesuiteapp.austenMPStuff;
 
 public class ServerConfig {
 
-    public static final String ServerURLProduction = "http://10.42.0.145:3030/";//"http://chatserver.azurewebsites.net/";
-    public static final String ServerURLDebug = "http://10.42.0.145:3030/";
+    public static final String ServerURLProduction = "http://192.168.1.249:3030/";//"http://chatserver.azurewebsites.net/";
+    public static final String ServerURLDebug = "http://192.168.1.249:3030/";
 
     //events from Server:
 

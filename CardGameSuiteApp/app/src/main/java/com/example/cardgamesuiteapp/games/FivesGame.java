@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.cardgamesuiteapp.R;
-import com.example.cardgamesuiteapp.austenMPStuff.MainActivity;
+import com.example.cardgamesuiteapp.austenMPStuff.MultiplayerOrSinglePlayerMenu;
 import com.example.cardgamesuiteapp.decks.Standard;
 import com.example.cardgamesuiteapp.display.Card;
 import com.example.cardgamesuiteapp.display.CardAnimation;
@@ -23,9 +23,11 @@ import com.example.cardgamesuiteapp.singlePlayerMenus.FivesSinglePlayerMenu;
 import java.util.ArrayList;
 
 public class FivesGame extends AppCompatActivity {
-    static int numHumans;// Number of Human players
-    static int numAI;// Number of AI players
+    static int numPlayers;//total number of players
+    static int numOnlineOpponents;// Number of online opponents
+    static int numAI;//number of AI players
     static Standard deck;// The Deck object
+    static boolean multiplayer;
 
     //View object names will always be preceded by "view"
     //View objects used for every Fives game
@@ -64,21 +66,22 @@ public class FivesGame extends AppCompatActivity {
     }
 
     private void initFives() {
-        numHumans = (int) getIntent().getSerializableExtra("numHumans");
+        numOnlineOpponents = (int) getIntent().getSerializableExtra("numOnlineOpponents");
         numAI = (int) getIntent().getSerializableExtra("numAI");
+        numPlayers = numAI + numOnlineOpponents + 1;
         setContentView();
         ((TextView) findViewById(R.id.scoresText)).setTextColor(Color.LTGRAY);
-        viewPlayers = new Hand[numAI + numHumans];
-        viewPlayerNames = new TextView[numHumans + numAI];
-        viewPlayerScores = new TextView[numHumans + numAI];
+        viewPlayers = new Hand[numPlayers];
+        viewPlayerNames = new TextView[numPlayers];
+        viewPlayerScores = new TextView[numPlayers];
         initViewPlayers();
         //Temp - placeholder for player name
         viewPlayerNames[0].setText("Human");
-        for (int i = numHumans; i <= numAI; i++) {
+        for (int i = 1 + numOnlineOpponents; i < numPlayers; i++) {
             viewPlayerNames[i].setText("CPU" + i);
         }
-        totalScores = new int[numHumans + numAI];
-        deck = new Standard(true, numHumans + numAI);
+        totalScores = new int[numPlayers];
+        deck = new Standard(true, numPlayers);
         viewDiscard = findViewById(R.id.discard);
         viewDiscard.bringToFront();
         viewDiscardHighlight = findViewById(R.id.highlightDiscard);
@@ -139,7 +142,7 @@ public class FivesGame extends AppCompatActivity {
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(FivesGame.this,MainActivity.class);
+                Intent intent = new Intent(FivesGame.this, MultiplayerOrSinglePlayerMenu.class);
                 startActivity(intent);
             }
         });
@@ -175,7 +178,7 @@ public class FivesGame extends AppCompatActivity {
     }
 
     private void setContentView() {
-        switch (numHumans + numAI) {
+        switch (numPlayers) {
             case 2:
                 setContentView(R.layout.fives_two_players);
                 break;
@@ -201,7 +204,6 @@ public class FivesGame extends AppCompatActivity {
         viewPlayers[1] = findViewById(R.id.player2);
         viewPlayerNames[1] = findViewById(R.id.player2name);
         viewPlayerScores[1] = findViewById(R.id.player2score);
-        int numPlayers = numHumans + numAI;
         if (numPlayers >= 3) {
             viewPlayers[2] = findViewById(R.id.player3);
             viewPlayerNames[2] = findViewById(R.id.player3name);
@@ -378,7 +380,7 @@ public class FivesGame extends AppCompatActivity {
                 scoreRound();
             }
             deck.nextPlayer();
-            if (numAI > 0 && deck.getCurPlayersTurn() >= numHumans) {
+            if (numAI > 0 && deck.getCurPlayersTurn() >= numOnlineOpponents + 1) {
                 runAITurns();
             }
         }
@@ -404,7 +406,7 @@ public class FivesGame extends AppCompatActivity {
                 scoreRound();
             }
             deck.nextPlayer();
-            if (numAI > 0 && deck.getCurPlayersTurn() >= numHumans) {
+            if (numAI > 0 && deck.getCurPlayersTurn() >= numOnlineOpponents + 1) {
                 runAITurns();
             }
         }
@@ -455,7 +457,7 @@ public class FivesGame extends AppCompatActivity {
                 scoreRound();
             }
             deck.nextPlayer();
-            if (numAI > 0 && deck.getCurPlayersTurn() >= numHumans) {
+            if (numAI > 0 && deck.getCurPlayersTurn() >= numOnlineOpponents + 1) {
                 runAITurns();
             }
         }

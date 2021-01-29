@@ -17,7 +17,7 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MultiplayerOrSinglePlayerMenu extends AppCompatActivity {
 
     public static final String GAME_TYPE = "gameType";
 
@@ -39,40 +39,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startOnlineMultiplayer() {
-        Intent intent = new Intent(this, MultiplayerWaitingRoomActivity.class);
-        String selectedGame= "fives";
-        intent.putExtra(GAME_TYPE, selectedGame);
-        startActivity(intent);
-    }
-
-    public void startGame(View view) {
-        Intent intent = new Intent(this, MultiplayerWaitingRoomActivity.class);
-
-        String selectedGame = "fives";
-        intent.putExtra(GAME_TYPE, selectedGame);
-        startActivity(intent);
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        Intent newIntent = new Intent(this, MultiplayerWaitingRoomActivity.class);
+        Intent oldIntent = getIntent();
+        newIntent.putExtra(GAME_TYPE, oldIntent.getSerializableExtra("gameName"));
+        newIntent.putExtra("class", oldIntent.getSerializableExtra("class"));
+        startActivity(newIntent);
     }
 }

@@ -8,7 +8,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cardgamesuiteapp.austenMPStuff.MainActivity;
+import com.example.cardgamesuiteapp.austenMPStuff.MultiplayerOrSinglePlayerMenu;
 import com.example.cardgamesuiteapp.games.FivesGame;
 import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.games.Solitaire;
@@ -50,9 +50,9 @@ public class DisplayMainPageActivity extends AppCompatActivity implements Serial
     }
 
     public void clickPlayFivesButton(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("Class", FivesGame.class);
-        intent.putExtra("GameName", "Fives");
+        Intent intent = new Intent(this, MultiplayerOrSinglePlayerMenu.class);
+        intent.putExtra("class", FivesGame.class);
+        intent.putExtra("gameName", "Fives");
         startActivity(intent);
     }
 

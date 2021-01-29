@@ -11,7 +11,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentResultListener;
 
 import android.os.Handler;
@@ -33,24 +32,6 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
     String _GameCode = "";
     private static final String TAG = MultiplayerWaitingRoomActivity.class.getSimpleName();
 
-    /**
-     * Probably need to have parameters for specifying what type of game to start and and how many players,
-     * like an array of player names if its a private game.
-     */
-    public void GoToGameActivity() {
- //switch on game type. Then load the correct game...
-            Intent intent = new Intent(this, FivesGame.class);
-            intent.putExtra("numHumans",1);
-            intent.putExtra("numAI",1); // put number of players that are playing the game. (Number of players in room)
-            startActivity(intent);
-    }
-
-    static class PlayerStatus {
-        static boolean _initiator = false;
-        static String _PlayerName;
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +41,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
 
         // get notified on updates from the MultiplayerConnector
         Intent intent = getIntent();
-        _GameType = intent.getStringExtra(MainActivity.GAME_TYPE);
+        _GameType = intent.getStringExtra(MultiplayerOrSinglePlayerMenu.GAME_TYPE);
 
 
         _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
@@ -84,6 +65,25 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
         Snackbar.make(findViewById(R.id.multiPlayerWaitingRoomCoordinatorLayout), _GameType, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
 
+    }
+
+    /**
+     * Probably need to have parameters for specifying what type of game to start and and how many players,
+     * like an array of player names if its a private game.
+     */
+    public void GoToGameActivity() {
+        //switch on game type. Then load the correct game...
+        Intent oldIntent = getIntent();
+        Intent newIntent = new Intent(this, (Class) oldIntent.getSerializableExtra("class"));
+        newIntent.putExtra("multiplayer", true);
+        newIntent.putExtra("numOnlineOpponents", 1); // put number of players that are playing the game. (Number of players in room)
+        newIntent.putExtra("numAI", 0);
+        startActivity(newIntent);
+    }
+
+    static class PlayerStatus {
+        static boolean _initiator = false;
+        static String _PlayerName;
     }
 
 
