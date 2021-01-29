@@ -1,11 +1,13 @@
 package com.example.cardgamesuiteapp.display;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplaySettingsActivity;
 import com.example.cardgamesuiteapp.games.FivesGame;
 import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.decks.Standard;
@@ -51,12 +53,12 @@ public class Card extends View implements View.OnTouchListener {
     /**
      * Updates the card value, and the card image if the card is face up.
      *
-     * @param imageNum the number representing the card
+     * @param cardNum the number representing the card
      */
-    public void updateImage(int imageNum) {
-        cardNum = imageNum;
+    public void updateImage(int cardNum) {
+        this.cardNum = cardNum;
         if (isFaceUp) {
-            imageId = getImageId(Standard.getCardImageFileName(imageNum));
+            imageId = getImageId(getCardResourceName(cardNum));
         }
         this.setOnTouchListener(this);
         this.invalidate();
@@ -68,13 +70,25 @@ public class Card extends View implements View.OnTouchListener {
      */
     public void flipCard() {
         if (isFaceUp) {
-            imageId = R.drawable.card_back;
+            imageId = getImageId(getCardResourceName(-1));
             this.isFaceUp = false;
         } else {
-            imageId = getImageId(Standard.getCardImageFileName(cardNum));
+            imageId = getImageId(getCardResourceName(cardNum));
             this.isFaceUp = true;
         }
         this.invalidate();
+    }
+
+    private String getCardResourceName(int cardNum) {
+        String stringBuilder = "";
+        if (cardNum == -1) {
+            stringBuilder += getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE).getString("backStyle", "cardStyle not found");
+            stringBuilder += "back";
+        } else {
+            stringBuilder += getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE).getString("cardStyle", "cardStyle not found");
+            stringBuilder += Standard.getCardImageFileName(cardNum);
+        }
+        return stringBuilder;
     }
 
     /**
@@ -108,9 +122,9 @@ public class Card extends View implements View.OnTouchListener {
     public void setFaceUp(boolean b) {
         isFaceUp = b;
         if (!isFaceUp) {
-            imageId = R.drawable.card_back;
+            imageId = getImageId(getCardResourceName(-1));
         } else {
-            imageId = getImageId(Standard.getCardImageFileName(cardNum));
+            imageId = getImageId(getCardResourceName(cardNum));
         }
         invalidate();
     }

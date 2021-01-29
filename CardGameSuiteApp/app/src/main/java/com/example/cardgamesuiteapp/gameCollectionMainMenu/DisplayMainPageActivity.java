@@ -1,6 +1,7 @@
 package com.example.cardgamesuiteapp.gameCollectionMainMenu;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,12 @@ public class DisplayMainPageActivity extends AppCompatActivity implements Serial
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_collection_activity_main_page);
         setContentView(R.layout.app_collection_content_main_page);
+        SharedPreferences sp = getSharedPreferences("preferences", MODE_PRIVATE);
+        if (sp.getString("cardStyle", "default").equals("default") || sp.getInt("animationSpeed", 0) == 0 || sp.getString("backStyle", "default").equals("default")) {
+            sp.edit().putString("cardStyle", "light_").apply();
+            sp.edit().putInt("animationSpeed", 2).apply();
+            sp.edit().putString("backStyle", "light_").apply();
+        }
     }
 
     @Override

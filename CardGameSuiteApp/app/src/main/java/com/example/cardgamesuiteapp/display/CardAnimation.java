@@ -28,8 +28,7 @@ public class CardAnimation {
         cardToAnimate.setX(0);
         cardToAnimate.setY(0);
         Animation slide = new TranslateAnimation(xStart, xEnd, yStart, yEnd);
-        this.cardToAnimate.setBackgroundResource(R.drawable.ace_d);
-        slide.setDuration(2000);
+        slide.setDuration(getAnimationSpeed());
         slide.setFillAfter(true);
         this.cardToAnimate.startAnimation(slide);
         slide.setAnimationListener(new Animation.AnimationListener() {
@@ -51,5 +50,9 @@ public class CardAnimation {
 
     public Card getCard() {
         return this.cardToAnimate;
+    }
+
+    public int getAnimationSpeed() {
+        return 500*(-1*context.getSharedPreferences("preferences", Context.MODE_PRIVATE).getInt("animationSpeed", 0)+6);
     }
 }

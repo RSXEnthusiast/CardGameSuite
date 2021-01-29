@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="left"
-            android:text="@string/fivesRulesExplained"
+            android:text="Each player\'s starting hand consists of four face-down cards. You will be allowed to view two cards before play begins. Use your best judgement when choosing cards from the draw or discard pile and choosing which card in your hand to replace to win the game. After a card is exchanged it will remain face up."
             android:textColor="?colorOnSecondary"
             android:textSize="20sp">
         </TextView>
@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="left"
-            android:text="@string/fivesScoring"
+            android:text="Scoring\n\n5s are worth -5\nPairs (excluding 5s) are worth 0\nTrios (excluding 5s) are worth 0\nQuads (excluding 5s) are worth 0\nKings are worth 0\nJacks and Queens are worth 10\nAces are worth 1\nNumerical cards (excluding 5s) are worth face value"
             android:textSize="20sp"
             android:textColor="?colorPrimaryVariant">
         </TextView>
