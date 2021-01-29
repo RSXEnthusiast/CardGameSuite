@@ -31,6 +31,8 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
 
     String _GameCode = "";
     private static final String TAG = MultiplayerWaitingRoomActivity.class.getSimpleName();
+    public int _ThisPlayerNumber;
+    public String _ThisPlayerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,6 +197,14 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
                 case ServerConfig.eventConnectError:
                     Snackbar.make(findViewById(R.id.multiPlayerWaitingRoomCoordinatorLayout), "Unable To Connect To Server WaitingRoomActivity", Snackbar.LENGTH_LONG)
                             .show();
+                    break;
+                case ServerConfig.playerNumber:
+                    ///OnRoomNotFound();
+                    _ThisPlayerNumber=(int) socketIOEventArg._JsonObject.opt("playerNumber");
+                    _ThisPlayerName=(String) socketIOEventArg._JsonObject.opt("playerNumber");
+                    break;
+                case ServerConfig.playerNumbers:
+                    ///OnRoomNotFound();
                     break;
             }
         }

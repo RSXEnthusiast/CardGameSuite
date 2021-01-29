@@ -181,6 +181,17 @@ public class MultiPlayerConnector extends Observable {
             SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.gameData,args);
             notifyObservers(socketIOEventArg);
         });
+        _Socket.on(ServerConfig.playerNumber, args -> {
+            Log.d(TAG, "starting Public game");
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.playerNumber,args);
+            notifyObservers(socketIOEventArg);
+        });
+        _Socket.on(ServerConfig.playerNumbers, args -> {
+            Log.d(TAG, "starting Public game");
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.playerNumbers,args);
+            notifyObservers(socketIOEventArg);
+        });
+
     }
 
 

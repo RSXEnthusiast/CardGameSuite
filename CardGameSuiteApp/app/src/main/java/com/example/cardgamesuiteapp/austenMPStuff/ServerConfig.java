@@ -15,6 +15,9 @@ public class ServerConfig {
     public static final String newPlayerJoinedRoom = "new-player-joined-room";
     public static final String startGame = "start-game";
     public static final String gameData= "game-data";
+    public static final String playerNumbers= "player_numbers";
+    public static final String playerNumber= "player_number";
+
 
 
     //------------------------- public game
