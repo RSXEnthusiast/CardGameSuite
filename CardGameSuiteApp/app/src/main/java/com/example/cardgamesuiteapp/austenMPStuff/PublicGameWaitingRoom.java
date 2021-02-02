@@ -101,9 +101,7 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
                     //showBadInputDialogForTesting();
                     break;
             }
-
         }
-
     };
 
 

@@ -13,6 +13,4 @@ public interface IMultiplayerConnectorSocketEventUser {
      */
     static void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
     }
-
-    ;
 }

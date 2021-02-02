@@ -12,12 +12,9 @@ import java.util.Observable;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
-import io.socket.engineio.client.Transport;
 import io.socket.engineio.client.transports.WebSocket;
 
 import static io.socket.client.Manager.EVENT_CONNECT_ERROR;
-import static io.socket.client.Manager.EVENT_TRANSPORT;
 import static io.socket.client.Socket.EVENT_CONNECT;
 import static io.socket.client.Socket.EVENT_DISCONNECT;
 
@@ -173,22 +170,22 @@ public class MultiPlayerConnector extends Observable {
 
         _Socket.on(ServerConfig.startGame, args -> {
             Log.d(TAG, "starting Public game");
-            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.startGame,null);
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.startGame, null);
             notifyObservers(socketIOEventArg);
         });
         _Socket.on(ServerConfig.gameData, args -> {
             Log.d(TAG, "starting Public game");
-            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.gameData,args);
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.gameData, args);
             notifyObservers(socketIOEventArg);
         });
         _Socket.on(ServerConfig.playerNumber, args -> {
             Log.d(TAG, "playerNumber received");
-            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.playerNumber,args);
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.playerNumber, args);
             notifyObservers(socketIOEventArg);
         });
         _Socket.on(ServerConfig.playerNumbers, args -> {
             Log.d(TAG, "playerNumbersReceived");
-            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.playerNumbers,args);
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.playerNumbers, args);
             notifyObservers(socketIOEventArg);
         });
 
@@ -213,9 +210,7 @@ public class MultiPlayerConnector extends Observable {
     }*/
 
     public void emitEvent(String emitEvent, JSONObject obj) {
-
         _Socket.emit(emitEvent, obj);
-
     }
 
     public void emitEvent(String emitEvent) {

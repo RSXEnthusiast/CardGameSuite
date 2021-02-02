@@ -1,14 +1,17 @@
 package com.example.cardgamesuiteapp.decks;
 
+import com.example.cardgamesuiteapp.deckMultiplayerManagement.DeckMultiplayerManager;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
 
-import com.example.cardgamesuiteapp.deckMultiplayerManagement.DeckMultiplayerManager;
+import org.json.JSONObject;
 
-public abstract class Deck {
+public abstract class Deck implements Serializable {
     private Queue<Integer> deck = new LinkedList<Integer>();
     private Stack<Integer> discard = new Stack<Integer>();
     private boolean shuffleOnEmptyDeck;
@@ -41,32 +44,30 @@ public abstract class Deck {
     }
 
     /**
-     * Initializes this players number. Unique to this player.
-     *
-     * @param myPlayerNum the number that this player will be playing as. Where this player's hand can be found in the hands array.
-     */
-    public void initializeMyPlayerNum(int myPlayerNum) {
-        this.myPlayerNum = myPlayerNum;
-    }
-
-    /**
      * Initializes this object to be identical to one passed from a peer (used for multi-player)
      *
      * @param deck The Deck object passed from a peer.
      */
-    public void initializeFromPeer(Deck deck) {
-        this.deck = deck.getDeck();
-        this.discard = deck.getDiscard();
-        this.shuffleOnEmptyDeck = deck.getShuffleOnEmptyDeck();
-        this.hands = deck.getHands();
-        this.numPlayers = deck.getNumPlayers();
-        this.curPlayersTurn = deck.getCurPlayersTurn();
+    public void initializeFromPeer(JSONObject deck) {
+        System.out.println(deck.opt("deck"));
+        this.deck = (Queue<Integer>) deck.opt("deck");
+        this.discard = (Stack<Integer>) deck.opt("discard");
+        for (int i = 0; i < numPlayers; i++) {
+            this.hands[i] = (ArrayList<Integer>) deck.opt("hand" + i);
+        }
     }
 
     /**
      * Moves to the next player
      */
-    public void nextPlayer() {
+    public void nextPlayer(boolean multiplayer) {
+        nextPlayerFromPeer();
+        if (multiplayer) {
+            DeckMultiplayerManager.nextPlayer();
+        }
+    }
+
+    public void nextPlayerFromPeer() {
         curPlayersTurn = (curPlayersTurn + 1) % numPlayers;
     }
 
@@ -87,14 +88,14 @@ public abstract class Deck {
     /**
      * @return the discard object
      */
-    private Stack<Integer> getDiscard() {
+    public Stack<Integer> getDiscard() {
         return discard;
     }
 
     /**
      * @return the deck object
      */
-    private Queue<Integer> getDeck() {
+    public Queue<Integer> getDeck() {
         return deck;
     }
 
@@ -157,7 +158,6 @@ public abstract class Deck {
         for (int i : temp) {
             deck.add(i);
         }
-        DeckMultiplayerManager.shuffle(this.deck);
     }
 
     /**
@@ -195,7 +195,6 @@ public abstract class Deck {
                 hands[j].add(draw());
             }
         }
-        DeckMultiplayerManager.deal(numCards);
     }
 
     /**
@@ -225,7 +224,6 @@ public abstract class Deck {
      */
     public void draw(int playerNum) throws Exception {
         hands[playerNum].add(draw());
-        DeckMultiplayerManager.playerDraw(playerNum);
     }
 
     /**
@@ -237,7 +235,6 @@ public abstract class Deck {
      */
     public void draw(int playerNum, int index) throws Exception {
         hands[playerNum].add(index, draw());
-        DeckMultiplayerManager.playerDrawIntoIndex(playerNum, index);
     }
 
     /**
@@ -248,7 +245,6 @@ public abstract class Deck {
      */
     public void drawFromDiscard(int playerNum) throws Exception {
         hands[playerNum].add(drawFromDiscard());
-        DeckMultiplayerManager.playerDrawFromDiscard(playerNum);
     }
 
     /**
@@ -260,7 +256,6 @@ public abstract class Deck {
      */
     public void drawFromDiscard(int playerNum, int index) throws Exception {
         hands[playerNum].add(index, drawFromDiscard());
-        DeckMultiplayerManager.playerDrawFromDiscardIntoIndex(playerNum, index);
     }
 
     public boolean discardByNumericalValue(int playerNum, int value) {
@@ -284,7 +279,6 @@ public abstract class Deck {
             return false;
         }
         discard.add(value);
-        DeckMultiplayerManager.discardByValue(playerNum, value);
         return true;
     }
 
@@ -297,7 +291,6 @@ public abstract class Deck {
     public int discardByIndex(int playerNum, int index) {
         int temp = hands[playerNum].remove(index);
         discard.add(temp);
-        DeckMultiplayerManager.discardByIndex(playerNum, index);
         return temp;
     }
 
@@ -311,7 +304,6 @@ public abstract class Deck {
             shuffleDiscardIntoDeck();
         }
         discard.add(deck.poll());
-        DeckMultiplayerManager.discardFromDeck();
     }
 
     /**
@@ -406,8 +398,8 @@ public abstract class Deck {
         return discard.isEmpty();
     }
 
-    public int getDiscardedCard(int i){
-        if(discard.size()>i){
+    public int getDiscardedCard(int i) {
+        if (discard.size() > i) {
             int temp = discard.pop();
             int result = discard.peek();
             discard.push(temp);

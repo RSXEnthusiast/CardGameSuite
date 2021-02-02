@@ -79,7 +79,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
         Intent oldIntent = getIntent();
         Intent newIntent = new Intent(this, (Class) oldIntent.getSerializableExtra("class"));
         newIntent.putExtra("multiplayer", true);
-        newIntent.putExtra("numOnlineOpponents", 1); // put number of players that are playing the game. (Number of players in room)
+        newIntent.putExtra("numOnlineOpponents", 1);
         newIntent.putExtra("numAI", 0);
         startActivity(newIntent);
     }
@@ -201,7 +201,6 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
                     break;
                 case ServerConfig.playerNumber:
                     int myPlayerNumber = (int) socketIOEventArg._JsonObject.opt("playerNumber");
-                    String myPlayerName = (String) socketIOEventArg._JsonObject.opt("playerName");
                     sp.edit().putInt("myNumber", myPlayerNumber).apply();
                     break;
                 case ServerConfig.playerNumbers:

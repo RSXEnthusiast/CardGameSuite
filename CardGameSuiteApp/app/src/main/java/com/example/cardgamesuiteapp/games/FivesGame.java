@@ -13,15 +13,29 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.cardgamesuiteapp.R;
+import com.example.cardgamesuiteapp.austenMPStuff.MultiPlayerConnector;
 import com.example.cardgamesuiteapp.austenMPStuff.MultiplayerOrSinglePlayerMenu;
+import com.example.cardgamesuiteapp.austenMPStuff.ServerConfig;
+import com.example.cardgamesuiteapp.austenMPStuff.SocketIOEventArg;
+import com.example.cardgamesuiteapp.deckMultiplayerManagement.DeckMultiplayerManager;
+import com.example.cardgamesuiteapp.decks.Deck;
 import com.example.cardgamesuiteapp.decks.Standard;
 import com.example.cardgamesuiteapp.display.Card;
 import com.example.cardgamesuiteapp.display.CardAnimation;
 import com.example.cardgamesuiteapp.display.Hand;
 import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplayMainPageActivity;
+import com.example.cardgamesuiteapp.multiplayerDataManagement.Operation;
 import com.example.cardgamesuiteapp.singlePlayerMenus.FivesSinglePlayerMenu;
 
+import org.javatuples.Triplet;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
 public class FivesGame extends AppCompatActivity {
     static int numPlayers;//total number of players
@@ -29,6 +43,7 @@ public class FivesGame extends AppCompatActivity {
     static int numAI;//number of AI players
     static Standard deck;// The Deck object
     static boolean multiplayer;
+    MultiPlayerConnector _MultiPlayerConnector;
 
     //View object names will always be preceded by "view"
     //View objects used for every Fives game
@@ -59,6 +74,8 @@ public class FivesGame extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
+        _MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
         initFives();
     }
 
@@ -69,6 +86,7 @@ public class FivesGame extends AppCompatActivity {
     private void initFives() {
         numOnlineOpponents = (int) getIntent().getSerializableExtra("numOnlineOpponents");
         numAI = (int) getIntent().getSerializableExtra("numAI");
+        multiplayer = (boolean) getIntent().getSerializableExtra("multiplayer");
         numPlayers = numAI + numOnlineOpponents + 1;
         setContentView();
         ((TextView) findViewById(R.id.scoresText)).setTextColor(Color.LTGRAY);
@@ -83,7 +101,11 @@ public class FivesGame extends AppCompatActivity {
             viewPlayerNames[i].setText("CPU" + i);
         }
         totalScores = new int[numPlayers];
-        deck = new Standard(true, numPlayers, fivesGameInfo.getInt("myNumber", -1));
+        int playerNum = 0;
+        if (multiplayer) {
+            playerNum = fivesGameInfo.getInt("myNumber", -1);
+        }
+        deck = new Standard(true, numPlayers, playerNum, multiplayer);
         viewDiscard = findViewById(R.id.discard);
         viewDiscard.bringToFront();
         viewDiscardHighlight = findViewById(R.id.highlightDiscard);
@@ -381,7 +403,7 @@ public class FivesGame extends AppCompatActivity {
             if (roundOver()) {
                 scoreRound();
             }
-            deck.nextPlayer();
+            deck.nextPlayer(multiplayer);
             if (numAI > 0 && deck.getCurPlayersTurn() >= numOnlineOpponents + 1) {
                 runAITurns();
             }
@@ -407,7 +429,7 @@ public class FivesGame extends AppCompatActivity {
             if (roundOver()) {
                 scoreRound();
             }
-            deck.nextPlayer();
+            deck.nextPlayer(multiplayer);
             if (numAI > 0 && deck.getCurPlayersTurn() >= numOnlineOpponents + 1) {
                 runAITurns();
             }
@@ -458,7 +480,7 @@ public class FivesGame extends AppCompatActivity {
             if (roundOver()) {
                 scoreRound();
             }
-            deck.nextPlayer();
+            deck.nextPlayer(multiplayer);
             if (numAI > 0 && deck.getCurPlayersTurn() >= numOnlineOpponents + 1) {
                 runAITurns();
             }
@@ -488,13 +510,14 @@ public class FivesGame extends AppCompatActivity {
     }
 
     private void newGame() {
+//        if (!multiplayer || deck.getMyPlayerNum() == 0) {
         deck.shuffleDiscardIntoDeck();
+//        }
         for (int i = 0; i < totalScores.length; i++) {
             totalScores[i] = 0;
             viewPlayerNames[i].setTextColor(Color.LTGRAY);
             viewPlayerScores[i].setTextColor(Color.LTGRAY);
         }
-        updateViewScores();
         newRound();
     }
 
@@ -503,6 +526,7 @@ public class FivesGame extends AppCompatActivity {
      * Called every time that there is a new round, to reset the table
      */
     public static void newRound() {
+//        if (!multiplayer || deck.getMyPlayerNum() == 0) {
         try {
             deck.deal(4);
             deck.discardFromDeck();
@@ -510,8 +534,12 @@ public class FivesGame extends AppCompatActivity {
             e.printStackTrace();
         }
         //Flipping up discard card
+//        }
         stage = fivesStage.memCards;
         viewConfirm.setVisibility(View.VISIBLE);
+        if (multiplayer && deck.getMyPlayerNum() == 0) {
+            DeckMultiplayerManager.initialize(deck);
+        }
         updateEntireScreen();
     }
 
@@ -529,6 +557,7 @@ public class FivesGame extends AppCompatActivity {
         viewPlayers[0].flipCardByIndex(2);
         viewPlayers[0].flipCardByIndex(3);
         viewInstruction.setText(getCurInstruction());
+        updateViewScores();
     }
 
     /**
@@ -711,7 +740,7 @@ public class FivesGame extends AppCompatActivity {
                 AIKeptDraw(drawFromPile);
             } else {
                 AIStage = fivesStage.discardedFromDeck;
-                AIDiscardedDraw(getAIFlipLocation());
+                AIDiscardedDraw();
             }
         }
     }
@@ -725,10 +754,11 @@ public class FivesGame extends AppCompatActivity {
                 AIKeptDraw(lastLocation);
                 break;
             case discardedFromDeck:
-                AIDiscardedDraw(lastLocation);
+                AIDiscardedDraw();
+                AIFlippedCard(getAIFlipLocation());
                 break;
         }
-        deck.nextPlayer();
+        deck.nextPlayer(multiplayer);
         if (!deck.isMyTurn()) {
             runAITurns();
         }
@@ -775,19 +805,15 @@ public class FivesGame extends AppCompatActivity {
         if (roundOver()) {
             scoreRound();
         }
-//        deck.nextPlayer();
     }
 
     /**
      * This method is called to update the screen after the AI has decided to discard from the draw pile
-     *
-     * @param location which card will be flipped up.
      */
-    private static void AIDiscardedDraw(int location) {
+    private static void AIDiscardedDraw() {
         //logic for flipping over card in hand.
         if (beforeAnimationAI) {
             beforeAnimationAI = false;
-            lastLocation = location;
             viewAnimatedCard1.updateImage(deck.peekTopDraw());
             viewDeck.flipCard();
             viewAnimation1.cardAnimate(viewDeck.getX(), viewDiscard.getX(), viewDeck.getY(), viewDiscard.getY());
@@ -800,12 +826,11 @@ public class FivesGame extends AppCompatActivity {
             }
             viewDeck.updateImage(deck.peekTopDraw());
             viewDiscard.updateImage(deck.peekTopDiscard());
-            viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
         }
-        if (roundOver()) {
-            scoreRound();
-        }
-//        deck.nextPlayer();
+    }
+
+    private static void AIFlippedCard(int location) {
+        viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
     }
 
     /**
@@ -845,7 +870,6 @@ public class FivesGame extends AppCompatActivity {
         if (roundOver()) {
             scoreRound();
         }
-//        deck.nextPlayer();
     }
 
     /**
@@ -999,5 +1023,65 @@ public class FivesGame extends AppCompatActivity {
      */
     private enum fivesStage {
         memCards, draw, drewFromDeck, discardedFromDeck, drewFromDiscard, roundOver, gameOver
+    }
+
+    private Observer _MultiPlayerConnectorObserver = new Observer() {
+        @Override
+        public void update(Observable o, Object arg) {
+            SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
+            if (socketIOEventArg._EventName.equals(ServerConfig.gameData)) {
+                try {
+                    handleIncomingData(socketIOEventArg._JsonObject);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
+
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public void handleIncomingData(JSONObject incomingData) throws Exception {
+        switch ((String) incomingData.opt("operation")) {
+            case "discardFromDeck":
+                discardFromDeckReceived();
+                break;
+            case "initialize":
+                initializeReceived(incomingData);
+                break;
+            case "playerDrawIntoIndex":
+                playerDrawIntoIndexReceived(incomingData);
+                break;
+            case "playerDrawIntoIndexFromDiscard":
+                playerDrawIntoIndexFromDiscardReceived(incomingData);
+                break;
+            case "recover":
+                recoverReceived(incomingData);
+                break;
+            case "nextPlayer":
+                System.out.println("NextPlayer");
+                deck.nextPlayerFromPeer();
+                break;
+        }
+    }
+
+    private void initializeReceived(JSONObject deck) {
+        this.deck.initializeFromPeer(deck);
+        updateEntireScreen();
+    }
+
+    private void recoverReceived(JSONObject deck) {
+    }
+
+    private void playerDrawIntoIndexFromDiscardReceived(JSONObject data) throws Exception {
+        AIDrewFromDiscard((Integer) data.opt("index"));
+    }
+
+    private void playerDrawIntoIndexReceived(JSONObject data) throws Exception {
+        AIKeptDraw((Integer) data.opt("index"));
+    }
+
+    private void discardFromDeckReceived() throws Exception {
+        AIDiscardedDraw();
     }
 }
