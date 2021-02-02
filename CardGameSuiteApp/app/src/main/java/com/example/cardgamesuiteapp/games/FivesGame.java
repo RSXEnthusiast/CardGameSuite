@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -75,13 +76,14 @@ public class FivesGame extends AppCompatActivity {
         viewPlayerNames = new TextView[numPlayers];
         viewPlayerScores = new TextView[numPlayers];
         initViewPlayers();
-        //Temp - placeholder for player name
-        viewPlayerNames[0].setText("Human");
+        SharedPreferences fivesGameInfo = getSharedPreferences("fivesGameInfo", MODE_PRIVATE);
+        SharedPreferences settings = getSharedPreferences("preferences", MODE_PRIVATE);
+        viewPlayerNames[0].setText(settings.getString("name", "nameNotFound"));
         for (int i = 1 + numOnlineOpponents; i < numPlayers; i++) {
             viewPlayerNames[i].setText("CPU" + i);
         }
         totalScores = new int[numPlayers];
-        deck = new Standard(true, numPlayers);
+        deck = new Standard(true, numPlayers, fivesGameInfo.getInt("myNumber", -1));
         viewDiscard = findViewById(R.id.discard);
         viewDiscard.bringToFront();
         viewDiscardHighlight = findViewById(R.id.highlightDiscard);
@@ -235,8 +237,8 @@ public class FivesGame extends AppCompatActivity {
             case "Memorized":
                 stage = fivesStage.draw;
                 updateViewInstruction();
-                viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(2);
-                viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(3);
+                viewPlayers[0].flipCardByIndex(2);
+                viewPlayers[0].flipCardByIndex(3);
                 viewConfirm.setVisibility(View.INVISIBLE);
                 break;
             case "Continue":
@@ -518,14 +520,14 @@ public class FivesGame extends AppCompatActivity {
      */
     private static void updateEntireScreen() {
         viewDiscard.updateImage(deck.peekTopDiscard());
-        viewDeck.updateImage(deck.peekTopDraw());
         viewDeck.setFaceUp(false);
+        viewDeck.updateImage(deck.peekTopDraw());
         for (int i = 0; i < viewPlayers.length; i++) {
             viewPlayers[i].initHand(deck.getHand(i));
             viewPlayers[i].flipAllCards();
         }
-        viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(2);
-        viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(3);
+        viewPlayers[0].flipCardByIndex(2);
+        viewPlayers[0].flipCardByIndex(3);
         viewInstruction.setText(getCurInstruction());
     }
 

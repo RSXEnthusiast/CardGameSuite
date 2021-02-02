@@ -13,8 +13,8 @@ public class Standard extends Deck {
      * @param numPlayers         How many people are playing.
      */
     @SuppressWarnings("unchecked")
-    public Standard(boolean shuffleOnEmptyDeck, int numPlayers) {
-        super(shuffleOnEmptyDeck, numPlayers);
+    public Standard(boolean shuffleOnEmptyDeck, int numPlayers, int myPlayerNum) {
+        super(shuffleOnEmptyDeck, numPlayers, myPlayerNum);
         Queue<Integer> deck = new LinkedList<Integer>();
         for (int i = 1; i <= 13 * 4; i++) {
             deck.add(i);

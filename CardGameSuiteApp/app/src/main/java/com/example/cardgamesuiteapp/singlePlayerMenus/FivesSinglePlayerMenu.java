@@ -1,6 +1,7 @@
 package com.example.cardgamesuiteapp.singlePlayerMenus;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -8,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.games.FivesGame;
+
+import java.util.Random;
 
 public class FivesSinglePlayerMenu extends AppCompatActivity {
     static View[] viewAINumButtons;// The buttons the user would press to select the number of AI
@@ -57,6 +60,9 @@ public class FivesSinglePlayerMenu extends AppCompatActivity {
         Intent intent = new Intent(this, FivesGame.class);
         intent.putExtra("numAI", numAI);
         intent.putExtra("numOnlineOpponents", 0);
+        SharedPreferences sp = getSharedPreferences("fivesGameInfo", MODE_PRIVATE);
+        sp.edit().putString("myName", "Human").apply();
+        sp.edit().putInt("myNumber", new Random().nextInt(numAI)).apply();
         startActivity(intent);
     }
 }

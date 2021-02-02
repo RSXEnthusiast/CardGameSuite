@@ -1,6 +1,7 @@
 package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,8 @@ import androidx.fragment.app.FragmentResultListener;
 
 import android.os.Handler;
 import android.util.Log;
+
+import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.util.Observable;
@@ -31,8 +34,6 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
 
     String _GameCode = "";
     private static final String TAG = MultiplayerWaitingRoomActivity.class.getSimpleName();
-    public int _ThisPlayerNumber;
-    public String _ThisPlayerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,8 +190,8 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
         public void update(Observable o, Object arg) {
 
             SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
+            SharedPreferences sp = getSharedPreferences("fivesGameInfo", MODE_PRIVATE);
             switch (socketIOEventArg._EventName) {
-
                 case ServerConfig.unableToFindRoom:
                     ///OnRoomNotFound();
                     break;
@@ -199,12 +200,11 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
                             .show();
                     break;
                 case ServerConfig.playerNumber:
-                    ///OnRoomNotFound();
-                    _ThisPlayerNumber=(int) socketIOEventArg._JsonObject.opt("playerNumber");
-                    _ThisPlayerName=(String) socketIOEventArg._JsonObject.opt("playerNumber");
+                    int myPlayerNumber = (int) socketIOEventArg._JsonObject.opt("playerNumber");
+                    String myPlayerName = (String) socketIOEventArg._JsonObject.opt("playerName");
+                    sp.edit().putInt("myNumber", myPlayerNumber).apply();
                     break;
                 case ServerConfig.playerNumbers:
-                    ///OnRoomNotFound();
                     break;
             }
         }

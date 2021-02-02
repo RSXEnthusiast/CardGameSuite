@@ -14,7 +14,7 @@ public abstract class Deck {
     private boolean shuffleOnEmptyDeck;
     private ArrayList<Integer>[] hands;
     int numPlayers;
-    int myPlayerNum = 0;
+    int myPlayerNum;
     int curPlayersTurn;
 
     /**
@@ -23,9 +23,10 @@ public abstract class Deck {
      * @param shuffleOnEmptyDeck decides whether the deck will shuffle automatically when out of cards
      * @param numPlayers         How many players are in the game
      */
-    public Deck(boolean shuffleOnEmptyDeck, int numPlayers) {
+    public Deck(boolean shuffleOnEmptyDeck, int numPlayers, int myPlayerNum) {
         this.shuffleOnEmptyDeck = shuffleOnEmptyDeck;
         this.numPlayers = numPlayers;
+        this.myPlayerNum = myPlayerNum;
     }
 
     /**
