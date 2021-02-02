@@ -36,6 +36,7 @@ public class ServerConfig {
     public static final String privateGameRoomRequestComplete = "private-game-room-request-complete";
     public static final String joinPrivateGameRoom = "join-private-game-room";
     public static final String unableToFindRoom = "unable-to-find-room";
+    public static final String initiatorSaysToStartGame= "initiator-start-game";
 
 
 }
