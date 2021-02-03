@@ -26,6 +26,8 @@ import com.example.cardgamesuiteapp.display.Hand;
 import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplayMainPageActivity;
 import com.example.cardgamesuiteapp.multiplayerDataManagement.Operation;
 import com.example.cardgamesuiteapp.singlePlayerMenus.FivesSinglePlayerMenu;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.javatuples.Triplet;
 import org.json.JSONArray;
@@ -1042,23 +1044,30 @@ public class FivesGame extends AppCompatActivity {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void handleIncomingData(JSONObject incomingData) throws Exception {
-        switch ((String) incomingData.opt("operation")) {
-            case "discardFromDeck":
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        switch (gson.fromJson((String) incomingData.opt("operation"), Operation.class)) {
+            case discardFromDeck:
+                System.out.println("discardFromDeck");
                 discardFromDeckReceived();
                 break;
-            case "initialize":
+            case initialize:
+                System.out.println("initialize");
                 initializeReceived(incomingData);
                 break;
-            case "playerDrawIntoIndex":
+            case playerDrawIntoIndex:
+                System.out.println("playerDrawIntoIndex");
                 playerDrawIntoIndexReceived(incomingData);
                 break;
-            case "playerDrawIntoIndexFromDiscard":
+            case playerDrawIntoIndexFromDiscard:
+                System.out.println("playerDrawIntoIndexFromDiscard");
                 playerDrawIntoIndexFromDiscardReceived(incomingData);
                 break;
-            case "recover":
+            case recover:
+                System.out.println("recover");
                 recoverReceived(incomingData);
                 break;
-            case "nextPlayer":
+            case nextPlayer:
                 System.out.println("NextPlayer");
                 deck.nextPlayerFromPeer();
                 break;

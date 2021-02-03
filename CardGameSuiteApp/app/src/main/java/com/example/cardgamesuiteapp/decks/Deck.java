@@ -1,9 +1,14 @@
 package com.example.cardgamesuiteapp.decks;
 
 import com.example.cardgamesuiteapp.deckMultiplayerManagement.DeckMultiplayerManager;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -49,11 +54,17 @@ public abstract class Deck implements Serializable {
      * @param deck The Deck object passed from a peer.
      */
     public void initializeFromPeer(JSONObject deck) {
-        System.out.println(deck.opt("deck"));
-        this.deck = (Queue<Integer>) deck.opt("deck");
-        this.discard = (Stack<Integer>) deck.opt("discard");
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        System.out.println((String) deck.opt("deck"));
+        this.deck = gson.fromJson((String) deck.opt("deck"), new TypeToken<Queue<Integer>>() {
+        }.getType());
+        System.out.println(this.deck.toString());
+        this.discard = gson.fromJson((String) deck.opt("discard"), new TypeToken<Stack<Integer>>() {
+        }.getType());
         for (int i = 0; i < numPlayers; i++) {
-            this.hands[i] = (ArrayList<Integer>) deck.opt("hand" + i);
+            this.hands[i] = gson.fromJson((String) deck.opt("hand" + i), new TypeToken<ArrayList<Integer>>() {
+            }.getType());
         }
     }
 
