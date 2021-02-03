@@ -512,9 +512,9 @@ public class FivesGame extends AppCompatActivity {
     }
 
     private void newGame() {
-//        if (!multiplayer || deck.getMyPlayerNum() == 0) {
-        deck.shuffleDiscardIntoDeck();
-//        }
+        if (!multiplayer || deck.getMyPlayerNum() == 0) {
+            deck.shuffleDiscardIntoDeck();
+        }
         for (int i = 0; i < totalScores.length; i++) {
             totalScores[i] = 0;
             viewPlayerNames[i].setTextColor(Color.LTGRAY);
@@ -528,21 +528,20 @@ public class FivesGame extends AppCompatActivity {
      * Called every time that there is a new round, to reset the table
      */
     public static void newRound() {
-//        if (!multiplayer || deck.getMyPlayerNum() == 0) {
-        try {
-            deck.deal(4);
-            deck.discardFromDeck();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!multiplayer || deck.getMyPlayerNum() == 0) {
+            try {
+                deck.deal(4);
+                deck.discardFromDeck();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        //Flipping up discard card
-//        }
         stage = fivesStage.memCards;
         viewConfirm.setVisibility(View.VISIBLE);
         if (multiplayer && deck.getMyPlayerNum() == 0) {
             DeckMultiplayerManager.initialize(deck);
+            updateEntireScreen();
         }
-        updateEntireScreen();
     }
 
     /**
@@ -553,6 +552,8 @@ public class FivesGame extends AppCompatActivity {
         viewDeck.setFaceUp(false);
         viewDeck.updateImage(deck.peekTopDraw());
         for (int i = 0; i < viewPlayers.length; i++) {
+//            viewPlayers[i].initHand(deck.getHand((i + deck.getMyPlayerNum()) % (numPlayers - 1)));
+            System.out.println(deck.getHand(i).toString());
             viewPlayers[i].initHand(deck.getHand(i));
             viewPlayers[i].flipAllCards();
         }

@@ -56,10 +56,8 @@ public abstract class Deck implements Serializable {
     public void initializeFromPeer(JSONObject deck) {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
-        System.out.println((String) deck.opt("deck"));
         this.deck = gson.fromJson((String) deck.opt("deck"), new TypeToken<Queue<Integer>>() {
         }.getType());
-        System.out.println(this.deck.toString());
         this.discard = gson.fromJson((String) deck.opt("discard"), new TypeToken<Stack<Integer>>() {
         }.getType());
         for (int i = 0; i < numPlayers; i++) {
