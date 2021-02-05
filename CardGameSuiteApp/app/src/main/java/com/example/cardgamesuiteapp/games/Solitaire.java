@@ -1,7 +1,10 @@
 package com.example.cardgamesuiteapp.games;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.decks.Standard;
@@ -46,8 +49,24 @@ public class Solitaire extends AppCompatActivity {
     }
 
     public void clickReturnToHome(View view) {
-        Intent intent = new Intent(this, DisplayMainPageActivity.class);
-        startActivity(intent);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Return To Main Menu");
+        builder.setMessage("All current game progress will be lost.\n\nAre you sure?");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getBaseContext(), DisplayMainPageActivity.class);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Do Nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     /**
@@ -106,18 +125,33 @@ public class Solitaire extends AppCompatActivity {
 
     //TODO METHODS
     /**
+     * Updates view instruction based upon current stage
+     */
+    private static void updateViewInstruction() {
+        viewWinOrLose.setText(getWinOrLose());
+    }
+
+    /**
      * @return returns win or lose string depending on how the game ends
      */
     private static String getWinOrLose() {
         String display = "";
         if(stage.equals(solitaireStage.gameOver)) {
-            //only aces left, no cards in deck TODO if statement
+            if(hasWon())
             display = "Game Over! You Win!";
 
-            //more than aces left, no cards in deck TODO if statement
+            if(hasLost())
             display = "Game Over! You Lose";
         }
         return display;
+    }
+
+    private static boolean hasWon() {
+        return false;
+    }
+
+    private static boolean hasLost() {
+        return false;
     }
 
     /**
@@ -148,14 +182,6 @@ public class Solitaire extends AppCompatActivity {
      */
     private static void stageMovingCard(int cardNum) {
 
-    }
-
-    private static boolean hasWon() {
-        return false;
-    }
-
-    private static boolean hasLost() {
-        return false;
     }
 
     /**
