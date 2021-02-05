@@ -145,7 +145,7 @@ public class FivesGame extends AppCompatActivity {
     }
 
     private void returnToGameMainMenu() {
-        alertBuilder("Return to Game Main Menu", MultiplayerOrSinglePlayerMenu.class);
+        alertBuilder("Home", MultiplayerOrSinglePlayerMenu.class);
     }
 
     private void returnToGameCollection() {
