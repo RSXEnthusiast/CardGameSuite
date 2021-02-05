@@ -85,8 +85,8 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
 
     public void onPrivateRoomJoin() {
         Bundle result = new Bundle();
-        result.putString("fragmentClassName", JoiningPrivateGameWaitingRoomFragment.class.getCanonicalName());
-        _MultiplayerWaitingRoomActivity.changeFragment(JoiningPrivateGameWaitingRoomFragment.class.getCanonicalName(), result);
+        result.putString("fragmentClassName", PrivateGameWaitingRoomFragment.class.getCanonicalName());
+        _MultiplayerWaitingRoomActivity.changeFragment(PrivateGameWaitingRoomFragment.class.getCanonicalName(), result);
 
     }
 

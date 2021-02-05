@@ -3,6 +3,7 @@ package com.example.cardgamesuiteapp.austenMPStuff;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -22,10 +23,18 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public abstract class PrivateGameWaitingRoom extends MultiplayerWaitingRoomActivityFragment {
-    public PrivateGameWaitingRoom() {
-        super(R.layout.austen_fragment_initiators_private_game_waiting_room);
+import io.socket.client.Socket;
+
+public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivityFragment {
+    boolean _GameCreator=false;
+    String _CreatorStatusMessage = "Private Game Creator";
+    String _JoinStatusMessage = "Private Game Joined";
+    public PrivateGameWaitingRoomFragment() {
+
+        super(R.layout.austen_fragment_private_game_waiting_room);
         SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
+
+
     }
 
     ListView _PlayerListView;
@@ -33,11 +42,15 @@ public abstract class PrivateGameWaitingRoom extends MultiplayerWaitingRoomActiv
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Bundle extras = getArguments();
+         Bundle extras = getArguments();
+        _GameCreator= extras.getBoolean("gameCreator",false);
 
         _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
             TextView roomCodeView = _MultiplayerWaitingRoomActivity.findViewById(R.id.gameCodeView);
             roomCodeView.setText(_MultiPlayerConnector.getRoomCode());
+
+            TextView statusMessage = _MultiplayerWaitingRoomActivity.findViewById(R.id.statusMessage);
+            statusMessage.setText(_GameCreator ? _CreatorStatusMessage: _JoinStatusMessage );
         });
 
        _PlayerListView = view.findViewById(R.id.playerList);
@@ -45,6 +58,8 @@ public abstract class PrivateGameWaitingRoom extends MultiplayerWaitingRoomActiv
 
 
     }
+
+
 
     private void addNewPlayerToRoomList(JSONArray playerNames) {
         _PlayerList.clear();
@@ -66,12 +81,25 @@ public abstract class PrivateGameWaitingRoom extends MultiplayerWaitingRoomActiv
             else{
                 _PlayerList.add(playerName);
             }
-        }
 
-        ArrayAdapter<String> arrayAdapter =
-                new ArrayAdapter<String>(_MultiplayerWaitingRoomActivity,android.R.layout.simple_list_item_1, _PlayerList);
-        // Set The Adapter
-        _PlayerListView.setAdapter(arrayAdapter);
+
+
+        }
+        updatePlayerCountView(_PlayerList.size());
+
+        _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
+            ArrayAdapter<String> arrayAdapter =
+                    new ArrayAdapter<String>(_MultiplayerWaitingRoomActivity, android.R.layout.simple_list_item_1, _PlayerList);
+            // Set The Adapter
+            _PlayerListView.setAdapter(arrayAdapter);
+        });
+    }
+
+    private void updatePlayerCountView(int numPlayers) {
+        _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
+            TextView numPlayersInRoomView = this.getActivity().getParent().findViewById(R.id.numPlayersInRoomView);
+            numPlayersInRoomView.setText(numPlayers);
+        });
     }
 
 
@@ -88,10 +116,11 @@ public abstract class PrivateGameWaitingRoom extends MultiplayerWaitingRoomActiv
 
             private void showAreYouSureDialog() {
 
+                String message = _GameCreator ? "If you leave, the game room will be deleted."  : "If you leave you will have to rejoin the game.";
                 _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
                     new AlertDialog.Builder(context)
                             .setTitle("Close Game?")
-                            .setMessage("If you leave you will have to rejoin the game.")
+                            .setMessage(message)
                             // Specifying a listener allows you to take an action before dismissing the dialog.
                             // The dialog is automatically dismissed when a dialog button is clicked.
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -127,10 +156,10 @@ public abstract class PrivateGameWaitingRoom extends MultiplayerWaitingRoomActiv
             SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
             switch (socketIOEventArg._EventName) {
 
-                case ServerConfig.newPlayerJoinedRoom:
+               /* case ServerConfig.newPlayerJoinedRoom:
                     //addNewPlayerToRoomList((String) socketIOEventArg._JsonObject.opt("playerName"));
-                    break;
-                case ServerConfig.playerNumber:
+                    break;*/
+                case ServerConfig.playerJoined:
                     ///OnRoomNotFound();
                     addNewPlayerToRoomList( (JSONArray) socketIOEventArg._JsonObject.opt("playerNames") );
                     break;
@@ -145,5 +174,15 @@ public abstract class PrivateGameWaitingRoom extends MultiplayerWaitingRoomActiv
     @Override
     void SetMultiPlayerConnectorObserver(Observer multiPlayerConnectorObserver) {
         _MultiPlayerConnectorObserver = multiPlayerConnectorObserver;
+    }
+
+    static void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
+
+        socket.on(ServerConfig.playerJoined, args -> {
+            //Log.d(TAG, "");
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.playerJoined, args);
+            multiPlayerConnector.notifyObservers(socketIOEventArg);
+        });
+
     }
 }

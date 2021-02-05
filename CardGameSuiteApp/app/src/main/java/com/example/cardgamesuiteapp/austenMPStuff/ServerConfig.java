@@ -12,7 +12,7 @@ public class ServerConfig {
 
 
     public static final String eventConnectError = "EVENT_CONNECT_ERROR";
-    public static final String newPlayerJoinedRoom = "new-player-joined-room";
+
     public static final String startGame = "start-game";
     public static final String gameData= "game-data";
     public static final String playerNumbers= "player_numbers"; //the server sends all players number and associated name
@@ -37,6 +37,7 @@ public class ServerConfig {
     public static final String joinPrivateGameRoom = "join-private-game-room";
     public static final String unableToFindRoom = "unable-to-find-room";
     public static final String initiatorSaysToStartGame= "initiator-start-game";
+    public static final String playerJoined = "player-joined";
 
 
 }

@@ -90,6 +90,7 @@ public class MultiPlayerConnector extends Observable {
         PublicGameWaitingRoom.AddSocketEvents(_Socket, this);
         JoinPrivateGameFragment.AddSocketEvents(_Socket, this);
         CreatePrivateGameFragment.AddSocketEvents(_Socket, this);
+        PrivateGameWaitingRoomFragment.AddSocketEvents(_Socket, this);
 
         _Socket.on(EVENT_CONNECT, args -> {
             //JSONObject obj = (JSONObject)args[0];

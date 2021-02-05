@@ -14,8 +14,8 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
     Observer _MultiPlayerConnectorObserver;
     MultiplayerWaitingRoomActivity _MultiplayerWaitingRoomActivity;
 
-    public MultiplayerWaitingRoomActivityFragment(int fragment_public_game_waiting_room) {
-        super(fragment_public_game_waiting_room);
+    public MultiplayerWaitingRoomActivityFragment(int fragment_Rid) {
+        super(fragment_Rid);
     }
 
 

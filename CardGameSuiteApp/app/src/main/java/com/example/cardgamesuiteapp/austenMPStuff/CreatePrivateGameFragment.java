@@ -91,7 +91,7 @@ public class CreatePrivateGameFragment extends Fragment implements IMultiplayerC
 
     private void goToPrivateGameWaitingRoom() {
         Bundle result = new Bundle();
-        result.putString("fragmentClassName", InitiatorsPrivateGameWaitingRoomFragment.class.getCanonicalName());
+        result.putString("fragmentClassName", PrivateGameWaitingRoomFragment.class.getCanonicalName());
         result.putBoolean("gameCreator", true);
         // The child fragment needs to still set the result on its parent fragment manager
         getParentFragmentManager().setFragmentResult("changeFragment", result);
