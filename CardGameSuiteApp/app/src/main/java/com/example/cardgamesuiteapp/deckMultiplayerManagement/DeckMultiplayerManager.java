@@ -49,4 +49,12 @@ public abstract class DeckMultiplayerManager {
             e.printStackTrace();
         }
     }
+
+    public static void flipCard(int cardNum) {
+        try {
+            DataSender.sendData(new JSONObject().put("operation", Operation.flipOverCard).put("cardNum", cardNum));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -45,12 +45,17 @@ public class Hand extends ViewGroup {
      * @param hand the hand to be put into the array
      */
     public void initHand(ArrayList<Integer> hand) {
-        removeAllCards();
-        for (int card : hand) {
-            Card cardView = new Card(getContext());
-            cardView.updateImage(card);
-            this.addView(cardView);
-            cards.add(cardView);
+        if (cards.size() == 0) {
+            for (int card : hand) {
+                Card cardView = new Card(getContext());
+                cardView.updateImage(card);
+                this.addView(cardView);
+                cards.add(cardView);
+            }
+        } else {
+            for (int i = 0; i < 4; i++) {
+                updateCard(i, hand.get(i));
+            }
         }
     }
 

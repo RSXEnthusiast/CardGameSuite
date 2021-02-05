@@ -62,8 +62,8 @@ public class FivesSinglePlayerMenu extends AppCompatActivity {
         intent.putExtra("numOnlineOpponents", 0);
         intent.putExtra("multiplayer", false);
         SharedPreferences sp = getSharedPreferences("fivesGameInfo", MODE_PRIVATE);
-        sp.edit().putString("myName", "Human").apply();
-        sp.edit().putInt("myNumber", new Random().nextInt(numAI)).apply();
+//        sp.edit().putInt("myNumber", new Random().nextInt(numAI)).apply();
+        sp.edit().putInt("myNumber", 0).apply();
         startActivity(intent);
     }
 }

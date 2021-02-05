@@ -18,7 +18,6 @@ import com.example.cardgamesuiteapp.austenMPStuff.MultiplayerOrSinglePlayerMenu;
 import com.example.cardgamesuiteapp.austenMPStuff.ServerConfig;
 import com.example.cardgamesuiteapp.austenMPStuff.SocketIOEventArg;
 import com.example.cardgamesuiteapp.deckMultiplayerManagement.DeckMultiplayerManager;
-import com.example.cardgamesuiteapp.decks.Deck;
 import com.example.cardgamesuiteapp.decks.Standard;
 import com.example.cardgamesuiteapp.display.Card;
 import com.example.cardgamesuiteapp.display.CardAnimation;
@@ -29,13 +28,9 @@ import com.example.cardgamesuiteapp.singlePlayerMenus.FivesSinglePlayerMenu;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.javatuples.Triplet;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -103,10 +98,7 @@ public class FivesGame extends AppCompatActivity {
             viewPlayerNames[i].setText("CPU" + i);
         }
         totalScores = new int[numPlayers];
-        int playerNum = 0;
-        if (multiplayer) {
-            playerNum = fivesGameInfo.getInt("myNumber", -1);
-        }
+        int playerNum = fivesGameInfo.getInt("myNumber", -1);
         deck = new Standard(true, numPlayers, playerNum, multiplayer);
         viewDiscard = findViewById(R.id.discard);
         viewDiscard.bringToFront();
@@ -377,7 +369,6 @@ public class FivesGame extends AppCompatActivity {
         }
     }
 
-
     /**
      * This method is called when a card is touched and the current stage is discardedFromDraw
      *
@@ -390,6 +381,7 @@ public class FivesGame extends AppCompatActivity {
             stage = fivesStage.draw; //reset stage, turn over.
             //logic for flipping over card in hand.
             viewPlayers[deck.getMyPlayerNum()].flipCardByNum(cardNum);
+            DeckMultiplayerManager.flipCard(cardNum);
             updateViewInstruction();
         }
         if (endTurn) {
@@ -477,9 +469,7 @@ public class FivesGame extends AppCompatActivity {
     }
 
     private void newGame() {
-        if (!multiplayer || deck.getMyPlayerNum() == 0) {
-            deck.shuffleDiscardIntoDeck();
-        }
+        deck.shuffleDiscardIntoDeck();
         for (int i = 0; i < totalScores.length; i++) {
             totalScores[i] = 0;
             viewPlayerNames[i].setTextColor(Color.LTGRAY);
@@ -493,37 +483,38 @@ public class FivesGame extends AppCompatActivity {
      * Called every time that there is a new round, to reset the table
      */
     public static void newRound() {
-        if (!multiplayer || deck.getMyPlayerNum() == 0) {
-            try {
-                deck.deal(4);
-                deck.discardFromDeck();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            deck.deal(4);
+            deck.discardFromDeck();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         stage = fivesStage.memCards;
         viewConfirm.setVisibility(View.VISIBLE);
+        updateEntireScreen(false);
         if (multiplayer && deck.getMyPlayerNum() == 0) {
             DeckMultiplayerManager.initialize(deck);
-            updateEntireScreen();
         }
     }
 
     /**
      * This method updates every single dynamic item on the screen.
      */
-    private static void updateEntireScreen() {
+    private static void updateEntireScreen(boolean fromPeer) {
         viewDiscard.updateImage(deck.peekTopDiscard());
         viewDeck.setFaceUp(false);
         viewDeck.updateImage(deck.peekTopDraw());
         for (int i = 0; i < viewPlayers.length; i++) {
 //            viewPlayers[i].initHand(deck.getHand((i + deck.getMyPlayerNum()) % (numPlayers - 1)));
-            System.out.println(deck.getHand(i).toString());
             viewPlayers[i].initHand(deck.getHand(i));
-            viewPlayers[i].flipAllCards();
+            if (!fromPeer) {
+                viewPlayers[i].flipAllCards();
+            }
         }
-        viewPlayers[0].flipCardByIndex(2);
-        viewPlayers[0].flipCardByIndex(3);
+        if (!fromPeer) {
+            viewPlayers[0].flipCardByIndex(2);
+            viewPlayers[0].flipCardByIndex(3);
+        }
         viewInstruction.setText(getCurInstruction());
         updateViewScores();
     }
@@ -723,7 +714,7 @@ public class FivesGame extends AppCompatActivity {
                 break;
             case discardedFromDeck:
                 AIDiscardedDraw();
-                AIFlippedCard(getAIFlipLocation());
+                AIFlippedCardByIndex(getAIFlipLocation());
                 break;
         }
         deck.nextPlayer(multiplayer);
@@ -797,8 +788,15 @@ public class FivesGame extends AppCompatActivity {
         }
     }
 
-    private static void AIFlippedCard(int location) {
+    private static void AIFlippedCardByIndex(int location) {
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
+        if (roundOver()) {
+            scoreRound();
+        }
+    }
+
+    private void AIFlippedCardByCardNum(int cardNum) {
+        viewPlayers[deck.getCurPlayersTurn()].flipCardByNum(cardNum);
     }
 
     /**
@@ -1037,12 +1035,20 @@ public class FivesGame extends AppCompatActivity {
                 System.out.println("NextPlayer");
                 deck.nextPlayerFromPeer();
                 break;
+            case flipOverCard:
+                System.out.println("Flip Card");
+                flipCardRecieved(incomingData);
         }
     }
 
+    private void flipCardRecieved(JSONObject data) {
+        AIFlippedCardByCardNum((int) data.opt("cardNum"));
+    }
+
+
     private void initializeReceived(JSONObject deck) {
         this.deck.initializeFromPeer(deck);
-        updateEntireScreen();
+        updateEntireScreen(true);
     }
 
     private void recoverReceived(JSONObject deck) {
