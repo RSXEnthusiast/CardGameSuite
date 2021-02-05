@@ -141,64 +141,29 @@ public class FivesGame extends AppCompatActivity {
     }
 
     private void returnToPlayerMenu() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Return To Player Menu");
-        builder.setMessage("All current game progress will be lost.\n\nAre you sure?");
-        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(FivesGame.this, FivesSinglePlayerMenu.class);
-                startActivity(intent);
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //Do Nothing
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        alertBuilder("Return to player Menu", FivesSinglePlayerMenu.class);
     }
 
     private void returnToGameMainMenu() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Return To Game Main Menu");
-        builder.setMessage("All current game progress will be lost.\n\nAre you sure?");
-        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(FivesGame.this, MultiplayerOrSinglePlayerMenu.class);
-                startActivity(intent);
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //Do Nothing
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        alertBuilder("Return to Game Main Menu", MultiplayerOrSinglePlayerMenu.class);
     }
 
     private void returnToGameCollection() {
+        alertBuilder("Return to Main Menu", DisplayMainPageActivity.class);
+    }
+
+    private void alertBuilder(String title, Class c) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Return To Main Menu");
+        builder.setTitle(title);
         builder.setMessage("All current game progress will be lost.\n\nAre you sure?");
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(getBaseContext(), DisplayMainPageActivity.class);
+                Intent intent = new Intent(FivesGame.this, c);
                 startActivity(intent);
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //Do Nothing
-            }
-        });
+        builder.setNegativeButton("Cancel", null);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
