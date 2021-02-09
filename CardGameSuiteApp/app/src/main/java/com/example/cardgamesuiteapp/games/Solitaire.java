@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.decks.Standard;
 import com.example.cardgamesuiteapp.display.Card;
+import com.example.cardgamesuiteapp.display.FivesHand;
 import com.example.cardgamesuiteapp.display.SolitaireHand;
 import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplayMainPageActivity;
 import android.view.View;
@@ -18,7 +19,8 @@ import android.widget.TextView;
 public class Solitaire extends AppCompatActivity {
     static SolitaireHand[] viewPlayer;
     static Standard deck;// The Deck object
-    static int player = 1; //only one player in solitaire
+    final static int player = 1; //only one player in solitaire
+    final static int columns = 4;
     static Card viewDiscard;// The discard view
     static View viewDiscardHighlight;// Simply the "highlight" of th discard, mainly used for setting the highlight to visible/invisible
     static Card viewDeck;// The deck view
@@ -40,6 +42,7 @@ public class Solitaire extends AppCompatActivity {
     }
 
     private void initSolitaire() {
+        viewPlayer = new SolitaireHand[columns];
         deck = new Standard(true, player);
         viewDiscard = findViewById(R.id.discard);
         viewDiscard.bringToFront();
@@ -123,6 +126,10 @@ public class Solitaire extends AppCompatActivity {
         viewDiscard.updateImage(deck.peekTopDiscard());
         viewDeck.updateImage(deck.peekTopDraw());
         viewDeck.setFaceUp(false);
+        for (int i = 0; i < viewPlayer.length; i++) {
+            viewPlayer[i].initHand(deck.getHand(i)); //this get hand is probably wrong - TODO refactor for Solitaire
+            viewPlayer[i].flipAllCards();
+        }
         viewPlayer[1].initHand(deck.getHand(1));
         viewPlayer[1].flipAllCards();
     }
