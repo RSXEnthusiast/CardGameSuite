@@ -9,13 +9,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.decks.Standard;
 import com.example.cardgamesuiteapp.display.Card;
+import com.example.cardgamesuiteapp.display.SolitaireHand;
 import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplayMainPageActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class Solitaire extends AppCompatActivity {
-
+    static SolitaireHand[] viewPlayer;
     static Standard deck;// The Deck object
     static int player = 1; //only one player in solitaire
     static Card viewDiscard;// The discard view
@@ -46,6 +47,7 @@ public class Solitaire extends AppCompatActivity {
         viewDiscardHighlight.setVisibility(View.INVISIBLE);
         viewDeck = findViewById(R.id.deck);
         viewWinOrLose = findViewById(R.id.winOrLose);
+        newGame();
     }
 
     public void clickReturnToHome(View view) {
@@ -121,6 +123,8 @@ public class Solitaire extends AppCompatActivity {
         viewDiscard.updateImage(deck.peekTopDiscard());
         viewDeck.updateImage(deck.peekTopDraw());
         viewDeck.setFaceUp(false);
+        viewPlayer[1].initHand(deck.getHand(1));
+        viewPlayer[1].flipAllCards();
     }
 
     //TODO METHODS
@@ -138,10 +142,10 @@ public class Solitaire extends AppCompatActivity {
         String display = "";
         if(stage.equals(solitaireStage.gameOver)) {
             if(hasWon())
-            display = "Game Over! You Win!";
+                display = "Game Over! You Win!";
 
             if(hasLost())
-            display = "Game Over! You Lose";
+                display = "Game Over! You Lose";
         }
         return display;
     }
@@ -160,7 +164,6 @@ public class Solitaire extends AppCompatActivity {
      * @return true if the round is over, false if not.
      */
     private static boolean movesRemaining() {
-
         //if no moves remaining TODO if statement
         stage = stage.deal;
         return true;
