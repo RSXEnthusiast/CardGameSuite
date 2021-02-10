@@ -7,10 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".games.Solitaire">
 
-    <com.example.cardgamesuiteapp.display.Card
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/deck"
         android:layout_width="75dp"
         android:layout_height="105dp"
+        android:background="@drawable/light_back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.69"
@@ -30,7 +31,7 @@
         app:layout_constraintVertical_bias="0.993" />
 
     <com.example.cardgamesuiteapp.display.SolitaireHand
-        android:id="@+id/row1"
+        android:id="@+id/column1"
         android:layout_width="90dp"
         android:layout_height="600dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -41,7 +42,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <com.example.cardgamesuiteapp.display.SolitaireHand
-        android:id="@+id/row2"
+        android:id="@+id/column2"
         android:layout_width="90dp"
         android:layout_height="600dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -52,7 +53,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <com.example.cardgamesuiteapp.display.SolitaireHand
-        android:id="@+id/row3"
+        android:id="@+id/column3"
         android:layout_width="90dp"
         android:layout_height="600dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -63,7 +64,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <com.example.cardgamesuiteapp.display.SolitaireHand
-        android:id="@+id/row4"
+        android:id="@+id/column4"
         android:layout_width="90dp"
         android:layout_height="600dp"
         app:layout_constraintBottom_toBottomOf="parent"

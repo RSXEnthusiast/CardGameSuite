@@ -17,13 +17,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class Solitaire extends AppCompatActivity {
-    static SolitaireHand[] viewPlayer;
+    static SolitaireHand[] viewColumns;
     static Standard deck;// The Deck object
     final static int player = 1; //only one player in solitaire
-    final static int columns = 4;
+    final static int columns = 4; //number of columns on the playing table
     static Card viewDiscard;// The discard view
-    static View viewDiscardHighlight;// Simply the "highlight" of th discard, mainly used for setting the highlight to visible/invisible
-    static Card viewDeck;// The deck view
+    static View viewDeckHighlight;// Simply the "highlight" of th discard, mainly used for setting the highlight to visible/invisible
     static Button viewReturnToAppCollection;// The button the user will press to return to the main menu
     static Button viewReturnToGameMainMenu;// The button the user will press to return to the game's main menu
     static TextView viewWinOrLose;// The textViews displays whether the user won or lost the game
@@ -42,13 +41,13 @@ public class Solitaire extends AppCompatActivity {
     }
 
     private void initSolitaire() {
-        viewPlayer = new SolitaireHand[columns];
-        deck = new Standard(true, player);
+        viewColumns = new SolitaireHand[columns];
+        initViewColumns();
+        deck = new Standard(false, player);
         viewDiscard = findViewById(R.id.discard);
         viewDiscard.bringToFront();
-        viewDiscardHighlight = findViewById(R.id.highlightDiscard);
-        viewDiscardHighlight.setVisibility(View.INVISIBLE);
-        viewDeck = findViewById(R.id.deck);
+        viewDeckHighlight = findViewById(R.id.highlightDiscard);
+        viewDeckHighlight.setVisibility(View.INVISIBLE);
         viewWinOrLose = findViewById(R.id.winOrLose);
         newGame();
     }
@@ -72,6 +71,11 @@ public class Solitaire extends AppCompatActivity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void initViewColumns() {
+        for (int i = 0; i < columns; i++)
+            viewColumns[i] = findViewById(getResources().getIdentifier(("column" + i), "id", getPackageName()));
     }
 
     /**
@@ -102,8 +106,7 @@ public class Solitaire extends AppCompatActivity {
      */
     private static void stageDeal() {
         stage = solitaireStage.deal;
-        viewDeck.flipCard();
-        viewDiscardHighlight.setVisibility(View.VISIBLE);
+        viewDeckHighlight.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -112,26 +115,23 @@ public class Solitaire extends AppCompatActivity {
     private void newGame() {
         deck.shuffleDiscardIntoDeck();
         try {
-            deck.deal(4);
+            deck.deal(1);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        viewDeck.setFaceUp(false);
+        updateEntireScreen();
     }
 
     /**
      * This method updates every single dynamic item on the screen.
      */
     private static void updateEntireScreen() {
-        viewDiscard.updateImage(deck.peekTopDiscard());
-        viewDeck.updateImage(deck.peekTopDraw());
-        viewDeck.setFaceUp(false);
-        for (int i = 0; i < viewPlayer.length; i++) {
-            viewPlayer[i].initHand(deck.getHand(i)); //this get hand is probably wrong - TODO refactor for Solitaire
-            viewPlayer[i].flipAllCards();
+        for (int i = 0; i < viewColumns.length; i++) {
+            viewColumns[i].initHand(deck.getHand(i)); //this get hand is probably wrong - TODO refactor for Solitaire
+            viewColumns[i].flipAllCards();
         }
-        viewPlayer[1].initHand(deck.getHand(1));
-        viewPlayer[1].flipAllCards();
+        viewColumns[1].initHand(deck.getHand(1));
+        viewColumns[1].flipAllCards();
     }
 
     //TODO METHODS
