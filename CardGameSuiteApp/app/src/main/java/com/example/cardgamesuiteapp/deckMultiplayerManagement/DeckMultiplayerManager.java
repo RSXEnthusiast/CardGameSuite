@@ -1,15 +1,9 @@
 package com.example.cardgamesuiteapp.deckMultiplayerManagement;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
-import org.javatuples.Pair;
-import org.javatuples.Triplet;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,9 +44,41 @@ public abstract class DeckMultiplayerManager {
         }
     }
 
-    public static void flipCard(int cardNum) {
+    public static void flipDeck() {
         try {
-            DataSender.sendData(new JSONObject().put("operation", Operation.flipOverCard).put("cardNum", cardNum));
+            DataSender.sendData(new JSONObject().put("operation", Operation.flipDeck));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void discardedFromDeck() {
+        try {
+            DataSender.sendData(new JSONObject().put("operation", Operation.discardFromDeck));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void drewFromDeck(int cardLocation) {
+        try {
+            DataSender.sendData(new JSONObject().put("operation", Operation.drawIntoIndex).put("location", cardLocation));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void flipCardInHand(int cardNum) {
+        try {
+            DataSender.sendData(new JSONObject().put("operation", Operation.flipCardInHand).put("cardNum", cardNum));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void drewFromDiscard(int cardLocation) {
+        try {
+            DataSender.sendData(new JSONObject().put("operation", Operation.drawIntoIndexFromDiscard).put("location", cardLocation));
         } catch (JSONException e) {
             e.printStackTrace();
         }
