@@ -3,6 +3,7 @@ package com.example.cardgamesuiteapp.display;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,7 +15,7 @@ import com.example.cardgamesuiteapp.decks.Standard;
 
 public class Card extends View implements View.OnTouchListener {
 
-    //    String that keeps track of the drawable to be displayed
+    //String that keeps track of the drawable to be displayed
     private int imageId;
     private int cardNum;
     private boolean isFaceUp = true;

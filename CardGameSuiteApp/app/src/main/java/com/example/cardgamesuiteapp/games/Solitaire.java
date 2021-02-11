@@ -1,27 +1,28 @@
 package com.example.cardgamesuiteapp.games;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.decks.Standard;
 import com.example.cardgamesuiteapp.display.Card;
-import com.example.cardgamesuiteapp.display.FivesHand;
 import com.example.cardgamesuiteapp.display.SolitaireHand;
 import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplayMainPageActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class Solitaire extends AppCompatActivity {
     static SolitaireHand[] viewColumns;
     static Standard deck;// The Deck object
-    final static int player = 1; //only one player in solitaire
+    final static int player = 4; //only one player in solitaire
     final static int columns = 4; //number of columns on the playing table
     static Card viewDiscard;// The discard view
+    static View viewDeckBack;
     static View viewDeckHighlight;// Simply the "highlight" of th discard, mainly used for setting the highlight to visible/invisible
     static Button viewReturnToAppCollection;// The button the user will press to return to the main menu
     static Button viewReturnToGameMainMenu;// The button the user will press to return to the game's main menu
@@ -46,6 +47,8 @@ public class Solitaire extends AppCompatActivity {
         deck = new Standard(false, player);
         viewDiscard = findViewById(R.id.discard);
         viewDiscard.bringToFront();
+        viewDeckBack = findViewById(R.id.deck);
+        setBackStyleToImageButton(viewDeckBack);
         viewDeckHighlight = findViewById(R.id.highlightDiscard);
         viewDeckHighlight.setVisibility(View.INVISIBLE);
         viewWinOrLose = findViewById(R.id.winOrLose);
@@ -74,8 +77,9 @@ public class Solitaire extends AppCompatActivity {
     }
 
     private void initViewColumns() {
-        for (int i = 0; i < columns; i++)
+        for (int i = 0; i < columns; i++) {
             viewColumns[i] = findViewById(getResources().getIdentifier(("column" + i), "id", getPackageName()));
+        }
     }
 
     /**
@@ -99,6 +103,18 @@ public class Solitaire extends AppCompatActivity {
                 stageMovingCard(cardNum);
                 break;
         }
+    }
+
+    /**
+     * Sets the background image of a image button to be the set back card style
+     *
+     * @param view is the image button that
+     */
+    public void setBackStyleToImageButton(View view) {
+        String stringBuilder = "";
+        stringBuilder += getSharedPreferences("preferences", Context.MODE_PRIVATE).getString("backStyle", "cardStyle not found");
+        stringBuilder += "back";
+        view.setBackgroundResource(getResources().getIdentifier(stringBuilder, "drawable", this.getPackageName()));
     }
 
     /**
@@ -126,12 +142,8 @@ public class Solitaire extends AppCompatActivity {
      * This method updates every single dynamic item on the screen.
      */
     private static void updateEntireScreen() {
-        for (int i = 0; i < viewColumns.length; i++) {
+        for (int i = 0; i < viewColumns.length; i++)
             viewColumns[i].initHand(deck.getHand(i)); //this get hand is probably wrong - TODO refactor for Solitaire
-            viewColumns[i].flipAllCards();
-        }
-        viewColumns[1].initHand(deck.getHand(1));
-        viewColumns[1].flipAllCards();
     }
 
     //TODO METHODS
