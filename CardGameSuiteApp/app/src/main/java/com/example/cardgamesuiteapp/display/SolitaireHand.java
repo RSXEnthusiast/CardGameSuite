@@ -21,23 +21,20 @@ public class SolitaireHand extends Hand {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        final int count = getChildCount();
+        View child = getChildAt(0);
+        int cardWidth = getMeasuredWidth();
+        int cardHeight = getMeasuredHeight();
 
-        int cardWidth = getMeasuredWidth() / 2;
-        int cardHeight = getMeasuredHeight() / 2;
-
-        for (int i = 0; i < count; i++) {
-            View child = getChildAt(i);
-
-            if (child.getVisibility() == GONE) {
-                return;
-            }
-            left = cardWidth * (i % 2);
-            top = cardHeight * (i / 2);
-            right = cardWidth * (i % 2 + 1);
-            bottom = cardHeight * (i / 2 + 1);
-            child.layout(left, top, right, bottom);
+        if (child.getVisibility() == GONE) {
+            return;
         }
+
+        left = 0;
+        top = 0;
+        right = cardWidth;
+        bottom = cardHeight/5;
+
+        child.layout(left, top, right, bottom);
     }
 }
 

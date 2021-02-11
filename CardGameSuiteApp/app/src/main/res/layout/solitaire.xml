@@ -31,8 +31,8 @@
 
     <com.example.cardgamesuiteapp.display.SolitaireHand
         android:id="@+id/column0"
-        android:layout_width="90dp"
-        android:layout_height="600dp"
+        android:layout_width="75dp"
+        android:layout_height="525dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.043"
@@ -42,8 +42,8 @@
 
     <com.example.cardgamesuiteapp.display.SolitaireHand
         android:id="@+id/column1"
-        android:layout_width="90dp"
-        android:layout_height="600dp"
+        android:layout_width="75dp"
+        android:layout_height="525dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.348"
@@ -53,8 +53,8 @@
 
     <com.example.cardgamesuiteapp.display.SolitaireHand
         android:id="@+id/column2"
-        android:layout_width="90dp"
-        android:layout_height="600dp"
+        android:layout_width="75dp"
+        android:layout_height="525dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.651"
@@ -64,8 +64,8 @@
 
     <com.example.cardgamesuiteapp.display.SolitaireHand
         android:id="@+id/column3"
-        android:layout_width="90dp"
-        android:layout_height="600dp"
+        android:layout_width="75dp"
+        android:layout_height="525dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.956"
