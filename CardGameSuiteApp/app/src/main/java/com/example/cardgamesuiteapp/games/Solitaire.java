@@ -86,6 +86,8 @@ public class Solitaire extends AppCompatActivity {
     public void clickDeckToDeal(View view) {
         try {
             deck.deal(1);
+            for (int i = 0; i < viewColumns.length; i++)
+                viewColumns[i].initHand(deck.getHand(i));
         } catch (Exception e) {
             e.printStackTrace();
         }
