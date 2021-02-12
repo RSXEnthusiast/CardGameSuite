@@ -224,4 +224,12 @@ public class Hand extends ViewGroup {
         }
         return null;
     }
+
+    public void swapVisibility(int location) {
+        if (cards.get(location).getVisibility() == VISIBLE) {
+            cards.get(location).setVisibility(INVISIBLE);
+        } else {
+            cards.get(location).setVisibility(VISIBLE);
+        }
+    }
 }
