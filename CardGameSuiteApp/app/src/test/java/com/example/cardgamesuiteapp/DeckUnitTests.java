@@ -154,4 +154,31 @@ public class DeckUnitTests {
 
     }
 
+    @Test
+    public void initializeFromPeer() throws Exception {
+        standardDeck.deal(1);
+        ArrayList<Integer>[] beforeHands = standardDeck.getHands();
+
+        Standard testDeck = new Standard(false, 4);
+        testDeck.deal(2);
+        ArrayList<Integer>[] newHands = testDeck.getHands();
+
+        standardDeck.initializeFromPeer(testDeck);
+        ArrayList<Integer>[] hands = standardDeck.getHands();
+        assertEquals(newHands, hands);
+        assertNotEquals(beforeHands, hands);
+
+    }
+
+    @Test
+    public void getHands() throws Exception {
+        standardDeck.deal(1);
+        ArrayList<Integer>[] hand = standardDeck.getHands();
+        int test = hand[0].get(0);
+
+        assertTrue(test >=0);
+    }
+
+
+
 }
