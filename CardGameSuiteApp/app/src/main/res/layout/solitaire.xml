@@ -92,6 +92,8 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="620dp"
         android:orientation="vertical"
+        android:textAlignment="center"
+        android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 

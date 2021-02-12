@@ -197,4 +197,8 @@ abstract public class Hand extends ViewGroup {
         }
         return null;
     }
+
+    public ArrayList<Card> getHand() {
+        return cards;
+    }
 }
