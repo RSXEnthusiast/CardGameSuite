@@ -83,4 +83,12 @@ public abstract class DeckMultiplayerManager {
             e.printStackTrace();
         }
     }
+
+    public static void readyToContinue() {
+        try {
+            DataSender.sendData(new JSONObject().put("operation", Operation.readyToContinue));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }
