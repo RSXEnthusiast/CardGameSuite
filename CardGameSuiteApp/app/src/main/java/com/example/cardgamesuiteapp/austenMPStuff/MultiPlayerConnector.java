@@ -68,7 +68,7 @@ public class MultiPlayerConnector extends Observable {
      *
      * @throws URISyntaxException
      */
-    public void connectToSignallingServer() throws URISyntaxException {
+    public void connectToServer() throws URISyntaxException {
         if (_Socket == null) {
             _Socket = IO.socket(serverUrl); //initialize here because we don't want to do it in the constructor
             configureSocketEvents();
@@ -81,16 +81,19 @@ public class MultiPlayerConnector extends Observable {
 
     }
 
+    public interface MultiPlayerConnectorEventAdder {
+
+        public void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector);
+    }
+
+    public void addSocketEvents(MultiPlayerConnectorEventAdder multiPlayerConnectorEventAdder){
+        multiPlayerConnectorEventAdder.AddSocketEvents(_Socket, this);
+    }
 
     private void configureSocketEvents() {
 
         IO.Options opts = new IO.Options();
         opts.transports = new String[]{WebSocket.NAME};
-
-        PublicGameWaitingRoom.AddSocketEvents(_Socket, this);
-        JoinPrivateGameFragment.AddSocketEvents(_Socket, this);
-        CreatePrivateGameFragment.AddSocketEvents(_Socket, this);
-        PrivateGameWaitingRoomFragment.AddSocketEvents(_Socket, this);
 
         _Socket.on(EVENT_CONNECT, args -> {
             //JSONObject obj = (JSONObject)args[0];

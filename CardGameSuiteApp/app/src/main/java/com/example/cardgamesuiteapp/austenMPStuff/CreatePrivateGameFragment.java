@@ -19,17 +19,19 @@ import java.util.Observer;
 
 import io.socket.client.Socket;
 
-public class CreatePrivateGameFragment extends Fragment implements IMultiplayerConnectorSocketEventUser {
+public class CreatePrivateGameFragment extends Fragment implements MultiPlayerConnector.MultiPlayerConnectorEventAdder {
     public CreatePrivateGameFragment() {
         super(R.layout.austen_fragment_create_private_game);
         _MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
+        _MultiPlayerConnector.addSocketEvents(this);
+
     }
 
     private static final String TAG = CreatePrivateGameFragment.class.getSimpleName();
 
     MultiPlayerConnector _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
     MultiplayerWaitingRoomActivity _MultiplayerWaitingRoomActivity = (MultiplayerWaitingRoomActivity) getActivity();
-
+    String _PlayerName;
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -81,18 +83,20 @@ public class CreatePrivateGameFragment extends Fragment implements IMultiplayerC
             e.printStackTrace();
         }
 
+        _PlayerName=playerName;
         _MultiPlayerConnector.emitEvent(ServerConfig.privateGameRoomRequest, args);
-
 
         return true;
 
     }
 
 
+
     private void goToPrivateGameWaitingRoom() {
         Bundle result = new Bundle();
         result.putString("fragmentClassName", PrivateGameWaitingRoomFragment.class.getCanonicalName());
         result.putBoolean("gameCreator", true);
+        result.putString("playerName", _PlayerName);
         // The child fragment needs to still set the result on its parent fragment manager
         getParentFragmentManager().setFragmentResult("changeFragment", result);
     }
@@ -117,7 +121,8 @@ public class CreatePrivateGameFragment extends Fragment implements IMultiplayerC
     };
 
     //Implementation of AddSocketEvents from IMultiplayerConnectorSocketEventUser
-    static void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
+    @Override
+    public void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
 
         socket.on(ServerConfig.privateGameRoomRequestComplete, args -> {
             Log.d(TAG, "created Room");

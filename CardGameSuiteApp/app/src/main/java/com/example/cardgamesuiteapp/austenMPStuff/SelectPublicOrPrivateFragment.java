@@ -1,19 +1,28 @@
 package com.example.cardgamesuiteapp.austenMPStuff;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.cardgamesuiteapp.R;
+import com.example.cardgamesuiteapp.games.FivesGame;
+
+import java.util.Observer;
 
 import io.socket.client.Socket;
 
-public class SelectPublicOrPrivateFragment extends Fragment implements IMultiplayerConnectorSocketEventUser {
+import static android.content.Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP;
+
+public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivityFragment {
 
 
     private static final String TAG = SelectPublicOrPrivateFragment.class.getSimpleName();
@@ -40,6 +49,11 @@ public class SelectPublicOrPrivateFragment extends Fragment implements IMultipla
 
     }
 
+    @Override
+    void SetMultiPlayerConnectorObserver(Observer multiPlayerConnectorObserver) {
+        multiPlayerConnectorObserver=null; //don't need to observe
+    }
+
 
     private void privateGameSelected() {
         //p2psocket.emit('private-game-room-request', {numPlayersRequiredForGame:2, gameType: 'fives'})
@@ -63,8 +77,30 @@ public class SelectPublicOrPrivateFragment extends Fragment implements IMultipla
     }
 
 
-    public static void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
-        //no events needed by this Fragment
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        OnBackPressedCallback callback = new OnBackPressedCallback(
+                true // default to enabled
+        ) {
+            @Override
+            public void handleOnBackPressed() {
+                disconnect();
+                _MultiplayerWaitingRoomActivity.finish();
+            }
+
+            private void disconnect() {
+
+                _MultiPlayerConnector.Close();
+
+
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(
+                this, // LifecycleOwner
+                callback);
     }
+
 
 }

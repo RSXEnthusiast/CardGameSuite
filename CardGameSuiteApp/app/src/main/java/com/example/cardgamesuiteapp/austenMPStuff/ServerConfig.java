@@ -3,7 +3,7 @@ package com.example.cardgamesuiteapp.austenMPStuff;
 public class ServerConfig {
 
     public static final String ServerURLProduction = "http://192.168.56.1:3030/";//"http://chatserver.azurewebsites.net/";
-    public static final String ServerURLDebug = "http://192.168.56.1:3030/";
+    public static final String ServerURLDebug = "http://10.42.0.145:3030/";
 
     //events from Server:
 
@@ -32,12 +32,15 @@ public class ServerConfig {
     public static final String privateGameRoomRequest = "private-game-room-request";
     public static final String privateGameInitiatorLeftTheGame = "private-game-initiator-left-game";
     public static final String joinPrivateGameRoomRequestComplete = "join-private-game-room-request-complete";
-    public static final String privateGameJoiningPlayerLeftTheGame = "private-game-joiner-player-left-game";
+    public static final String privateGameWaitingRoomPlayerLeft = "private-game-waiting-room-player-left";
     public static final String privateGameRoomRequestComplete = "private-game-room-request-complete";
     public static final String joinPrivateGameRoom = "join-private-game-room";
     public static final String unableToFindRoom = "unable-to-find-room";
     public static final String initiatorSaysToStartGame= "initiator-start-game";
-    public static final String playerJoined = "player-joined";
+    public static final String roomPlayerCountUpdate = "room-player-count-changed";
+    public static final String privateGameReadyToPlay="game-ready-to-play";
+    public static final String gameRoomDeletedByInitiator="game-room-deleted-by-initiator";
+
 
 
 }

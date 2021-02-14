@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.example.cardgamesuiteapp.R;
-import com.example.cardgamesuiteapp.games.FivesGame;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AlertDialog;
@@ -16,8 +15,6 @@ import androidx.fragment.app.FragmentResultListener;
 
 import android.os.Handler;
 import android.util.Log;
-
-import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.util.Observable;
@@ -49,7 +46,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
 
         _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
         try {
-            _MultiPlayerConnector.connectToSignallingServer();
+            _MultiPlayerConnector.connectToServer();
         } catch (URISyntaxException e) {
             Log.d(TAG, "socket.io server url is malformed. check url in Server.Config");
             e.printStackTrace();

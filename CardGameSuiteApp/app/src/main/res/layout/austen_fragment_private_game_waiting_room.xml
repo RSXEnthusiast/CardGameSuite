@@ -86,6 +86,8 @@
             android:layout_height="150dp"
             android:paddingHorizontal="30dp"
             android:paddingVertical="20dp"
+            android:textAlignment="center"
+            android:background="@drawable/roundedrectangleblackstroke"
 
             >
 

@@ -1,11 +1,16 @@
 package com.example.cardgamesuiteapp.austenMPStuff;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import java.net.URISyntaxException;
 import java.util.Observer;
 
 public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment implements IMultiPlayerConnectorObserverSubscriber {
@@ -45,6 +50,14 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
     public void onResume() { //make sure events don't fire unless fragment is in use
 
         super.onResume();
+
+        try {
+            _MultiPlayerConnector.connectToServer(); //always try to connect back to the server. pressing back disconnects so that the socket is reset and leaves rooms.
+            // so now reconnect fresh
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
         if (_MultiPlayerConnectorObserver != null)
             subscribeToMultiPlayerConnector();
 
@@ -63,6 +76,28 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
     public void subscribeToMultiPlayerConnector() {
 
         _MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        OnBackPressedCallback callback = new OnBackPressedCallback(
+                true // default to enabled
+        ) {
+            @Override
+            public void handleOnBackPressed() {
+                disconnect();
+            }
+
+            private void disconnect() {
+
+              _MultiPlayerConnector.Close();
+
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(
+                this, // LifecycleOwner
+                callback);
     }
 }
 

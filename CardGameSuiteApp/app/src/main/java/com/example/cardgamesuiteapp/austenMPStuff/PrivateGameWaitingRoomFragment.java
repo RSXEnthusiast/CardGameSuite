@@ -3,9 +3,9 @@ package com.example.cardgamesuiteapp.austenMPStuff;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,7 +25,7 @@ import java.util.Observer;
 
 import io.socket.client.Socket;
 
-public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivityFragment {
+public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivityFragment implements MultiPlayerConnector.MultiPlayerConnectorEventAdder {
     boolean _GameCreator=false;
     String _CreatorStatusMessage = "Private Game Creator";
     String _JoinStatusMessage = "Private Game Joined";
@@ -33,29 +33,42 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
 
         super(R.layout.austen_fragment_private_game_waiting_room);
         SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
+        _MultiPlayerConnector.addSocketEvents(this);
 
 
     }
 
     ListView _PlayerListView;
+    TextView _GameCodeView;
+    TextView _NumberOfPlayersInRoomView;
+    Button _StartButton;
+    ArrayAdapter<String> _PlayerListViewArrayAdapter;
     ArrayList<String> _PlayerList = new ArrayList<>();
+
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        _GameCodeView = view.findViewById(R.id.gameCodeView);
+        _NumberOfPlayersInRoomView= view.findViewById(R.id.numPlayersInRoomView);
+        _PlayerListView = view.findViewById(R.id.playerList);
+        _StartButton = view.findViewById(R.id.startButton);
          Bundle extras = getArguments();
-        _GameCreator= extras.getBoolean("gameCreator",false);
+        _GameCreator= extras.getBoolean("gameCreator",false);//also get player name if creator
+        String playerName=extras.getString("playerName","noName");
+
+        _StartButton.setVisibility((_GameCreator ? View.VISIBLE:View.GONE));
 
         _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
-            TextView roomCodeView = _MultiplayerWaitingRoomActivity.findViewById(R.id.gameCodeView);
-            roomCodeView.setText(_MultiPlayerConnector.getRoomCode());
-
+            _GameCodeView.setText(_MultiPlayerConnector.getRoomCode());
             TextView statusMessage = _MultiplayerWaitingRoomActivity.findViewById(R.id.statusMessage);
-            statusMessage.setText(_GameCreator ? _CreatorStatusMessage: _JoinStatusMessage );
+            statusMessage.setText(_GameCreator ? _CreatorStatusMessage: _JoinStatusMessage);
         });
 
-       _PlayerListView = view.findViewById(R.id.playerList);
-
-
+        _PlayerListViewArrayAdapter =
+                new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, _PlayerList);
+        // Set The Adapter
+        _PlayerListView.setAdapter(_PlayerListViewArrayAdapter);
+        _PlayerListViewArrayAdapter.add(playerName);
 
     }
 
@@ -82,23 +95,21 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
                 _PlayerList.add(playerName);
             }
 
-
-
         }
-        updatePlayerCountView(_PlayerList.size());
+
+        int numberOfPlayersInRoom = _PlayerList.size();
+        updatePlayerCountView(numberOfPlayersInRoom);
+
+        startButtonIsEnabled(numberOfPlayersInRoom>=2);//change 2 to the specific  min number of players required for type of game
 
         _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
-            ArrayAdapter<String> arrayAdapter =
-                    new ArrayAdapter<String>(_MultiplayerWaitingRoomActivity, android.R.layout.simple_list_item_1, _PlayerList);
-            // Set The Adapter
-            _PlayerListView.setAdapter(arrayAdapter);
+            _PlayerListViewArrayAdapter.notifyDataSetChanged();
         });
     }
 
     private void updatePlayerCountView(int numPlayers) {
         _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
-            TextView numPlayersInRoomView = this.getActivity().getParent().findViewById(R.id.numPlayersInRoomView);
-            numPlayersInRoomView.setText(numPlayers);
+            _NumberOfPlayersInRoomView.setText(String.valueOf(numPlayers));
         });
     }
 
@@ -126,10 +137,10 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // Continue with delete operation
+                                    _MultiPlayerConnector.Close();
                                     goBackToSelectPrivateOrPublic();
                                 }
                             })
-
                             // A null listener allows the button to dismiss the dialog and take no further action.
                             .setNegativeButton(android.R.string.no, null)
                             .setIcon(android.R.drawable.ic_dialog_alert)
@@ -144,10 +155,9 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
     }
 
     private void goBackToSelectPrivateOrPublic() {
-        _MultiPlayerConnector.emitEvent(ServerConfig.privateGameJoiningPlayerLeftTheGame);
+        _MultiPlayerConnector.emitEvent(ServerConfig.privateGameWaitingRoomPlayerLeft);
         _MultiplayerWaitingRoomActivity.changeFragment(SelectPublicOrPrivateFragment.class.getCanonicalName(), null);
     }
-
 
 
     private Observer multiPlayerConnectorObserver = new Observer() {
@@ -156,12 +166,18 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
             SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
             switch (socketIOEventArg._EventName) {
 
-               /* case ServerConfig.newPlayerJoinedRoom:
+               /* case ServerConfig.privateGameReadyToPlay: //not needed
+                    showStartButton();
                     //addNewPlayerToRoomList((String) socketIOEventArg._JsonObject.opt("playerName"));
                     break;*/
-                case ServerConfig.playerJoined:
+                case ServerConfig.roomPlayerCountUpdate:
                     ///OnRoomNotFound();
                     addNewPlayerToRoomList( (JSONArray) socketIOEventArg._JsonObject.opt("playerNames") );
+                    break;
+                case ServerConfig.gameRoomDeletedByInitiator:
+                    ///OnRoomNotFound();
+                    informPlayerGameIsDeleted();
+
                     break;
                 /*case another option:
                     go to
@@ -171,18 +187,48 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
         }
     };
 
+    private void informPlayerGameIsDeleted() {
+
+        _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
+            new AlertDialog.Builder(_MultiplayerWaitingRoomActivity)
+                    .setTitle("Sorry")
+                    .setMessage("The creator of this game room has left and the room has been deleted.")
+                    // Specifying a listener allows you to take an action before dismissing the dialog.
+                    // The dialog is automatically dismissed when a dialog button is clicked.
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Continue with delete operation
+
+                            goBackToSelectPrivateOrPublic();
+                        }
+                    })
+                    // A null listener allows the button to dismiss the dialog and take no further action.
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        });
+    }
+
+    private void startButtonIsEnabled(boolean isEnabled) {
+        if(_GameCreator){
+            _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
+                _StartButton.setEnabled(isEnabled);
+            });
+        }
+    }
+
     @Override
     void SetMultiPlayerConnectorObserver(Observer multiPlayerConnectorObserver) {
         _MultiPlayerConnectorObserver = multiPlayerConnectorObserver;
     }
 
-    static void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
 
-        socket.on(ServerConfig.playerJoined, args -> {
+    @Override
+    public void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
+        socket.on(ServerConfig.roomPlayerCountUpdate, args -> {
             //Log.d(TAG, "");
-            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.playerJoined, args);
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.roomPlayerCountUpdate, args);
             multiPlayerConnector.notifyObservers(socketIOEventArg);
         });
-
     }
 }

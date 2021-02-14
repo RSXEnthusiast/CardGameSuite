@@ -19,12 +19,13 @@ import java.util.Observer;
 
 import io.socket.client.Socket;
 
-public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragment implements IMultiplayerConnectorSocketEventUser {
+public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragment implements MultiPlayerConnector.MultiPlayerConnectorEventAdder {
 
 
     public JoinPrivateGameFragment() {
         super(R.layout.austen_fragment_join_private_game);
         SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
+        _MultiPlayerConnector.addSocketEvents(this);
 
     }
 
@@ -132,8 +133,8 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
 
     };
 
-
-    static void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
+    @Override
+    public void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
 
         socket.on(ServerConfig.unableToFindRoom, args -> {
             Log.d(TAG, "unable to find room");
