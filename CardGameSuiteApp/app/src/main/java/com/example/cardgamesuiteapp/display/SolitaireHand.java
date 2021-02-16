@@ -21,9 +21,15 @@ public class SolitaireHand extends Hand {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        boolean bigFontCard = getCardType();
         int count = getChildCount();
         int cardWidth = getMeasuredWidth();
         int cardHeight = getMeasuredHeight();
+        int layeredCardDistance = 90;
+        int lastShrunk = 0;
+
+        if(bigFontCard)
+            layeredCardDistance = 220;
 
         for(int i = 0; i < count; i++){
             View child = getChildAt(i);
@@ -32,13 +38,33 @@ public class SolitaireHand extends Hand {
             }
 
             left = 0;
-            top = i * 75;
             right = cardWidth;
-            bottom = i * 75 + (cardHeight/5);
+
+            if(bigFontCard && count-i>3) {
+                top = i * 40;
+                bottom = i * 40 + (cardHeight / 5);
+                lastShrunk = i;
+            }
+            else if(bigFontCard && count-i<=3) {
+                top = ((i - lastShrunk) * layeredCardDistance) + lastShrunk*40;
+                bottom = ((i - lastShrunk) * layeredCardDistance) + lastShrunk*40 + (cardHeight / 5);
+            }
+            else {
+                top = i * layeredCardDistance;
+                bottom = i * layeredCardDistance + (cardHeight / 5);
+            }
 
             child.layout(left, top, right, bottom);
         }
-
     }
+
+    public boolean getCardType () {
+        System.out.println(getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE).getString("cardStyle", "cardStyle not found"));
+        if(getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE).getString("cardStyle", "cardStyle not found").contains("big"))
+            return true;
+        else
+            return false;
+    }
+
 }
 

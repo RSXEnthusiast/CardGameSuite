@@ -118,4 +118,5 @@ public class DisplaySettingsActivity extends AppCompatActivity {
     private void setAnimationSpeedOnSlider(int speed) {
         getSharedPreferences("preferences", MODE_PRIVATE).edit().putInt("animationSpeed", speed).apply();
     }
+
 }

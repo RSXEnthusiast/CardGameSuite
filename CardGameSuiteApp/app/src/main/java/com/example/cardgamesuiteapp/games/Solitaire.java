@@ -13,7 +13,6 @@ import com.example.cardgamesuiteapp.decks.Standard;
 import com.example.cardgamesuiteapp.display.Card;
 import com.example.cardgamesuiteapp.display.SolitaireHand;
 import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplayMainPageActivity;
-import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplaySettingsActivity;
 
 import android.widget.Button;
 import android.widget.TextView;
@@ -140,7 +139,6 @@ public class Solitaire extends AppCompatActivity {
             if (viewColumns[i].getHand().size() != 1 || viewColumns[i].getHand().get(0).getCardNum()%13 != 1)
                 check = false;
         }
-        System.out.println("onlyAcesRemaining: " + check);
         return check;
     }
 
