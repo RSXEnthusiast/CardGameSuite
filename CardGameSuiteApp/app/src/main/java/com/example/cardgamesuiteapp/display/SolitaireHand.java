@@ -42,12 +42,12 @@ public class SolitaireHand extends Hand {
 
             if(bigFontCard && count-i>3) {
                 top = i * 40;
-                bottom = i * 40 + (cardHeight / 5);
+                bottom = (int) (i * 40 + (cardHeight / 5.5));
                 lastShrunk = i;
             }
             else if(bigFontCard && count-i<=3) {
                 top = ((i - lastShrunk) * layeredCardDistance) + lastShrunk*40;
-                bottom = ((i - lastShrunk) * layeredCardDistance) + lastShrunk*40 + (cardHeight / 5);
+                bottom = (int) (((i - lastShrunk) * layeredCardDistance) + lastShrunk*40 + (cardHeight / 5.5));
             }
             else {
                 top = i * layeredCardDistance;
