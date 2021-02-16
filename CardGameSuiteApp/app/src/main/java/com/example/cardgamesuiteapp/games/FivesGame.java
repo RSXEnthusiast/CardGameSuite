@@ -213,7 +213,7 @@ public class FivesGame extends AppCompatActivity {
                 if (playersReadyToContinue >= numPlayers - numAI) {
                     stage = fivesStage.memCards;
                     newRound();
-                    if (deck.getMyPlayerNum() != 0) {
+                    if (deck.getMyPlayerNum() == 0) {
                         DeckMultiplayerManager.initialize(deck);
                     }
                     playersReadyToContinue = 0;
@@ -272,7 +272,6 @@ public class FivesGame extends AppCompatActivity {
 
     public static void postAnimation() {
         isAnimating = false;
-        System.out.println("Post Animation");
         if (!preAnimation) {
             cardTouched(lastTouchedCardNum);
         } else {
@@ -391,6 +390,7 @@ public class FivesGame extends AppCompatActivity {
             //logic for flipping over card in hand.
             viewPlayers[deck.getMyPlayerNum()].flipCardByNum(cardNum);
             updateViewInstruction();
+            nextCurAnimatedPlayer();
             if (multiplayer) {
                 DeckMultiplayerManager.flipCardInHand(cardNum);
             }
@@ -506,8 +506,11 @@ public class FivesGame extends AppCompatActivity {
             e.printStackTrace();
         }
         stage = fivesStage.memCards;
-        viewConfirm.setVisibility(View.VISIBLE);
-        updateEntireScreen(false);
+        try {
+            viewConfirm.setVisibility(View.VISIBLE);
+        } catch (Exception e) {
+        }
+        updateEntireScreen();
         if (multiplayer && deck.getMyPlayerNum() == 0) {
             DeckMultiplayerManager.initialize(deck);
         }
@@ -516,21 +519,17 @@ public class FivesGame extends AppCompatActivity {
     /**
      * This method updates every single dynamic item on the screen.
      */
-    private static void updateEntireScreen(boolean fromPeer) {
+    private static void updateEntireScreen() {
         viewDiscard.updateImage(deck.peekTopDiscard());
         viewDeck.setFaceUp(false);
         viewDeck.updateImage(deck.peekTopDraw());
         for (int i = 0; i < viewPlayers.length; i++) {
 //            viewPlayers[i].initHand(deck.getHand((i + deck.getMyPlayerNum()) % numPlayers));
             viewPlayers[i].initHand(deck.getHand(i));
-            if (!fromPeer) {
-                viewPlayers[i].flipAllCards();
-            }
+            viewPlayers[i].allCardsFaceDown();
         }
-        if (!fromPeer) {
-            viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(2);
-            viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(3);
-        }
+        viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(2);
+        viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(3);
         updateViewInstruction();
         updateViewScores();
     }
@@ -826,6 +825,7 @@ public class FivesGame extends AppCompatActivity {
     }
 
     private void AIFlippedCardByCardNum(int cardNum) {
+        System.out.println(curAnimatedPlayer);
         viewPlayers[curAnimatedPlayer].flipCardByNum(cardNum);
         AIStage = fivesStage.draw;
         nextCurAnimatedPlayer();
@@ -1076,7 +1076,7 @@ public class FivesGame extends AppCompatActivity {
                 break;
             case flipCardInHand:
                 System.out.println("Flip Card");
-                flipCardRecieved(incomingData);
+                flipCardReceived(incomingData);
                 break;
             case flipDeck:
                 System.out.println("FlipDeck");
@@ -1088,22 +1088,35 @@ public class FivesGame extends AppCompatActivity {
                 if (playersReadyToContinue >= numPlayers - numAI) {
                     stage = fivesStage.memCards;
                     viewConfirm.setText("Memorized");
-                    viewConfirm.setVisibility(View.VISIBLE);
+                    setVisibility(viewConfirm, View.VISIBLE);
+                    newRound();
+                    if (deck.getMyPlayerNum() == 0) {
+                        DeckMultiplayerManager.initialize(deck);
+                    }
                     playersReadyToContinue = 0;
                 }
-                updateViewInstruction();
                 break;
         }
     }
 
-    private void flipCardRecieved(JSONObject data) {
+    private void setVisibility(final Button view, final int visibility) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                view.setVisibility(visibility);
+            }
+        });
+    }
+
+    private void flipCardReceived(JSONObject data) {
         AIFlippedCardByCardNum((int) data.opt("cardNum"));
     }
 
 
     private void initializeReceived(JSONObject deck) {
+        newRound();
         this.deck.initializeFromPeer(deck);
-        updateEntireScreen(true);
+        updateEntireScreen();
     }
 
     private void recoverReceived(JSONObject deck) {

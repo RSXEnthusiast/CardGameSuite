@@ -2,8 +2,10 @@ package com.example.cardgamesuiteapp.austenMPStuff;
 
 public class ServerConfig {
 
-    public static final String ServerURLProduction = "http://192.168.56.1:3030/";//"http://chatserver.azurewebsites.net/";
-    public static final String ServerURLDebug = "http://10.42.0.145:3030/";
+    public static final String ServerURLProduction = "http://192.168.56.1:3030/";//"http://chatserver.azurewebsites.net/"; //Joel's IP
+//    public static final String ServerURLProduction = "http://192.168.1.160:3030/";//"http://chatserver.azurewebsites.net/"; //Austen's IP
+    public static final String ServerURLDebug = "http://192.168.56.1:3030/"; // Joel's IP
+//    public static final String ServerURLDebug = "http://10.42.0.145:3030/"; // Austen's IP
 
     //events from Server:
 
@@ -14,10 +16,9 @@ public class ServerConfig {
     public static final String eventConnectError = "EVENT_CONNECT_ERROR";
 
     public static final String startGame = "start-game";
-    public static final String gameData= "game-data";
-    public static final String playerNumbers= "player_numbers"; //the server sends all players number and associated name
-    public static final String playerNumber= "player_number"; //the players number and the players name
-
+    public static final String gameData = "game-data";
+    public static final String playerNumbers = "player_numbers"; //the server sends all players number and associated name
+    public static final String playerNumber = "player_number"; //the players number and the players name
 
 
     //------------------------- public game
@@ -36,11 +37,10 @@ public class ServerConfig {
     public static final String privateGameRoomRequestComplete = "private-game-room-request-complete";
     public static final String joinPrivateGameRoom = "join-private-game-room";
     public static final String unableToFindRoom = "unable-to-find-room";
-    public static final String initiatorSaysToStartGame= "initiator-start-game";
+    public static final String initiatorSaysToStartGame = "initiator-start-game";
     public static final String roomPlayerCountUpdate = "room-player-count-changed";
-    public static final String privateGameReadyToPlay="game-ready-to-play";
-    public static final String gameRoomDeletedByInitiator="game-room-deleted-by-initiator";
-
+    public static final String privateGameReadyToPlay = "game-ready-to-play";
+    public static final String gameRoomDeletedByInitiator = "game-room-deleted-by-initiator";
 
 
 }

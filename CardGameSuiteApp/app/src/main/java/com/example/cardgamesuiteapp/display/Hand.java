@@ -232,4 +232,10 @@ public class Hand extends ViewGroup {
             cards.get(location).setVisibility(VISIBLE);
         }
     }
+
+    public void allCardsFaceDown() {
+        for (Card card : cards) {
+            card.setFaceUp(false);
+        }
+    }
 }
