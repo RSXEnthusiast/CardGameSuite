@@ -190,9 +190,11 @@ public class FivesGame extends AppCompatActivity {
 
     private void initViewPlayers(int playerNum) {
         for (int i = 0; i < numPlayers; i++) {
-            viewPlayers[i] = findViewById(getResources().getIdentifier("player" + (((playerNum + i) % numPlayers) + 1), "id", getPackageName()));
-            viewPlayerNames[i] = findViewById(getResources().getIdentifier("player" + (((playerNum + i) % numPlayers) + 1) + "name", "id", getPackageName()));
-            viewPlayerScores[i] = findViewById(getResources().getIdentifier("player" + (((playerNum + i) % numPlayers) + 1) + "score", "id", getPackageName()));
+            int temp = (playerNum + 1) % numPlayers;
+            System.out.println("playerNum: " + playerNum + " i: " + i + " result: " + temp);
+            viewPlayers[i] = findViewById(getResources().getIdentifier("player" + temp, "id", getPackageName()));
+            viewPlayerNames[i] = findViewById(getResources().getIdentifier("player" + temp + "name", "id", getPackageName()));
+            viewPlayerScores[i] = findViewById(getResources().getIdentifier("player" + temp + "score", "id", getPackageName()));
         }
     }
 

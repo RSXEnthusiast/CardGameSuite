@@ -24,8 +24,8 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
 
     MultiPlayerConnector _MultiPlayerConnector;
     public Handler _UIHandler;
-    public static String _GameType = "fives";
-    public static int _MinNumPlayersRequiredForGame = 2;
+    public static String _GameType;
+    public static int _MinNumPlayersRequiredForGame = 3;
 
     String _CurrentFragmentClassName;
 
@@ -41,8 +41,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
 
         // get notified on updates from the MultiplayerConnector
         Intent intent = getIntent();
-        _GameType = intent.getStringExtra(MultiplayerOrSinglePlayerMenu.GAME_TYPE);
-
+        _GameType = (String) intent.getSerializableExtra("gameName");
 
         _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
         try {
@@ -74,9 +73,9 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
     public void GoToGameActivity() {
         //switch on game type. Then load the correct game...
         Intent oldIntent = getIntent();
-        Intent newIntent = new Intent(this, (Class) oldIntent.getSerializableExtra("class"));
+        Intent newIntent = new Intent(this, (Class) oldIntent.getSerializableExtra("gameClass"));
         newIntent.putExtra("multiplayer", true);
-        newIntent.putExtra("numOnlineOpponents", 1);
+        newIntent.putExtra("numOnlineOpponents", 2);
         newIntent.putExtra("numAI", 0);
         startActivity(newIntent);
     }

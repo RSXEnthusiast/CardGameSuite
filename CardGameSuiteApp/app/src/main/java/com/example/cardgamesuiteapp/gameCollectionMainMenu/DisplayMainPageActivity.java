@@ -12,6 +12,7 @@ import com.example.cardgamesuiteapp.austenMPStuff.MultiplayerOrSinglePlayerMenu;
 import com.example.cardgamesuiteapp.games.FivesGame;
 import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.games.Solitaire;
+import com.example.cardgamesuiteapp.singlePlayerMenus.FivesSinglePlayerMenu;
 
 import java.io.Serializable;
 
@@ -58,8 +59,9 @@ public class DisplayMainPageActivity extends AppCompatActivity implements Serial
 
     public void clickPlayFivesButton(View view) {
         Intent intent = new Intent(this, MultiplayerOrSinglePlayerMenu.class);
-        intent.putExtra("class", FivesGame.class);
+        intent.putExtra("gameClass", FivesGame.class);
         intent.putExtra("gameName", "Fives");
+        intent.putExtra("singlePlayerClass", FivesSinglePlayerMenu.class);
         startActivity(intent);
     }
 

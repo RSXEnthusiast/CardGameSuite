@@ -19,14 +19,11 @@ import org.w3c.dom.Text;
 
 public class MultiplayerOrSinglePlayerMenu extends AppCompatActivity {
 
-    public static final String GAME_TYPE = "gameType";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.austen_fragment_first);
-        TextView title = findViewById(R.id.gameTitle);
-        title.setText((String) getIntent().getSerializableExtra("GameName"));
+        ((TextView) findViewById(R.id.gameTitle)).setText((String) getIntent().getSerializableExtra("gameName"));
         Button viewOfflineSinglePlayer = findViewById(R.id.offlineSinglePlayer);
         Button viewOnlineMultiplayer = findViewById(R.id.onlineMultiplayer);
         viewOfflineSinglePlayer.setOnClickListener(v -> startOfflineSinglePlayer());
@@ -34,15 +31,15 @@ public class MultiplayerOrSinglePlayerMenu extends AppCompatActivity {
     }
 
     private void startOfflineSinglePlayer() {
-        Intent intent = new Intent(this, FivesSinglePlayerMenu.class);
+        Intent intent = new Intent(this, (Class) getIntent().getSerializableExtra("singlePlayerClass"));
         startActivity(intent);
     }
 
     private void startOnlineMultiplayer() {
-        Intent newIntent = new Intent(this, MultiplayerWaitingRoomActivity.class);
         Intent oldIntent = getIntent();
-        newIntent.putExtra(GAME_TYPE, oldIntent.getSerializableExtra("gameName"));
-        newIntent.putExtra("class", oldIntent.getSerializableExtra("class"));
+        Intent newIntent = new Intent(this, MultiplayerWaitingRoomActivity.class);
+        newIntent.putExtra("gameName", oldIntent.getSerializableExtra("gameName"));
+        newIntent.putExtra("gameClass", oldIntent.getSerializableExtra("gameClass"));
         startActivity(newIntent);
     }
 }
