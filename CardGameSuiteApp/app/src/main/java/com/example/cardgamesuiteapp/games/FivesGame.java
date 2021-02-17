@@ -225,9 +225,21 @@ public class FivesGame extends AppCompatActivity {
                 DeckMultiplayerManager.readyToContinue();
                 break;
             case "New Game":
-                stage = fivesStage.memCards;
-                viewConfirm.setText("Memorized");
-                newGame();
+                playersReadyToContinue++;
+                if (playersReadyToContinue >= numPlayers - numAI) {
+                    stage = fivesStage.memCards;
+                    newGame();
+                    if (deck.getMyPlayerNum() == 0) {
+                        DeckMultiplayerManager.initialize(deck);
+                    }
+                    playersReadyToContinue = 0;
+                    viewConfirm.setText("Memorized");
+                } else {
+                    viewConfirm.setVisibility(View.INVISIBLE);
+                }
+                updateViewInstruction();
+                DeckMultiplayerManager.readyToContinue();
+                break;
         }
     }
 
@@ -1087,9 +1099,17 @@ public class FivesGame extends AppCompatActivity {
                 playersReadyToContinue++;
                 if (playersReadyToContinue >= numPlayers - numAI) {
                     stage = fivesStage.memCards;
+                    boolean newGame = false;
+                    if (viewConfirm.getText().equals("New Game")) {
+                        newGame = true;
+                    }
                     viewConfirm.setText("Memorized");
                     setVisibility(viewConfirm, View.VISIBLE);
-                    newRound();
+                    if (newGame) {
+                        newGame();
+                    } else {
+                        newRound();
+                    }
                     if (deck.getMyPlayerNum() == 0) {
                         DeckMultiplayerManager.initialize(deck);
                     }
