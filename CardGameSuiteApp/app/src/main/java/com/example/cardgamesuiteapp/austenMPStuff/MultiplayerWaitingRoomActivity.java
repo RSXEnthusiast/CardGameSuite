@@ -25,7 +25,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
     MultiPlayerConnector _MultiPlayerConnector;
     public Handler _UIHandler;
     public static String _GameType;
-    public static int _MinNumPlayersRequiredForGame = 3;
+    public static int _MinNumPlayersRequiredForGame = 6;
 
     String _CurrentFragmentClassName;
 
@@ -75,7 +75,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
         Intent oldIntent = getIntent();
         Intent newIntent = new Intent(this, (Class) oldIntent.getSerializableExtra("gameClass"));
         newIntent.putExtra("multiplayer", true);
-        newIntent.putExtra("numOnlineOpponents", 2);
+        newIntent.putExtra("numOnlineOpponents", _MinNumPlayersRequiredForGame - 1);
         newIntent.putExtra("numAI", 0);
         startActivity(newIntent);
     }
