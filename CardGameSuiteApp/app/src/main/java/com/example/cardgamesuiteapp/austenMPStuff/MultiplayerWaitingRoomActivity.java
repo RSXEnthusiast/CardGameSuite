@@ -188,9 +188,6 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
             SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
             SharedPreferences sp = getSharedPreferences("fivesGameInfo", MODE_PRIVATE);
             switch (socketIOEventArg._EventName) {
-                case ServerConfig.unableToFindRoom:
-                    ///OnRoomNotFound();
-                    break;
                 case ServerConfig.eventConnectError:
                     Snackbar.make(findViewById(R.id.multiPlayerWaitingRoomCoordinatorLayout), "Unable To Connect To Server WaitingRoomActivity", Snackbar.LENGTH_LONG)
                             .show();

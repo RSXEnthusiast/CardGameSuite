@@ -137,8 +137,9 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // Continue with delete operation
-                                    _MultiPlayerConnector.Close();
                                     goBackToSelectPrivateOrPublic();
+                                    _MultiPlayerConnector.Close();
+
                                 }
                             })
                             // A null listener allows the button to dismiss the dialog and take no further action.

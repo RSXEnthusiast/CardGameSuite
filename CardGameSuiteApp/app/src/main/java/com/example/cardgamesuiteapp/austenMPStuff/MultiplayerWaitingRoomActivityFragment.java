@@ -31,7 +31,7 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
     }
 
     /**
-     * If the fragment has an observer property, assign it to _MultiPlayerConnectorObserver in the constructor of your fragment
+     * If your fragment has an observer property, assign it to _MultiPlayerConnectorObserver in the constructor of your fragment
      *
      * @param multiPlayerConnectorObserver
      */
@@ -87,6 +87,7 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
             @Override
             public void handleOnBackPressed() {
                 disconnect();
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
             }
 
             private void disconnect() {

@@ -1,5 +1,6 @@
 package com.example.cardgamesuiteapp.austenMPStuff;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,8 @@ import java.util.Observer;
 
 import io.socket.client.Socket;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragment implements MultiPlayerConnector.MultiPlayerConnectorEventAdder {
 
 
@@ -32,11 +35,19 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
 
     private static final String TAG = JoinPrivateGameFragment.class.getSimpleName();
 
+    private String _PlayerName="";
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        SharedPreferences sp = _MultiplayerWaitingRoomActivity.getSharedPreferences("playerInfo", MODE_PRIVATE);
+        if (sp.contains("playerName")){
+            _PlayerName= sp.getString("playerName", "");
+        }
+
+
 
         TextView playerNameTextInput = view.findViewById(R.id.playerNameInput);
+        playerNameTextInput.setText(_PlayerName);
         TextView gameCodeTextInput = view.findViewById(R.id.gameCodeInput);
 
         Button joinButton = view.findViewById(R.id.joinButton);
@@ -78,6 +89,10 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        SharedPreferences sp = _MultiplayerWaitingRoomActivity.getSharedPreferences("playerInfo", MODE_PRIVATE);
+        sp.edit().putString("playerName", playerName).apply();
+
         _MultiPlayerConnector.emitEvent(ServerConfig.joinPrivateGameRoom, args);
 
         return true;
@@ -121,7 +136,7 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
             SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
             switch (socketIOEventArg._EventName) {
 
-                case ServerConfig.joinPrivateGameRoomRequestComplete:
+                case ServerConfig.privateGameRoomRequestComplete:
                     onPrivateRoomJoin();
                     break;
                 case ServerConfig.unableToFindRoom:

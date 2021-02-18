@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Observable;
 
 import io.socket.client.IO;
@@ -28,14 +29,10 @@ public class MultiPlayerConnector extends Observable {
     private Socket _Socket;
 
     public boolean Connected() {
-        return (_Socket != null) ? false : _Socket.connected();
+
+        return (_Socket != null) ?  _Socket.connected(): false;
     }
 
-    //static JSONObject _EmitObject;
-    //public static final String emitWithObjectString="emitWithObject";
-
-
-    public int _NumberActivePublicPlayers;
     private String _RoomCode;
 
     public String getRoomCode() {
@@ -47,7 +44,7 @@ public class MultiPlayerConnector extends Observable {
         this._RoomCode = roomCode;
     }
 
-    public String msg;
+
 
 
     private JSONArray _TurnStunServers;
@@ -82,12 +79,17 @@ public class MultiPlayerConnector extends Observable {
     }
 
     public interface MultiPlayerConnectorEventAdder {
-
         public void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector);
     }
 
+    ArrayList<String> _SocketEventAdders = new ArrayList<>();
     public void addSocketEvents(MultiPlayerConnectorEventAdder multiPlayerConnectorEventAdder){
-        multiPlayerConnectorEventAdder.AddSocketEvents(_Socket, this);
+        String socketEventAdderName=multiPlayerConnectorEventAdder.getClass().getCanonicalName();
+        if(_SocketEventAdders.contains(socketEventAdderName)){return;} //don't add events twice!
+        else {
+            _SocketEventAdders.add(socketEventAdderName);
+            multiPlayerConnectorEventAdder.AddSocketEvents(_Socket, this);
+        }
     }
 
     private void configureSocketEvents() {
@@ -204,8 +206,6 @@ public class MultiPlayerConnector extends Observable {
     }
 
 
-
-
     /*public void emitEvent(String emitEvent, boolean emitWithObject) {
         if (emitWithObject){
             _Socket.emit(emitEvent,_EmitObject);
@@ -230,6 +230,7 @@ public class MultiPlayerConnector extends Observable {
     public void Close() {
 
         _Socket.disconnect();
+        _RoomCode="";
 
     }
 

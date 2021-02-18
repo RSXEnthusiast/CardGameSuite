@@ -1,5 +1,8 @@
 package com.example.cardgamesuiteapp.austenMPStuff;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,22 +22,38 @@ import java.util.Observer;
 
 import io.socket.client.Socket;
 
-public class CreatePrivateGameFragment extends Fragment implements MultiPlayerConnector.MultiPlayerConnectorEventAdder {
+
+
+
+public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFragment implements MultiPlayerConnector.MultiPlayerConnectorEventAdder {
     public CreatePrivateGameFragment() {
         super(R.layout.austen_fragment_create_private_game);
-        _MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
+
+        SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
         _MultiPlayerConnector.addSocketEvents(this);
+
+        Observer multiPlayerConnectorObservers = new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+
+            }
+        };
 
     }
 
     private static final String TAG = CreatePrivateGameFragment.class.getSimpleName();
 
-    MultiPlayerConnector _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
-    MultiplayerWaitingRoomActivity _MultiplayerWaitingRoomActivity = (MultiplayerWaitingRoomActivity) getActivity();
-    String _PlayerName;
+
+    String _PlayerName="";
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        SharedPreferences sp = getActivity().getApplicationContext().getSharedPreferences("playerInfo", Context.MODE_PRIVATE);
+        if (sp.contains("playerName")){
+            _PlayerName= sp.getString("playerName", "");
+        }
+        TextView playerNameInput = view.findViewById(R.id.playerNameInput);
+        playerNameInput.setText(_PlayerName);
 
         Button createButton = view.findViewById(R.id.createButton);
 
@@ -60,6 +79,12 @@ public class CreatePrivateGameFragment extends Fragment implements MultiPlayerCo
 
     }
 
+    @Override
+    void SetMultiPlayerConnectorObserver(Observer thisMultiPlayerConnectorObserver) {
+        _MultiPlayerConnectorObserver=thisMultiPlayerConnectorObserver;
+    }
+
+
     /**
      * if Player name is valid, emits a privateGameRoomRequest, else returns false
      *
@@ -84,6 +109,8 @@ public class CreatePrivateGameFragment extends Fragment implements MultiPlayerCo
         }
 
         _PlayerName=playerName;
+        SharedPreferences sp = getActivity().getApplicationContext().getSharedPreferences("playerInfo", Context.MODE_PRIVATE);
+        sp.edit().putString("playerName", _PlayerName).apply();
         _MultiPlayerConnector.emitEvent(ServerConfig.privateGameRoomRequest, args);
 
         return true;
@@ -102,7 +129,7 @@ public class CreatePrivateGameFragment extends Fragment implements MultiPlayerCo
     }
 
 
-    private Observer _MultiPlayerConnectorObserver = new Observer() {
+    private Observer multiPlayerConnectorObserver = new Observer() {
         @Override
         public void update(Observable o, Object arg) {
             SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
