@@ -242,7 +242,7 @@ public abstract class Deck {
     /**
      * Takes a card from the discard and puts it in a player's hand
      *
-     * @param playerNum The player of which to put the card in
+     * @param playerNum The player of which to put the card in 
      * @throws Exception if the discard is empty
      */
     public void drawFromDiscard(int playerNum) throws Exception {

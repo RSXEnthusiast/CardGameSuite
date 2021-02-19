@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EmptyStackException;
 
 public class DeckUnitTests {
 
@@ -41,23 +42,23 @@ public class DeckUnitTests {
     }
 
     @Test
-    public void cardValueTest(){
+    public void cardValue(){
         assertEquals(1, standardDeck.getNumericalValue(1));
     }
 
     @Test
-    public void curPlayersTurnTest(){
+    public void curPlayersTurn(){
         assertEquals(0, standardDeck.getCurPlayersTurn());
     }
 
     @Test
-    public void advancePlayerTurnsTest(){
+    public void advancePlayerTurns(){
         standardDeck.nextPlayer();
         assertEquals(1, standardDeck.getCurPlayersTurn());
     }
 
     @Test
-    public void deckCreationTest(){
+    public void deckCreation(){
         Standard testDeck = new Standard(false, 2);
         testDeck.nextPlayer();
         assertEquals(testDeck.getCurPlayersTurn(), 1);
@@ -89,7 +90,7 @@ public class DeckUnitTests {
     }
 
     @Test
-    public void curPlayerTurnTest(){
+    public void curPlayerTurn(){
         assertEquals(0, standardDeck.getCurPlayersTurn());
     }
 
@@ -179,6 +180,71 @@ public class DeckUnitTests {
         assertTrue(test >=0);
     }
 
+    @Test
+    public void getHand() throws Exception {
+        standardDeck.deal(2);
+        ArrayList<Integer> player1Hand = standardDeck.getHand(0);
+        int player1Card = player1Hand.get(0);
+        int firstCard = standardDeck.discardByIndex(0,0);
 
+        assertTrue(player1Card == firstCard);
 
+    }
+
+    @Test
+    public void shuffleDiscardIntoDeck() throws Exception {
+        standardDeck.deal(3);
+        standardDeck.discardByIndex(0,0);
+        int topOfDeck = standardDeck.peekTopDraw();
+        int topOfDiscard = standardDeck.peekTopDiscard();
+        standardDeck.shuffleDiscardIntoDeck();
+
+        assertFalse(topOfDeck == standardDeck.peekTopDraw());
+        assertTrue(standardDeck.discardIsEmpty());
+    }
+
+    @Test
+    public void shuffleJustDeckTest() throws Exception {
+        standardDeck.deal(4);
+        int topOfDeck = standardDeck.peekTopDraw();
+        int discardedCard = standardDeck.discardByIndex(0,0);
+        standardDeck.shuffleJustDeck();
+        assertEquals(discardedCard, standardDeck.peekTopDiscard());
+        assertNotEquals(topOfDeck, standardDeck.peekTopDraw());
+    }
+
+    @Test
+    public void shuffleLeavingTopDiscardTest() throws Exception {
+        standardDeck.deal(4);
+        standardDeck.discardByIndex(0,0);
+        standardDeck.discardByIndex(1,0);
+        standardDeck.discardByIndex(2,0);
+
+        int topOfDiscard = standardDeck.peekTopDiscard();
+
+        standardDeck.shuffleLeavingTopDiscard();
+        int newTopOfDiscard = standardDeck.peekTopDiscard();
+        boolean flag = true;
+        int discardSize = 0;
+        while(!standardDeck.discardIsEmpty()){
+            standardDeck.drawFromDiscard(0);
+            discardSize++;
+        }
+        assertEquals(topOfDiscard, newTopOfDiscard);
+        assertEquals(1, discardSize);
+
+    }
+
+    @Test
+    public void deckIsEmptyTest() throws Exception {
+        boolean initialDeckIsEmpty = standardDeck.deckIsEmpty();
+
+        while(!standardDeck.deckIsEmpty()){
+            standardDeck.draw(0);
+        }
+        boolean postDeckIsEmpty = standardDeck.deckIsEmpty();
+
+        assertFalse(initialDeckIsEmpty);
+        assertTrue(postDeckIsEmpty);
+    }
 }
