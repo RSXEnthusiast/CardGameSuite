@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment;
 import java.net.URISyntaxException;
 import java.util.Observer;
 
-public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment implements IMultiPlayerConnectorObserverSubscriber {
+import io.socket.client.Socket;
+
+public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment implements IMultiPlayerConnectorObserverSubscriber,  MultiPlayerConnector.MultiPlayerConnectorEventAdder{
 
     MultiPlayerConnector _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
     Observer _MultiPlayerConnectorObserver;
@@ -42,8 +44,6 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
         super.onPause();
         if (_MultiPlayerConnectorObserver != null)
             unsubscribeFromMultiPlayerConnector();
-
-
     }
 
     @Override
@@ -58,8 +58,11 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
             e.printStackTrace();
         }
 
+        _MultiPlayerConnector.addSocketEvents(this); //add back this fragments events
+
         if (_MultiPlayerConnectorObserver != null)
             subscribeToMultiPlayerConnector();
+
 
     }
 
@@ -68,6 +71,7 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
      */
     public void unsubscribeFromMultiPlayerConnector() {
         _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
+        _MultiPlayerConnector.ResetSocketEvents();
     }
 
     /**
@@ -79,6 +83,9 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
     }
 
     @Override
+    public abstract void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector);
+
+    @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         OnBackPressedCallback callback = new OnBackPressedCallback(
@@ -86,15 +93,10 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
         ) {
             @Override
             public void handleOnBackPressed() {
-                disconnect();
+                _MultiPlayerConnector.Reset();
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
             }
 
-            private void disconnect() {
-
-              _MultiPlayerConnector.Close();
-
-            }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(
                 this, // LifecycleOwner

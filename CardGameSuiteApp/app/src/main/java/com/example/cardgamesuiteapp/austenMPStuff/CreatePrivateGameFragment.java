@@ -25,12 +25,12 @@ import io.socket.client.Socket;
 
 
 
-public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFragment implements MultiPlayerConnector.MultiPlayerConnectorEventAdder {
+public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFragment  {
     public CreatePrivateGameFragment() {
         super(R.layout.austen_fragment_create_private_game);
 
         SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
-        _MultiPlayerConnector.addSocketEvents(this);
+
 
         Observer multiPlayerConnectorObservers = new Observer() {
             @Override
@@ -147,7 +147,7 @@ public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFra
         }
     };
 
-    //Implementation of AddSocketEvents from IMultiplayerConnectorSocketEventUser
+
     @Override
     public void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
 

@@ -22,13 +22,12 @@ import io.socket.client.Socket;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragment implements MultiPlayerConnector.MultiPlayerConnectorEventAdder {
+public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragment {
 
 
     public JoinPrivateGameFragment() {
         super(R.layout.austen_fragment_join_private_game);
         SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
-        _MultiPlayerConnector.addSocketEvents(this);
 
     }
 
@@ -39,12 +38,10 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences sp = _MultiplayerWaitingRoomActivity.getSharedPreferences("playerInfo", MODE_PRIVATE);
+        SharedPreferences sp = getActivity().getApplicationContext().getSharedPreferences("playerInfo", MODE_PRIVATE);
         if (sp.contains("playerName")){
             _PlayerName= sp.getString("playerName", "");
         }
-
-
 
         TextView playerNameTextInput = view.findViewById(R.id.playerNameInput);
         playerNameTextInput.setText(_PlayerName);
@@ -90,7 +87,7 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
             e.printStackTrace();
         }
 
-        SharedPreferences sp = _MultiplayerWaitingRoomActivity.getSharedPreferences("playerInfo", MODE_PRIVATE);
+        SharedPreferences sp = getActivity().getApplicationContext().getSharedPreferences("playerInfo", MODE_PRIVATE);
         sp.edit().putString("playerName", playerName).apply();
 
         _MultiPlayerConnector.emitEvent(ServerConfig.joinPrivateGameRoom, args);
@@ -129,6 +126,8 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
     }
 
 
+
+
     private Observer multiPlayerConnectorObserver = new Observer() {
         @Override
         public void update(Observable o, Object arg) {
@@ -142,6 +141,7 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
                 case ServerConfig.unableToFindRoom:
                     OnRoomNotFound();
                     break;
+
 
             }
         }
@@ -157,6 +157,12 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
             multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.unableToFindRoom, null));
 
         });
+        socket.on(ServerConfig.privateGameRoomRequestComplete, args -> {
+            Log.d(TAG, "found room");
+            multiPlayerConnector.setRoomCode(((JSONObject) args[0]).opt("gameRoomName").toString());
+            multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.privateGameRoomRequestComplete, null));
+        });
+
 
     }
 

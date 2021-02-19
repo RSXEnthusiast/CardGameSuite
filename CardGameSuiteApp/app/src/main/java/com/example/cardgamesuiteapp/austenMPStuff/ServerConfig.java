@@ -19,6 +19,7 @@ public class ServerConfig {
     public static final String gameData = "game-data";
     public static final String playerNumbers = "player_numbers"; //the server sends all players number and associated name
     public static final String playerNumber = "player_number"; //the players number and the players name
+    public static final String playerListRequest= "player-list-request";
 
 
     //------------------------- public game
@@ -41,6 +42,7 @@ public class ServerConfig {
     public static final String roomPlayerCountUpdate = "room-player-count-changed";
     public static final String privateGameReadyToPlay = "game-ready-to-play";
     public static final String gameRoomDeletedByInitiator = "game-room-deleted-by-initiator";
+
 
 
 }

@@ -23,13 +23,13 @@ import java.util.Observer;
 import io.socket.client.Socket;
 
 
-public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragment implements MultiPlayerConnector.MultiPlayerConnectorEventAdder {
+public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragment  {
     private static final String TAG = PublicGameWaitingRoom.class.getSimpleName();
 
     public PublicGameWaitingRoom() {
         super(R.layout.austen_fragment_public_game_waiting_room);
         SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
-        _MultiPlayerConnector.addSocketEvents(this);
+
 
     }
 

@@ -16,6 +16,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.net.URISyntaxException;
 import java.util.Observer;
 
+import io.socket.client.Socket;
+
 public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivityFragment {
 
 
@@ -54,6 +56,11 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
         }
 
         System.out.println("resuming SelectPublicOrPrivate");
+    }
+
+    @Override
+    public void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
+        //no events to add
     }
 
     @Override

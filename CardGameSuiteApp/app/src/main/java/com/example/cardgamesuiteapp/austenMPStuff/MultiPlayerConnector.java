@@ -78,25 +78,33 @@ public class MultiPlayerConnector extends Observable {
 
     }
 
+
+
     public interface MultiPlayerConnectorEventAdder {
         public void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector);
     }
 
-    ArrayList<String> _SocketEventAdders = new ArrayList<>();
+   // ArrayList<String> _SocketEventAdders = new ArrayList<>();
     public void addSocketEvents(MultiPlayerConnectorEventAdder multiPlayerConnectorEventAdder){
-        String socketEventAdderName=multiPlayerConnectorEventAdder.getClass().getCanonicalName();
-        if(_SocketEventAdders.contains(socketEventAdderName)){return;} //don't add events twice!
-        else {
-            _SocketEventAdders.add(socketEventAdderName);
+        //String socketEventAdderName=multiPlayerConnectorEventAdder.getClass().getCanonicalName();
+       // if(_SocketEventAdders.contains(socketEventAdderName)){return;} //don't add events twice!
+        //else {
+            //_SocketEventAdders.add(socketEventAdderName);
             multiPlayerConnectorEventAdder.AddSocketEvents(_Socket, this);
-        }
+        //}
     }
+
 
     private void configureSocketEvents() {
 
         IO.Options opts = new IO.Options();
         opts.transports = new String[]{WebSocket.NAME};
 
+       addEssentialEvents();
+
+    }
+
+    private void addEssentialEvents() {
         _Socket.on(EVENT_CONNECT, args -> {
             //JSONObject obj = (JSONObject)args[0];
             Log.d(TAG, "Connected to server");
@@ -194,7 +202,6 @@ public class MultiPlayerConnector extends Observable {
             SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.playerNumbers, args);
             notifyObservers(socketIOEventArg);
         });
-
     }
 
 
@@ -224,6 +231,11 @@ public class MultiPlayerConnector extends Observable {
 
     }
 
+    public void ResetSocketEvents() {
+        _Socket.off();
+        addEssentialEvents();
+    }
+
     /**
      * Closes the socket.io socket.
      */
@@ -231,6 +243,20 @@ public class MultiPlayerConnector extends Observable {
 
         _Socket.disconnect();
         _RoomCode="";
+
+    }
+
+    public void Reset() {
+
+       Close();
+       _Socket.off();
+       addEssentialEvents();
+
+        try {
+            connectToServer();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
 
     }
 
