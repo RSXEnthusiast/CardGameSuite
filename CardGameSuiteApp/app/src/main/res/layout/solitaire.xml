@@ -30,6 +30,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.993" />
 
+    <com.example.cardgamesuiteapp.display.Card
+        android:id="@+id/animatedCard1"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.example.cardgamesuiteapp.display.SolitaireHand
         android:id="@+id/column0"
         android:layout_width="75dp"
@@ -75,7 +82,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <View
-        android:id="@+id/highlightDiscard"
+        android:id="@+id/highlightDeck"
         android:layout_width="80dp"
         android:layout_height="112dp"
         android:background="@drawable/rounded"
@@ -83,6 +90,48 @@
         app:layout_constraintEnd_toEndOf="@id/deck"
         app:layout_constraintStart_toStartOf="@id/deck"
         app:layout_constraintTop_toTopOf="@id/deck" />
+
+    <View
+        android:id="@+id/highlightDiscard"
+        android:layout_width="80dp"
+        android:layout_height="112dp"
+        android:background="@drawable/rounded"
+        app:layout_constraintBottom_toBottomOf="@id/discard"
+        app:layout_constraintEnd_toEndOf="@id/discard"
+        app:layout_constraintStart_toStartOf="@id/discard"
+        app:layout_constraintTop_toTopOf="@id/discard" />
+
+    <View
+        android:id="@+id/highlightColumn0"
+        android:layout_width="80dp"
+        android:layout_height="112dp"
+        android:background="@drawable/rounded"
+        app:layout_constraintStart_toStartOf="@id/column0"
+        app:layout_constraintTop_toTopOf="@id/column0" />
+
+    <View
+        android:id="@+id/highlightColumn1"
+        android:layout_width="80dp"
+        android:layout_height="112dp"
+        android:background="@drawable/rounded"
+        app:layout_constraintStart_toStartOf="@id/column1"
+        app:layout_constraintTop_toTopOf="@id/column1" />
+
+    <View
+        android:id="@+id/highlightColumn2"
+        android:layout_width="80dp"
+        android:layout_height="112dp"
+        android:background="@drawable/rounded"
+        app:layout_constraintStart_toStartOf="@id/column2"
+        app:layout_constraintTop_toTopOf="@id/column2" />
+
+    <View
+        android:id="@+id/highlightColumn3"
+        android:layout_width="80dp"
+        android:layout_height="112dp"
+        android:background="@drawable/rounded"
+        app:layout_constraintStart_toStartOf="@id/column3"
+        app:layout_constraintTop_toTopOf="@id/column3" />
 
     <TextView
         android:id="@+id/winOrLose"

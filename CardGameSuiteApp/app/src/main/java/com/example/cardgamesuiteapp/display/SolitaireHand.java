@@ -59,7 +59,6 @@ public class SolitaireHand extends Hand {
     }
 
     public boolean getCardType () {
-        System.out.println(getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE).getString("cardStyle", "cardStyle not found"));
         if(getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE).getString("cardStyle", "cardStyle not found").contains("big"))
             return true;
         else
