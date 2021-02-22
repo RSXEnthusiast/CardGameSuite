@@ -29,7 +29,6 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
 
     String _CurrentFragmentClassName;
 
-    String _GameCode = "";
     private static final String TAG = MultiplayerWaitingRoomActivity.class.getSimpleName();
 
     @Override

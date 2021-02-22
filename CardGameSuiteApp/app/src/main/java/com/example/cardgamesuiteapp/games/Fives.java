@@ -757,6 +757,8 @@ public class Fives extends AppCompatActivity {
                 }
                 break;
         }
+        deck.nextPlayerFromPeer();
+        updateViewInstruction();
         if (!deck.isMyTurn() && numAI > 0) {
             runAITurns();
         }
