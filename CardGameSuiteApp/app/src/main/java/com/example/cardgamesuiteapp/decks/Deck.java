@@ -344,7 +344,7 @@ public abstract class Deck implements Serializable {
     }
 
     /**
-     * @return the current number of player hands this deck is keeping track of
+     * @return the current player number
      */
     public int getMyPlayerNum() {
         return myPlayerNum;

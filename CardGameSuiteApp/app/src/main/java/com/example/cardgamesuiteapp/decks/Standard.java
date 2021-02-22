@@ -75,22 +75,26 @@ public class Standard extends Deck {
                 result += "king";
                 break;
         }
-        result += "_";
+        result += "_" + getCardSuit(num);
+
+        return result;
+    }
+
+    /**
+     * @return a lowercase string representing the cards suit
+     */
+    public static String getCardSuit(int num) {
         switch ((num - 1) / 13) {
             case 0:
-                result += "h";
-                break;
+                return "h";
             case 1:
-                result += "c";
-                break;
+                return "c";
             case 2:
-                result += "d";
-                break;
+                return "d";
             case 3:
-                result += "s";
-                break;
+                return "s";
         }
-        return result;
+        return "-1";
     }
 
     /**
