@@ -15,11 +15,7 @@ import com.example.cardgamesuiteapp.display.CardAnimation;
 import com.example.cardgamesuiteapp.display.SolitaireHand;
 import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplayMainPageActivity;
 
-import android.widget.Button;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Objects;
 
 public class Solitaire extends AppCompatActivity {
     static SolitaireHand[] viewColumns;

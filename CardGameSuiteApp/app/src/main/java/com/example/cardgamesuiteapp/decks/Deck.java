@@ -3,12 +3,10 @@ package com.example.cardgamesuiteapp.decks;
 import com.example.cardgamesuiteapp.deckMultiplayerManagement.DeckMultiplayerManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -35,6 +33,11 @@ public abstract class Deck implements Serializable {
         this.shuffleOnEmptyDeck = shuffleOnEmptyDeck;
         this.numPlayers = numPlayers;
         this.myPlayerNum = myPlayerNum;
+    }
+
+    public Deck(boolean shuffleOnEmptyDeck, int numPlayers) {
+        this.shuffleOnEmptyDeck = shuffleOnEmptyDeck;
+        this.numPlayers = numPlayers;
     }
 
     /**

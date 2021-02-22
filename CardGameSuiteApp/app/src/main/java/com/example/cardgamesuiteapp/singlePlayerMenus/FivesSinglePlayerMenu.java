@@ -8,9 +8,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cardgamesuiteapp.R;
-import com.example.cardgamesuiteapp.games.FivesGame;
-
-import java.util.Random;
+import com.example.cardgamesuiteapp.games.Fives;
 
 public class FivesSinglePlayerMenu extends AppCompatActivity {
     static View[] viewAINumButtons;// The buttons the user would press to select the number of AI
@@ -57,7 +55,7 @@ public class FivesSinglePlayerMenu extends AppCompatActivity {
     }
 
     private void numAISelected(int numAI) {
-        Intent intent = new Intent(this, FivesGame.class);
+        Intent intent = new Intent(this, Fives.class);
         intent.putExtra("numAI", numAI);
         intent.putExtra("numOnlineOpponents", 0);
         intent.putExtra("multiplayer", false);
