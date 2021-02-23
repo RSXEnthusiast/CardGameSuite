@@ -134,6 +134,9 @@ public class Fives extends AppCompatActivity {
         curAnimatedPlayer = 0;
         playersReadyToContinue = 0;
         newGame();
+        if (multiplayer && deck.getMyPlayerNum() == 0) {
+            DeckMultiplayerManager.initialize(deck);
+        }
     }
 
     static void nextCurAnimatedPlayer() {
@@ -215,9 +218,7 @@ public class Fives extends AppCompatActivity {
                 if (playersReadyToContinue >= numPlayers - numAI) {
                     stage = fivesStage.memCards;
                     newRound();
-                    if (deck.getMyPlayerNum() != 0) {
-                        DeckMultiplayerManager.initialize(deck);
-                    }
+                    DeckMultiplayerManager.initialize(deck);
                     playersReadyToContinue = 0;
                     viewConfirm.setText("Memorized");
                 } else {
@@ -231,9 +232,7 @@ public class Fives extends AppCompatActivity {
                 if (playersReadyToContinue >= numPlayers - numAI) {
                     stage = fivesStage.memCards;
                     newGame();
-                    if (deck.getMyPlayerNum() != 0) {
-                        DeckMultiplayerManager.initialize(deck);
-                    }
+                    DeckMultiplayerManager.initialize(deck);
                     playersReadyToContinue = 0;
                     viewConfirm.setText("Memorized");
                 } else {
@@ -519,14 +518,8 @@ public class Fives extends AppCompatActivity {
             e.printStackTrace();
         }
         stage = fivesStage.memCards;
-        try {
-            viewConfirm.setVisibility(View.VISIBLE);
-        } catch (Exception e) {
-        }
+        viewConfirm.setVisibility(View.VISIBLE);
         updateEntireScreen();
-        if (multiplayer && deck.getMyPlayerNum() == 0) {
-            DeckMultiplayerManager.initialize(deck);
-        }
     }
 
     /**
