@@ -27,11 +27,10 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
     MultiPlayerConnector _MultiPlayerConnector;
     public Handler _UIHandler;
     public static String _GameType;
-    public static int _MinNumPlayersRequiredForGame = 6;
+    public static int _MinNumPlayersRequiredForGame = 2;
 
     String _CurrentFragmentClassName;
 
-    String _GameCode = "";
     private static final String TAG = MultiplayerWaitingRoomActivity.class.getSimpleName();
 
     @Override

@@ -1,7 +1,6 @@
 package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.cardgamesuiteapp.R;
-import com.example.cardgamesuiteapp.games.FivesGame;
 
 import org.json.JSONException;
 import org.json.JSONObject;

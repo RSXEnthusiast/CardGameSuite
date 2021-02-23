@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public class FivesGame extends AppCompatActivity {
+public class Fives extends AppCompatActivity {
     static int numPlayers;//total number of players
     static int numOnlineOpponents;// Number of online opponents
     static int numAI;//number of AI players
@@ -101,7 +101,7 @@ public class FivesGame extends AppCompatActivity {
             viewPlayerNames[i].setText("CPU" + i);
         }
         totalScores = new int[numPlayers];
-        deck = new Standard(true, numPlayers, playerNum, multiplayer);
+        deck = new Standard(true, numPlayers, playerNum);
         viewDiscard = findViewById(R.id.discard);
         viewDiscard.bringToFront();
         viewDiscardHighlight = findViewById(R.id.highlightDiscard);
@@ -134,6 +134,9 @@ public class FivesGame extends AppCompatActivity {
         curAnimatedPlayer = 0;
         playersReadyToContinue = 0;
         newGame();
+        if (multiplayer && deck.getMyPlayerNum() == 0) {
+            DeckMultiplayerManager.initialize(deck);
+        }
     }
 
     static void nextCurAnimatedPlayer() {
@@ -159,7 +162,7 @@ public class FivesGame extends AppCompatActivity {
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(FivesGame.this, c);
+                Intent intent = new Intent(Fives.this, c);
                 startActivity(intent);
             }
         });
@@ -191,7 +194,6 @@ public class FivesGame extends AppCompatActivity {
     private void initViewPlayers(int playerNum) {
         for (int i = 0; i < numPlayers; i++) {
             int temp = (playerNum * (numPlayers - 1) + i) % numPlayers + 1;
-            System.out.println("playerNum: " + playerNum + " i: " + i + " result: " + temp);
             viewPlayers[i] = findViewById(getResources().getIdentifier("player" + temp, "id", getPackageName()));
             viewPlayerNames[i] = findViewById(getResources().getIdentifier("player" + temp + "name", "id", getPackageName()));
             viewPlayerScores[i] = findViewById(getResources().getIdentifier("player" + temp + "score", "id", getPackageName()));
@@ -212,35 +214,31 @@ public class FivesGame extends AppCompatActivity {
                 break;
             case "Continue":
                 playersReadyToContinue++;
+                DeckMultiplayerManager.readyToContinue();
                 if (playersReadyToContinue >= numPlayers - numAI) {
                     stage = fivesStage.memCards;
                     newRound();
-                    if (deck.getMyPlayerNum() == 0) {
-                        DeckMultiplayerManager.initialize(deck);
-                    }
-                    playersReadyToContinue = 0;
-                } else {
-                    viewConfirm.setVisibility(View.INVISIBLE);
-                }
-                viewConfirm.setText("Memorized");
-                updateViewInstruction();
-                DeckMultiplayerManager.readyToContinue();
-                break;
-            case "New Game":
-                playersReadyToContinue++;
-                if (playersReadyToContinue >= numPlayers - numAI) {
-                    stage = fivesStage.memCards;
-                    newGame();
-                    if (deck.getMyPlayerNum() == 0) {
-                        DeckMultiplayerManager.initialize(deck);
-                    }
+                    DeckMultiplayerManager.initialize(deck);
                     playersReadyToContinue = 0;
                     viewConfirm.setText("Memorized");
                 } else {
                     viewConfirm.setVisibility(View.INVISIBLE);
                 }
                 updateViewInstruction();
+                break;
+            case "New Game":
+                playersReadyToContinue++;
                 DeckMultiplayerManager.readyToContinue();
+                if (playersReadyToContinue >= numPlayers - numAI) {
+                    stage = fivesStage.memCards;
+                    newGame();
+                    DeckMultiplayerManager.initialize(deck);
+                    playersReadyToContinue = 0;
+                    viewConfirm.setText("Memorized");
+                } else {
+                    viewConfirm.setVisibility(View.INVISIBLE);
+                }
+                updateViewInstruction();
                 break;
         }
     }
@@ -520,14 +518,8 @@ public class FivesGame extends AppCompatActivity {
             e.printStackTrace();
         }
         stage = fivesStage.memCards;
-        try {
-            viewConfirm.setVisibility(View.VISIBLE);
-        } catch (Exception e) {
-        }
+        viewConfirm.setVisibility(View.VISIBLE);
         updateEntireScreen();
-        if (multiplayer && deck.getMyPlayerNum() == 0) {
-            DeckMultiplayerManager.initialize(deck);
-        }
     }
 
     /**
@@ -538,7 +530,6 @@ public class FivesGame extends AppCompatActivity {
         viewDeck.setFaceUp(false);
         viewDeck.updateImage(deck.peekTopDraw());
         for (int i = 0; i < viewPlayers.length; i++) {
-//            viewPlayers[i].initHand(deck.getHand((i + deck.getMyPlayerNum()) % numPlayers));
             viewPlayers[i].initHand(deck.getHand(i));
             viewPlayers[i].allCardsFaceDown();
         }
@@ -574,16 +565,22 @@ public class FivesGame extends AppCompatActivity {
                         return "Press continue";
                     }
                 case gameOver:
-                    String winners = "";
-                    for (int i = 0; i < winnerIndex.size(); i++) {
-                        winners += viewPlayerNames[winnerIndex.get(i)].getText();
-                        if (winnerIndex.size() > i + 1) {
-                            winners += " and ";
+                    if (playersReadyToContinue == 0) {
+                        String winners = "";
+                        for (int i = 0; i < winnerIndex.size(); i++) {
+                            winners += viewPlayerNames[winnerIndex.get(i)].getText();
+                            if (winnerIndex.size() > i + 1) {
+                                winners += " and ";
+                            }
                         }
+                        winners += " won! ";
+                        winners += viewPlayerNames[loserIndex].getText() + " lost!";
+                        return winners;
+                    } else if (playersReadyToContinue < numPlayers - numAI) {
+                        return "Waiting on other players";
+                    } else {
+                        return "Press continue";
                     }
-                    winners += " won! ";
-                    winners += viewPlayerNames[loserIndex].getText() + " lost!";
-                    return winners;
             }
         }
         return "Player " + deck.getCurPlayersTurn() + "'s Turn";
@@ -757,6 +754,10 @@ public class FivesGame extends AppCompatActivity {
                 }
                 break;
         }
+        if (deck.getCurPlayersTurn() > numOnlineOpponents + 1) {
+            deck.nextPlayerFromPeer();
+        }
+        updateViewInstruction();
         if (!deck.isMyTurn() && numAI > 0) {
             runAITurns();
         }
@@ -839,7 +840,6 @@ public class FivesGame extends AppCompatActivity {
     }
 
     private void AIFlippedCardByCardNum(int cardNum) {
-        System.out.println(curAnimatedPlayer);
         viewPlayers[curAnimatedPlayer].flipCardByNum(cardNum);
         AIStage = fivesStage.draw;
         nextCurAnimatedPlayer();
@@ -1112,9 +1112,6 @@ public class FivesGame extends AppCompatActivity {
                     } else {
                         newRound();
                     }
-                    if (deck.getMyPlayerNum() == 0) {
-                        DeckMultiplayerManager.initialize(deck);
-                    }
                     playersReadyToContinue = 0;
                 }
                 break;
@@ -1136,7 +1133,6 @@ public class FivesGame extends AppCompatActivity {
 
 
     private void initializeReceived(JSONObject deck) {
-        newRound();
         this.deck.initializeFromPeer(deck);
         updateEntireScreen();
     }

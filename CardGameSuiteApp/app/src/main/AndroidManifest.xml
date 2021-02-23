@@ -13,7 +13,7 @@
         android:theme="@style/Theme.CardGameSuiteApp"
         android:usesCleartextTraffic="true">
         <activity android:name=".gameCollectionMainMenu.DisplaySettingsActivity" />
-        <activity android:name=".games.FivesGame" />
+        <activity android:name=".games.Fives" />
         <activity android:name=".gameCollectionMainMenu.DisplayFivesRulesActivity" />
         <activity android:name=".games.Solitaire" />
         <activity android:name=".gameCollectionMainMenu.DisplaySolitaireRulesActivity" />

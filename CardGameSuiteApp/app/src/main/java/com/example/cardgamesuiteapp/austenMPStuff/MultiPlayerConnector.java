@@ -202,7 +202,7 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
             notifyObservers(socketIOEventArg);
         });
         _Socket.on(ServerConfig.gameData, args -> {
-            Log.d(TAG, "gameData");
+//            Log.d(TAG, "gameData");
             SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.gameData, args);
             notifyObservers(socketIOEventArg);
         });
