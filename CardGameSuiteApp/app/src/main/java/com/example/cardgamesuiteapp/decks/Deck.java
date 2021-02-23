@@ -80,7 +80,6 @@ public abstract class Deck implements Serializable {
     }
 
     public void nextPlayerFromPeer() {
-        System.out.println("nextPlayerFromPeer from player " + myPlayerNum);
         curPlayersTurn = (curPlayersTurn + 1) % numPlayers;
     }
 
