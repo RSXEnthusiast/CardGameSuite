@@ -191,7 +191,6 @@ public class Fives extends AppCompatActivity {
     private void initViewPlayers(int playerNum) {
         for (int i = 0; i < numPlayers; i++) {
             int temp = (playerNum * (numPlayers - 1) + i) % numPlayers + 1;
-            System.out.println("playerNum: " + playerNum + " i: " + i + " result: " + temp);
             viewPlayers[i] = findViewById(getResources().getIdentifier("player" + temp, "id", getPackageName()));
             viewPlayerNames[i] = findViewById(getResources().getIdentifier("player" + temp + "name", "id", getPackageName()));
             viewPlayerScores[i] = findViewById(getResources().getIdentifier("player" + temp + "score", "id", getPackageName()));
@@ -215,9 +214,7 @@ public class Fives extends AppCompatActivity {
                 if (playersReadyToContinue >= numPlayers - numAI) {
                     stage = fivesStage.memCards;
                     newRound();
-                    if (deck.getMyPlayerNum() == 0) {
-                        DeckMultiplayerManager.initialize(deck);
-                    }
+                    DeckMultiplayerManager.initialize(deck);
                     playersReadyToContinue = 0;
                 } else {
                     viewConfirm.setVisibility(View.INVISIBLE);
@@ -574,16 +571,22 @@ public class Fives extends AppCompatActivity {
                         return "Press continue";
                     }
                 case gameOver:
-                    String winners = "";
-                    for (int i = 0; i < winnerIndex.size(); i++) {
-                        winners += viewPlayerNames[winnerIndex.get(i)].getText();
-                        if (winnerIndex.size() > i + 1) {
-                            winners += " and ";
+                    if (playersReadyToContinue == 0) {
+                        String winners = "";
+                        for (int i = 0; i < winnerIndex.size(); i++) {
+                            winners += viewPlayerNames[winnerIndex.get(i)].getText();
+                            if (winnerIndex.size() > i + 1) {
+                                winners += " and ";
+                            }
                         }
+                        winners += " won! ";
+                        winners += viewPlayerNames[loserIndex].getText() + " lost!";
+                        return winners;
+                    } else if (playersReadyToContinue < numPlayers - numAI) {
+                        return "Waiting on other players";
+                    } else {
+                        return "Press continue";
                     }
-                    winners += " won! ";
-                    winners += viewPlayerNames[loserIndex].getText() + " lost!";
-                    return winners;
             }
         }
         return "Player " + deck.getCurPlayersTurn() + "'s Turn";
@@ -757,7 +760,9 @@ public class Fives extends AppCompatActivity {
                 }
                 break;
         }
-        deck.nextPlayerFromPeer();
+        if (deck.getCurPlayersTurn() > numOnlineOpponents + 1) {
+            deck.nextPlayerFromPeer();
+        }
         updateViewInstruction();
         if (!deck.isMyTurn() && numAI > 0) {
             runAITurns();
@@ -841,7 +846,6 @@ public class Fives extends AppCompatActivity {
     }
 
     private void AIFlippedCardByCardNum(int cardNum) {
-        System.out.println(curAnimatedPlayer);
         viewPlayers[curAnimatedPlayer].flipCardByNum(cardNum);
         AIStage = fivesStage.draw;
         nextCurAnimatedPlayer();
@@ -1111,11 +1115,9 @@ public class Fives extends AppCompatActivity {
                     setVisibility(viewConfirm, View.VISIBLE);
                     if (newGame) {
                         newGame();
+                        DeckMultiplayerManager.initialize(deck);
                     } else {
                         newRound();
-                    }
-                    if (deck.getMyPlayerNum() == 0) {
-                        DeckMultiplayerManager.initialize(deck);
                     }
                     playersReadyToContinue = 0;
                 }
@@ -1138,7 +1140,6 @@ public class Fives extends AppCompatActivity {
 
 
     private void initializeReceived(JSONObject deck) {
-        newRound();
         this.deck.initializeFromPeer(deck);
         updateEntireScreen();
     }
