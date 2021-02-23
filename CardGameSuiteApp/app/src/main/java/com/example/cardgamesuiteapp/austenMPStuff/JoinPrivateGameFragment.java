@@ -133,6 +133,8 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
         public void update(Observable o, Object arg) {
 
             SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
+            if(!socketIOEventArg.CompareEventWatcher(TAG)) return;
+            
             switch (socketIOEventArg._EventName) {
 
                 case ServerConfig.privateGameRoomRequestComplete:
@@ -154,13 +156,13 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
         socket.on(ServerConfig.unableToFindRoom, args -> {
             Log.d(TAG, "unable to find room");
 
-            multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.unableToFindRoom, null));
+            multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.unableToFindRoom,TAG, null));
 
         });
         socket.on(ServerConfig.privateGameRoomRequestComplete, args -> {
             Log.d(TAG, "found room");
             multiPlayerConnector.setRoomCode(((JSONObject) args[0]).opt("gameRoomName").toString());
-            multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.privateGameRoomRequestComplete, null));
+            multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.privateGameRoomRequestComplete, TAG, null));
         });
 
 

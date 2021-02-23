@@ -39,6 +39,7 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
     boolean _GameCreator=false;
     String _CreatorStatusMessage = "Private Game Creator";
     String _JoinStatusMessage = "Private Game Joined";
+    private static final String TAG = PrivateGameWaitingRoomFragment.class.getSimpleName();
     public PrivateGameWaitingRoomFragment() {
 
         super(R.layout.austen_fragment_private_game_waiting_room);
@@ -184,6 +185,8 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
         @Override
         public void update(Observable o, Object arg) {
             SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
+            if(!socketIOEventArg.CompareEventWatcher(TAG)) return;
+
             switch (socketIOEventArg._EventName) {
 
                /* case ServerConfig.privateGameReadyToPlay: //not needed
@@ -265,12 +268,12 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
     public void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
         socket.on(ServerConfig.roomPlayerCountUpdate, args -> {
             //Log.d(TAG, "");
-            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.roomPlayerCountUpdate, args);
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.roomPlayerCountUpdate, TAG, args);
             multiPlayerConnector.notifyObservers(socketIOEventArg);
         });
         socket.on(ServerConfig.gameRoomDeletedByInitiator, args -> {
             //Log.d(TAG, "unable to find room");
-            multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.gameRoomDeletedByInitiator, null));
+            multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.gameRoomDeletedByInitiator, TAG, null));
 
         });
     }

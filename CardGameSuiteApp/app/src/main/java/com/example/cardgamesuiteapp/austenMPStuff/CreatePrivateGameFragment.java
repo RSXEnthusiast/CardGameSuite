@@ -133,6 +133,7 @@ public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFra
         @Override
         public void update(Observable o, Object arg) {
             SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
+            if(!socketIOEventArg.CompareEventWatcher(TAG)) return;
 
             switch (socketIOEventArg._EventName) {
 
@@ -154,7 +155,7 @@ public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFra
         socket.on(ServerConfig.privateGameRoomRequestComplete, args -> {
             Log.d(TAG, "created Room");
             multiPlayerConnector.setRoomCode(((JSONObject) args[0]).opt("gameRoomName").toString());
-            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.privateGameRoomRequestComplete, null);
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.privateGameRoomRequestComplete,TAG, null);
             multiPlayerConnector.notifyObservers(socketIOEventArg);
 
         });

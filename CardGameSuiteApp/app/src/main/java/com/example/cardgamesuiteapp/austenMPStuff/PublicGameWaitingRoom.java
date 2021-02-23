@@ -87,6 +87,7 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
         public void update(Observable o, Object arg) {
 
             SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
+            if(!socketIOEventArg.CompareEventWatcher(TAG)) return;
             switch (socketIOEventArg._EventName) {
 
                 case ServerConfig.NUM_ACTIVE_PUBLIC_PLAYERS:
@@ -151,12 +152,12 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
         socket.on(ServerConfig.NUM_ACTIVE_PUBLIC_PLAYERS, args -> {
             Log.d(TAG, "num active players received");
 
-            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.NUM_ACTIVE_PUBLIC_PLAYERS, args);
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.NUM_ACTIVE_PUBLIC_PLAYERS, TAG ,args);
             multiPlayerConnector.notifyObservers(socketIOEventArg);
         });
         socket.on(ServerConfig.publicGameRoomRequestComplete, args -> {
             Log.d(TAG, "public game room found");
-            multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.publicGameRoomRequestComplete, args));
+            multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.publicGameRoomRequestComplete, TAG, args));
         });
 
 

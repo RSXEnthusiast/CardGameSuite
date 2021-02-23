@@ -9,11 +9,13 @@ import androidx.annotation.NonNull;
 import com.example.cardgamesuiteapp.R;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentResultListener;
 
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.util.Log;
 
 import java.net.URISyntaxException;
@@ -44,6 +46,8 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
         _GameType = (String) intent.getSerializableExtra("gameName");
 
         _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
+        getLifecycle().addObserver(_MultiPlayerConnector); //allows the MultiPlayerConnector to be aware of lifecycle
+
         try {
             _MultiPlayerConnector.connectToServer();
         } catch (URISyntaxException e) {
@@ -180,6 +184,15 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
     }
 */
 
+
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
+    }
 
     private Observer _MultiPlayerConnectorObserver = new Observer() {
         @Override

@@ -29,7 +29,7 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         _MultiplayerWaitingRoomActivity = (MultiplayerWaitingRoomActivity) getActivity();
-
+        _MultiPlayerConnector.addSocketEvents(this);
     }
 
     /**
@@ -58,7 +58,7 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
             e.printStackTrace();
         }
 
-        _MultiPlayerConnector.addSocketEvents(this); //add back this fragments events
+       // _MultiPlayerConnector.addSocketEvents(this); //add back this fragments events
 
         if (_MultiPlayerConnectorObserver != null)
             subscribeToMultiPlayerConnector();
@@ -71,7 +71,7 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
      */
     public void unsubscribeFromMultiPlayerConnector() {
         _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
-        _MultiPlayerConnector.ResetSocketEvents();
+       // _MultiPlayerConnector.ResetSocketEvents();
     }
 
     /**

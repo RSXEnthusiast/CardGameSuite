@@ -1,26 +1,37 @@
 package com.example.cardgamesuiteapp.austenMPStuff;
 
+import android.os.CountDownTimer;
 import android.util.Log;
 
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.OnLifecycleEvent;
+
 import com.example.cardgamesuiteapp.BuildConfig;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Observable;
+import java.util.Queue;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.engineio.client.transports.WebSocket;
 
-import static io.socket.client.Manager.EVENT_CONNECT_ERROR;
+
 import static io.socket.client.Socket.EVENT_CONNECT;
+import static io.socket.client.Socket.EVENT_CONNECT_ERROR;
 import static io.socket.client.Socket.EVENT_DISCONNECT;
 
 
-public class MultiPlayerConnector extends Observable {
+public class MultiPlayerConnector extends Observable implements DefaultLifecycleObserver {
     private static final String TAG = "MultiPlayerConnector";
 
     private static MultiPlayerConnector _Instance = null;
@@ -59,6 +70,7 @@ public class MultiPlayerConnector extends Observable {
 
         return _Instance;
     }
+
 
     /**
      * Call this method to connected to the Socket.io Server associated with your game. Uses url placed in ServerConfig.ServerURLProduction or ServerConfig.ServerURLDebug
@@ -100,11 +112,13 @@ public class MultiPlayerConnector extends Observable {
         IO.Options opts = new IO.Options();
         opts.transports = new String[]{WebSocket.NAME};
 
-       addEssentialEvents();
-
+        addEssentialEvents();
     }
 
+
     private void addEssentialEvents() {
+
+
         _Socket.on(EVENT_CONNECT, args -> {
             //JSONObject obj = (JSONObject)args[0];
             Log.d(TAG, "Connected to server");
@@ -183,7 +197,7 @@ public class MultiPlayerConnector extends Observable {
             });*/
 
         _Socket.on(ServerConfig.startGame, args -> {
-            Log.d(TAG, "starting Public game");
+            Log.d(TAG, "start game received");
             SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.startGame, null);
             notifyObservers(socketIOEventArg);
         });
@@ -205,8 +219,40 @@ public class MultiPlayerConnector extends Observable {
     }
 
 
+    Queue<SocketIOEventArg> _SocketEventsReceivedWhileAppSleeping = new LinkedList<>();
+ boolean _AppIsSleeping = false;
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    @Override
+    public void onResume(LifecycleOwner owner) {
+        _AppIsSleeping=false;
+        new Thread(new Runnable(){
+            public void run() {
+                try {
+                    Thread.sleep(100); // give time for subscribers to resubscribe
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // do something here
+                while(!_SocketEventsReceivedWhileAppSleeping.isEmpty()){
+                    notifyObservers(_SocketEventsReceivedWhileAppSleeping.poll());
+                }
+               //send events
+            }
+        }).start();
+
+    }
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    @Override
+    public void onPause(LifecycleOwner owner) {
+             _AppIsSleeping=true;
+    }
+
     @Override
     public void notifyObservers(Object arg) {
+        if(_AppIsSleeping){
+            _SocketEventsReceivedWhileAppSleeping.add((SocketIOEventArg) arg);
+            return;
+        }
         setChanged();
         super.notifyObservers(arg);
 
@@ -249,9 +295,8 @@ public class MultiPlayerConnector extends Observable {
     public void Reset() {
 
        Close();
-       _Socket.off();
-       addEssentialEvents();
-
+       //_Socket.off();
+       //addEssentialEvents();
         try {
             connectToServer();
         } catch (URISyntaxException e) {
