@@ -239,8 +239,13 @@ public class DeckUnitTests {
     public void deckIsEmptyTest() throws Exception {
         boolean initialDeckIsEmpty = standardDeck.deckIsEmpty();
 
-        while(!standardDeck.deckIsEmpty()){
-            standardDeck.draw(0);
+        boolean deckIsEmpty = true;
+        while(deckIsEmpty){
+            try{
+                standardDeck.draw(0);
+            }catch(Exception e){
+                deckIsEmpty = false;
+            }
         }
         boolean postDeckIsEmpty = standardDeck.deckIsEmpty();
 
