@@ -45,7 +45,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
         _GameType = (String) intent.getSerializableExtra("gameName");
 
         _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
-        getLifecycle().addObserver(_MultiPlayerConnector); //allows the MultiPlayerConnector to be aware of lifecycle
+        //getLifecycle().addObserver(_MultiPlayerConnector); //allows the MultiPlayerConnector to be aware of lifecycle
 
         try {
             _MultiPlayerConnector.connectToServer();
@@ -53,7 +53,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
             Log.d(TAG, "socket.io server url is malformed. check url in Server.Config");
             e.printStackTrace();
         }
-        _MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
+        //_MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
 
 
         if (savedInstanceState == null) {
@@ -64,8 +64,8 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
         }
 
 
-        Snackbar.make(findViewById(R.id.multiPlayerWaitingRoomCoordinatorLayout), _GameType, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+       /* Snackbar.make(findViewById(R.id.multiPlayerWaitingRoomCoordinatorLayout), _GameType, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();*/
 
     }
 
@@ -75,8 +75,6 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
      */
     public void GoToGameActivity() {
         //switch on game type. Then load the correct game...
-        stopMultiplayerConnectorFromWatchingThisActivity();
-
         Intent oldIntent = getIntent();
         Intent newIntent = new Intent(this, (Class) oldIntent.getSerializableExtra("gameClass"));
         newIntent.putExtra("multiplayer", true);
@@ -84,17 +82,23 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
         newIntent.putExtra("numAI", 0);
         startActivity(newIntent);
 
-        _UIHandler.post(() -> {
-            finish();
-        });
-
     }
 
-    private void stopMultiplayerConnectorFromWatchingThisActivity() {
 
-        _UIHandler.post(() -> {
-            getLifecycle().removeObserver(_MultiPlayerConnector);
-        });
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
+        getLifecycle().removeObserver(_MultiPlayerConnector);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        _MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
+        getLifecycle().addObserver(_MultiPlayerConnector); //allows the MultiPlayerConnector to be aware of lifecycle
+
     }
 
     static class PlayerStatus {
@@ -199,13 +203,6 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
 
 
 
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
-        getLifecycle().removeObserver(_MultiPlayerConnector);
-    }
 
     private Observer _MultiPlayerConnectorObserver = new Observer() {
         @Override
