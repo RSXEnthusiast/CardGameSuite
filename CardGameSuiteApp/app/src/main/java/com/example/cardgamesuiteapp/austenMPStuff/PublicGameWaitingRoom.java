@@ -85,6 +85,14 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
         public void update(Observable o, Object arg) {
 
             SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
+
+            switch (socketIOEventArg._EventName) {
+                case ServerConfig.startGame:
+                    //go to game
+                    _MultiplayerWaitingRoomActivity.GoToGameActivity();
+                    break;
+            }
+
             if(!socketIOEventArg.CompareEventWatcher(TAG)) return;
             switch (socketIOEventArg._EventName) {
 
