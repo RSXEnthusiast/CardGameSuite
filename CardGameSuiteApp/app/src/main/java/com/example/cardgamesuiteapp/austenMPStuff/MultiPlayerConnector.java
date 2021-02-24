@@ -271,10 +271,7 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
     }
 
     public void emitEvent(String emitEvent) {
-
         _Socket.emit(emitEvent);
-
-
     }
 
     public void ResetSocketEvents() {

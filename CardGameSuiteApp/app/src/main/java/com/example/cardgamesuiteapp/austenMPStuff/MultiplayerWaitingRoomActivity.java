@@ -191,6 +191,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
+        getLifecycle().removeObserver(_MultiPlayerConnector);
     }
 
     private Observer _MultiPlayerConnectorObserver = new Observer() {

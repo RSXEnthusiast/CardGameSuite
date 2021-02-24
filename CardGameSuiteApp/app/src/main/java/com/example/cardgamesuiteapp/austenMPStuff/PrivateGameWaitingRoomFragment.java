@@ -205,7 +205,7 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
                 case ServerConfig.startGame:
                     //go to game
                     _MultiplayerWaitingRoomActivity.GoToGameActivity();
-                    break;                
+                    break;
 
             }
         }
