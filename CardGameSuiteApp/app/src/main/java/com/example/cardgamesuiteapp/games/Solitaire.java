@@ -134,38 +134,109 @@ public class Solitaire extends AppCompatActivity {
             lastTouchedCardNum = cardNum;
             selectPlayingCard(cardNum);
         }
-        else if(deck.discardIsEmpty() || deck.peekTopDiscard() == cardNum)
-            moveCardToDiscard(columnToMoveCardFrom, cardNum);
+        else if((deck.discardIsEmpty() || deck.peekTopDiscard() == cardNum) && isCardValidToMoveToDiscard(lastTouchedCardNum))
+            moveCardToDiscard(lastTouchedCardNum);
         else
-            moveCardToEmptyColumn(cardNum);
+            moveCardToEmptyColumn(lastTouchedCardNum);
 
         updateViewInstruction();
     }
 
     /**
-     * A simple method to check whether there are any remaining moves or not
+     * A method to check whether there are any remaining moves or not
      *
      * @return true if the round is over, false if not.
      */
     private static boolean movesRemaining() {
-        boolean remainingMoves = false;
+        String [] suits = getSuits();
+        boolean areThereRemainingMoves = doAnySuitsMatch(suits);
 
-        //fill a string array with all the suits from the cards at the bottom of each column
-        String [] suits = new String[4];
-        for(int i = 0; i < columns; i++) {
-            suits[i] = Standard.getCardSuit(getLastCardInColumn(i).getCardNum());
+        for (int j = 0; j < columns; j++) {
+            if(suits[j].equals("No Card"))
+                areThereRemainingMoves = true;
         }
 
-        //compare each suit to make sure none match
-        if(suits[0].equals(suits[1]) || suits[1].equals(suits[2]) || suits[2].equals(suits[3]) || suits[1].equals(suits[3]) || suits[2].equals(suits[0]))
-            remainingMoves = true;
-
-        if(!remainingMoves)
+        if(!areThereRemainingMoves)
             viewDeckHighlight.setVisibility(View.VISIBLE);
 
-        return remainingMoves;
+        return areThereRemainingMoves;
     }
 
+    /**
+     * A method that checks whether card is valid to move or not
+     *
+     * @return true if the card can move or false if it cannot
+     */
+    private static boolean isCardValidToMoveToDiscard(int passedCardNum) {
+        boolean isCardValidToMove = false;
+
+        Card [] lastFourCards = new Card[4];
+
+        for (int i = 0; i < columns; i++) {
+            if (viewColumns[i].getHand().isEmpty()) {
+                lastFourCards[i] = null;
+            }
+            else
+                lastFourCards[i] = getLastCardInColumn(i);
+        }
+
+        //Game Logic: Card must be of the same suit and lesser value than another card at the bottom of a column
+        for (int i = 0; i < lastFourCards.length - 1; i++) {
+            for (int j = i + 1; j < lastFourCards.length; j++) {
+                String passedCardSuit = Standard.getCardSuit(passedCardNum);
+                String suit1 = Standard.getCardSuit(lastFourCards[i].getCardNum());
+                String suit2 = Standard.getCardSuit(lastFourCards[j].getCardNum());
+                int cardNum1 = lastFourCards[i].getCardNum();
+                int cardNum2 = lastFourCards[j].getCardNum();
+
+                if(suit1.equals(suit2) && suit1.equals(passedCardSuit))
+                    if((cardNum1 < cardNum2 && cardNum1 == passedCardNum) || (cardNum2 < cardNum1 && cardNum2 == passedCardNum))
+                        isCardValidToMove = true;
+            }
+        }
+
+        return isCardValidToMove;
+    }
+
+    /**
+     * A simple method to check whether any suits in the string array match
+     *
+     * @return true if if suits match, false if not
+     */
+    private static boolean doAnySuitsMatch(String [] suits) {
+        boolean doAnySuitsMatch = false;
+
+        for (int i = 0; i < suits.length - 1; i++){
+            for (int j = i + 1; j < suits.length; j++){
+                if (suits[i].equals(suits[j])){
+                    doAnySuitsMatch = true;
+                    j = suits.length;
+                    i = suits.length;
+                }
+            }
+        }
+
+        return doAnySuitsMatch;
+    }
+
+    /**
+     * Fill a string array with all the suits from the cards at the bottom of each column
+     *
+     * @return this string array
+     */
+    private static String [] getSuits() {
+        String [] suits = new String[4];
+
+        for (int i = 0; i < columns; i++) {
+            if (viewColumns[i].getHand().isEmpty()) {
+                suits[i] = "No Card";
+            }
+            else
+                suits[i] = Standard.getCardSuit(getLastCardInColumn(i).getCardNum());
+        }
+
+        return suits;
+    }
 
     /******************** END OF GAME METHODS **********************/
 
@@ -248,6 +319,17 @@ public class Solitaire extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * Makes the discard stack a clickable object even when empty and calls card touched. Passes a negative number to indicating that the click was a destination.
+     *
+     * @param view is the deck ImageButton
+     */
+    public void clickDiscardHighlight(View view) {
+        cardTouched(-1);
+    }
+
+
+
     /************************ CARD ANIMATION ************************/
 
     /**
@@ -267,17 +349,18 @@ public class Solitaire extends AppCompatActivity {
      * This method is called when a card on the playing table is selected and the discard pile is touched
      *
      * @param cardNum the value of the card that was tapped on
-     * @param columnToMoveCardFrom the column where the card were moving resides
      */
-    private static void moveCardToDiscard(int columnToMoveCardFrom, int cardNum) {
-        System.out.println("I MADE IT TO DISCARD");
+    private static void moveCardToDiscard(int cardNum) {
+        int columnToMoveCardFrom = findColumnOfSelectedCard(cardNum);
         isAnimating = true;
         removeHighlightedChoices();
 
-        viewAnimation1.cardAnimate(getCardInHandX(cardNum), viewDiscard.getX(), getCardInHandY(cardNum), viewDiscard.getY());
+        System.out.println(columnToMoveCardFrom);
+        System.out.println(lastTouchedCardNum);
 
         try {
-            deck.discardByValue(columnToMoveCardFrom, lastTouchedCardNum);
+            boolean test = deck.discardByValue(columnToMoveCardFrom, lastTouchedCardNum);
+            System.out.println(test);
             viewColumns[columnToMoveCardFrom].removeCard(lastTouchedCardNum);
         } catch (Exception e) {
             e.printStackTrace();
@@ -328,6 +411,9 @@ public class Solitaire extends AppCompatActivity {
     private static int findColumnOfSelectedCard(int cardNum) {
         int column = -1;
 
+        if(cardNum == -1)
+            return -1;
+
         for(int i = 0; i<viewColumns.length; i++) {
             for(int j = 0; j<viewColumns[i].getHand().size(); j++) {
                 if (viewColumns[i].getHand().get(j).getCardNum() == cardNum)
@@ -357,11 +443,11 @@ public class Solitaire extends AppCompatActivity {
 
         if(emptyColumn == 0)
             viewColumnHighlight0.setVisibility(View.VISIBLE);
-        else if(emptyColumn == 1)
+        if(emptyColumn == 1)
             viewColumnHighlight1.setVisibility(View.VISIBLE);
-        else if(emptyColumn == 2)
+        if(emptyColumn == 2)
             viewColumnHighlight2.setVisibility(View.VISIBLE);
-        else if(emptyColumn == 3)
+        if(emptyColumn == 3)
             viewColumnHighlight3.setVisibility(View.VISIBLE);
     }
 

@@ -96,6 +96,7 @@
         android:layout_width="80dp"
         android:layout_height="112dp"
         android:background="@drawable/rounded"
+        android:onClick="clickDiscardHighlight"
         app:layout_constraintBottom_toBottomOf="@id/discard"
         app:layout_constraintEnd_toEndOf="@id/discard"
         app:layout_constraintStart_toStartOf="@id/discard"
