@@ -83,6 +83,11 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
         newIntent.putExtra("numOnlineOpponents", _MinNumPlayersRequiredForGame - 1);
         newIntent.putExtra("numAI", 0);
         startActivity(newIntent);
+
+        _UIHandler.post(() -> {
+            finish();
+        });
+
     }
 
     private void stopMultiplayerConnectorFromWatchingThisActivity() {
@@ -191,7 +196,6 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
         }
     }
 */
-
 
 
 
