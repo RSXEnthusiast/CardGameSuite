@@ -220,4 +220,8 @@ abstract public class Hand extends ViewGroup {
             card.setFaceUp(false);
         }
     }
+
+    public boolean isEmpty(){
+        return cards.isEmpty();
+    }
 }

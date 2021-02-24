@@ -65,5 +65,16 @@ public class SolitaireHand extends Hand {
             return false;
     }
 
+    public Card removeFinalCard(){
+        Card finalCard = cards.get(cards.size()-1);
+        this.removeCard(cards.get(cards.size()-1).getCardNum());
+        return finalCard;
+    }
+
+    /** Testing method please remove**/
+    public Card finalCard(){
+        return cards.get(cards.size()-1);
+    }
+
 }
 

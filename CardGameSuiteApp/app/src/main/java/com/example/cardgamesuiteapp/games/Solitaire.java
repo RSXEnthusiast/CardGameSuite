@@ -17,6 +17,8 @@ import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplayMainPageActivi
 
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class Solitaire extends AppCompatActivity {
     static SolitaireHand[] viewColumns;
     static Standard deck;
@@ -214,7 +216,7 @@ public class Solitaire extends AppCompatActivity {
     /**
      * A simple method to check whether any suits in the string array match
      *
-     * @return true if if suits match, false if not
+     * @return true if suits match, false if not
      */
     private static boolean doAnySuitsMatch(String [] suits) {
         boolean doAnySuitsMatch = false;
@@ -307,7 +309,6 @@ public class Solitaire extends AppCompatActivity {
 
         if(deck.deckIsEmpty())
             viewDeckBack.setVisibility(View.INVISIBLE);
-
         removeHighlightedChoices();
     }
 
@@ -390,8 +391,26 @@ public class Solitaire extends AppCompatActivity {
         removeHighlightedChoices();
 
         //write stuff here Evan... doesAnEmptyColumnExist and getTotalNumberOfCardsOnPlayingTable method from below might be helpful
+        if(doesAnEmptyColumnExist()){
+//            moveCardsToAnotherHand(findColumnOfSelectedCard(cardNum), , cardNum);
+        }
+
 
         isAnimating = false;
+    }
+
+    public static Card moveCardsToAnotherHand(int startingHand, int endingHand, int cardNum){
+        deck.discardByValue(startingHand, cardNum);
+        try{
+            deck.drawFromDiscard(endingHand);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        Card removedCard =  viewColumns[startingHand].removeFinalCard();
+        viewColumns[endingHand].addCard(cardNum);
+        return removedCard;
+
+
     }
 
 
@@ -479,7 +498,7 @@ public class Solitaire extends AppCompatActivity {
      * @param columnNum to be used to find last card
      */
     private static Card getLastCardInColumn(int columnNum) {
-        return viewColumns[columnNum].getHand().get(viewColumns[columnNum].getHand().size()-1);
+        return viewColumns[columnNum].finalCard();
     }
 
     /**
@@ -487,7 +506,7 @@ public class Solitaire extends AppCompatActivity {
      */
     private static boolean doesAnEmptyColumnExist() {
         for(int i = 0; i < viewColumns.length; i++) {
-            if (viewColumns[i].getHand().isEmpty())
+            if (viewColumns[i].isEmpty())
                 return true;
         }
         return false;
