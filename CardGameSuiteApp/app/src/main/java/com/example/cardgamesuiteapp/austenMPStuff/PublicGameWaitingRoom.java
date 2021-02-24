@@ -86,13 +86,6 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
 
             SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
 
-            switch (socketIOEventArg._EventName) {
-                case ServerConfig.startGame:
-                    //go to game
-                    _MultiplayerWaitingRoomActivity.GoToGameActivity();
-                    break;
-            }
-
             if(!socketIOEventArg.CompareEventWatcher(TAG)) return;
             switch (socketIOEventArg._EventName) {
 
@@ -165,6 +158,11 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
             Log.d(TAG, "public game room found");
             multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.publicGameRoomRequestComplete, TAG, args));
         });
+
+    socket.on(ServerConfig.startGame, args -> {
+        Log.d(TAG, "start public game received");
+        multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.startGame, TAG, args));
+    });
 
 
     }

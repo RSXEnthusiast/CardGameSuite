@@ -202,9 +202,10 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
                     informPlayerGameIsDeleted();
 
                     break;
-                /*case another option:
-                    go to
-                   break;*/
+                case ServerConfig.startGame:
+                    //go to game
+                    _MultiplayerWaitingRoomActivity.GoToGameActivity();
+                    break;                
 
             }
         }
@@ -275,6 +276,11 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
             //Log.d(TAG, "unable to find room");
             multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.gameRoomDeletedByInitiator, TAG, null));
 
+        });
+
+        socket.on(ServerConfig.startGame, args -> {
+            Log.d(TAG, "start private game received");
+            multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.startGame, TAG, args));
         });
     }
 }
