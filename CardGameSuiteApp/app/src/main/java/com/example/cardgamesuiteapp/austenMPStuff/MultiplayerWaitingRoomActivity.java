@@ -75,13 +75,21 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
      */
     public void GoToGameActivity() {
         //switch on game type. Then load the correct game...
-        getLifecycle().removeObserver(_MultiPlayerConnector);
+        stopMultiplayerConnectorFromWatchingThisActivity();
+
         Intent oldIntent = getIntent();
         Intent newIntent = new Intent(this, (Class) oldIntent.getSerializableExtra("gameClass"));
         newIntent.putExtra("multiplayer", true);
         newIntent.putExtra("numOnlineOpponents", _MinNumPlayersRequiredForGame - 1);
         newIntent.putExtra("numAI", 0);
         startActivity(newIntent);
+    }
+
+    private void stopMultiplayerConnectorFromWatchingThisActivity() {
+
+        _UIHandler.post(() -> {
+            getLifecycle().removeObserver(_MultiPlayerConnector);
+        });
     }
 
     static class PlayerStatus {
