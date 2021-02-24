@@ -618,7 +618,7 @@ public class Fives extends AppCompatActivity {
                 for (int k = j + 1; k < deck.getHand(i).size(); k++) {
                     // If it isn't a 5(worth -5) or a K(worth 0) remove it.
                     if (deck.compareNumericalValues(deck.getHand(i).get(j), deck.getHand(i).get(k))
-                            && Standard.getNumericalValue(deck.getHand(i).get(j)) != 5) {
+                            && Standard.getNumericalValueAceOne(deck.getHand(i).get(j)) != 5) {
                         toRemove.add(deck.getHand(i).get(j));
                     }
                 }
@@ -631,7 +631,7 @@ public class Fives extends AppCompatActivity {
             }
             // Adding current round values to score
             while (!deck.getHand(i).isEmpty()) {
-                totalScores[i] += getFivesValue(Standard.getNumericalValue(deck.discardByIndex(i, 0)));
+                totalScores[i] += getFivesValue(Standard.getNumericalValueAceOne(deck.discardByIndex(i, 0)));
             }
         }
         updateViewScores();
@@ -931,7 +931,7 @@ public class Fives extends AppCompatActivity {
                 }
             }
         }
-        if (lowestNewScore - curScore < 0 || (lowestNewScore - curScore <= 3 && Standard.getNumericalValue(newCard) <= 3)) {
+        if (lowestNewScore - curScore < 0 || (lowestNewScore - curScore <= 3 && Standard.getNumericalValueAceOne(newCard) <= 3)) {
             return lowestNewScoreMoveIndex;
         }
         return -1;
@@ -1019,7 +1019,7 @@ public class Fives extends AppCompatActivity {
             for (int j = i + 1; j < hand.size(); j++) {
                 // If it isn't a 5(worth -5) or a K(worth 0) remove it.
                 if (deck.compareNumericalValues(hand.get(i), hand.get(j))
-                        && Standard.getNumericalValue(hand.get(i)) != 5) {
+                        && Standard.getNumericalValueAceOne(hand.get(i)) != 5) {
                     toRemove.add(hand.get(i));
                 }
             }
@@ -1033,7 +1033,7 @@ public class Fives extends AppCompatActivity {
         int totalCount = 0;
         // Adding current round values to score
         while (!hand.isEmpty()) {
-            totalCount += getFivesValue(Standard.getNumericalValue(hand.remove(0)));
+            totalCount += getFivesValue(Standard.getNumericalValueAceOne(hand.remove(0)));
         }
         return totalCount;
     }

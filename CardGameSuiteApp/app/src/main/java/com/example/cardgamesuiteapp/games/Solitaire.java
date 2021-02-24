@@ -152,12 +152,9 @@ public class Solitaire extends AppCompatActivity {
         boolean areThereRemainingMoves = doAnySuitsMatch(suits);
 
         for (int j = 0; j < columns; j++) {
-            if(suits[j].equals("No Card"))
+            if(suits[j].contains("No Card"))
                 areThereRemainingMoves = true;
         }
-
-        if(!areThereRemainingMoves)
-            viewDeckHighlight.setVisibility(View.VISIBLE);
 
         return areThereRemainingMoves;
     }
@@ -167,10 +164,11 @@ public class Solitaire extends AppCompatActivity {
      *
      * @return true if the card can move or false if it cannot
      */
-    private static boolean isCardValidToMoveToDiscard(int passedCardNum) {
+    private static boolean isCardValidToMoveToDiscard(int cardNum) {
         boolean isCardValidToMove = false;
-
         Card [] lastFourCards = new Card[4];
+        String passedCardSuit, suit1, suit2;
+        int passedCardNum, cardNum1, cardNum2;
 
         for (int i = 0; i < columns; i++) {
             if (viewColumns[i].getHand().isEmpty()) {
@@ -183,11 +181,26 @@ public class Solitaire extends AppCompatActivity {
         //Game Logic: Card must be of the same suit and lesser value than another card at the bottom of a column
         for (int i = 0; i < lastFourCards.length - 1; i++) {
             for (int j = i + 1; j < lastFourCards.length; j++) {
-                String passedCardSuit = Standard.getCardSuit(passedCardNum);
-                String suit1 = Standard.getCardSuit(lastFourCards[i].getCardNum());
-                String suit2 = Standard.getCardSuit(lastFourCards[j].getCardNum());
-                int cardNum1 = lastFourCards[i].getCardNum();
-                int cardNum2 = lastFourCards[j].getCardNum();
+                passedCardSuit = Standard.getCardSuit(cardNum);
+                passedCardNum = Standard.getNumericalValue(cardNum);
+
+                if(lastFourCards[i] != null) {
+                    suit1 = Standard.getCardSuit(lastFourCards[i].getCardNum());
+                    cardNum1 = Standard.getNumericalValue(lastFourCards[i].getCardNum());
+                }
+                else {
+                    suit1 = "No Card";
+                    cardNum1 = -1;
+                }
+
+                if(lastFourCards[j] != null) {
+                    suit2 = Standard.getCardSuit(lastFourCards[j].getCardNum());
+                    cardNum2 = Standard.getNumericalValue(lastFourCards[j].getCardNum());
+                }
+                else {
+                    suit2 = "No Card";
+                    cardNum2 = -1;
+                }
 
                 if(suit1.equals(suit2) && suit1.equals(passedCardSuit))
                     if((cardNum1 < cardNum2 && cardNum1 == passedCardNum) || (cardNum2 < cardNum1 && cardNum2 == passedCardNum))
@@ -229,7 +242,7 @@ public class Solitaire extends AppCompatActivity {
 
         for (int i = 0; i < columns; i++) {
             if (viewColumns[i].getHand().isEmpty()) {
-                suits[i] = "No Card";
+                suits[i] = "No Card " + i;
             }
             else
                 suits[i] = Standard.getCardSuit(getLastCardInColumn(i).getCardNum());
@@ -278,6 +291,9 @@ public class Solitaire extends AppCompatActivity {
      * @param view is the deck ImageButton
      */
     public void clickDeckToDeal(View view) {
+        if(doesAnEmptyColumnExist() && getTotalNumberOfCardsOnPlayingTable() > 3)
+            return ;
+
         try {
             for (int i = 0; i < viewColumns.length; i++){
                 int card = deck.peekTopDraw();
@@ -292,7 +308,7 @@ public class Solitaire extends AppCompatActivity {
         if(deck.deckIsEmpty())
             viewDeckBack.setVisibility(View.INVISIBLE);
 
-        viewDeckHighlight.setVisibility(View.INVISIBLE);
+        removeHighlightedChoices();
     }
 
     /**
@@ -329,7 +345,6 @@ public class Solitaire extends AppCompatActivity {
     }
 
 
-
     /************************ CARD ANIMATION ************************/
 
     /**
@@ -339,8 +354,6 @@ public class Solitaire extends AppCompatActivity {
      */
     private static void selectPlayingCard(int cardNum) {
         viewAnimatedCard1.updateImage(cardNum);
-
-        //TODO grab first card and wait for location to be selected
 
         highlightAvailableChoices();
     }
@@ -355,12 +368,8 @@ public class Solitaire extends AppCompatActivity {
         isAnimating = true;
         removeHighlightedChoices();
 
-        System.out.println(columnToMoveCardFrom);
-        System.out.println(lastTouchedCardNum);
-
         try {
             boolean test = deck.discardByValue(columnToMoveCardFrom, lastTouchedCardNum);
-            System.out.println(test);
             viewColumns[columnToMoveCardFrom].removeCard(lastTouchedCardNum);
         } catch (Exception e) {
             e.printStackTrace();
@@ -376,8 +385,11 @@ public class Solitaire extends AppCompatActivity {
      * @param cardNum the value of the card that was tapped on
      */
     private static void moveCardToEmptyColumn(int cardNum) {
+
         isAnimating = true;
         removeHighlightedChoices();
+
+        //write stuff here Evan... doesAnEmptyColumnExist and getTotalNumberOfCardsOnPlayingTable method from below might be helpful
 
         isAnimating = false;
     }
@@ -428,26 +440,24 @@ public class Solitaire extends AppCompatActivity {
      * This method is called when a card on the playing table is touched. Highlights discard pile on first use and any empty columns
      */
     private static void highlightAvailableChoices() {
-        int emptyColumn = -1;
-
         if(!movesRemaining())
             return ;
 
         if(deck.discardIsEmpty())
             viewDiscardHighlight.setVisibility(View.VISIBLE);
 
-        for(int i = 0; i<viewColumns.length; i++) {
-            if (viewColumns[i].getHand().isEmpty())
-                emptyColumn = i;
-        }
+        if(!doAnySuitsMatch(getSuits()))
+            viewDeckHighlight.setVisibility(View.VISIBLE);
 
-        if(emptyColumn == 0)
+        System.out.println(doAnySuitsMatch(getSuits()));
+
+        if(viewColumns[0].getHand().isEmpty())
             viewColumnHighlight0.setVisibility(View.VISIBLE);
-        if(emptyColumn == 1)
+        if(viewColumns[1].getHand().isEmpty())
             viewColumnHighlight1.setVisibility(View.VISIBLE);
-        if(emptyColumn == 2)
+        if(viewColumns[2].getHand().isEmpty())
             viewColumnHighlight2.setVisibility(View.VISIBLE);
-        if(emptyColumn == 3)
+        if(viewColumns[3].getHand().isEmpty())
             viewColumnHighlight3.setVisibility(View.VISIBLE);
     }
 
@@ -456,6 +466,7 @@ public class Solitaire extends AppCompatActivity {
      */
     private static void removeHighlightedChoices() {
         viewDiscardHighlight.setVisibility(View.INVISIBLE);
+        viewDeckHighlight.setVisibility(View.INVISIBLE);
         viewColumnHighlight0.setVisibility(View.INVISIBLE);
         viewColumnHighlight1.setVisibility(View.INVISIBLE);
         viewColumnHighlight2.setVisibility(View.INVISIBLE);
@@ -469,6 +480,29 @@ public class Solitaire extends AppCompatActivity {
      */
     private static Card getLastCardInColumn(int columnNum) {
         return viewColumns[columnNum].getHand().get(viewColumns[columnNum].getHand().size()-1);
+    }
+
+    /**
+     * Returns true if an empty column exists and false if not
+     */
+    private static boolean doesAnEmptyColumnExist() {
+        for(int i = 0; i < viewColumns.length; i++) {
+            if (viewColumns[i].getHand().isEmpty())
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns an int representing the total number of playing cards amongst the columns
+     */
+    private static int getTotalNumberOfCardsOnPlayingTable() {
+        int totalNumOfCards = 0;
+
+        for(int i = 0; i<viewColumns.length; i++)
+            totalNumOfCards += viewColumns[i].getNumCards();
+
+        return totalNumOfCards;
     }
 
 
