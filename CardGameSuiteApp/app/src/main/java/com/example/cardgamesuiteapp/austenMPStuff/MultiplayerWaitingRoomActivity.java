@@ -75,6 +75,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
      */
     public void GoToGameActivity() {
         //switch on game type. Then load the correct game...
+        getLifecycle().removeObserver(_MultiPlayerConnector);
         Intent oldIntent = getIntent();
         Intent newIntent = new Intent(this, (Class) oldIntent.getSerializableExtra("gameClass"));
         newIntent.putExtra("multiplayer", true);
