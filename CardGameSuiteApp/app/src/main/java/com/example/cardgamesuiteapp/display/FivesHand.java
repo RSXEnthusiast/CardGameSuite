@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.ArrayList;
+
 public class FivesHand extends Hand {
 
     public FivesHand(Context context) {
@@ -17,6 +19,17 @@ public class FivesHand extends Hand {
     public FivesHand(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
+    }
+
+    @Override
+    public void initHand(ArrayList<Integer> hand) {
+        if (cards.size() == 0) {
+            super.initHand(hand);
+        } else {
+            for (int i = 0; i < cards.size(); i++) {
+                updateCard(i, hand.get(i));
+            }
+        }
     }
 
     @Override
