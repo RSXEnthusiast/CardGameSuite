@@ -52,10 +52,6 @@ abstract public class Hand extends ViewGroup {
                 this.addView(cardView);
                 cards.add(cardView);
             }
-        } else {
-            for (int i = 0; i < 4; i++) {
-                updateCard(i, hand.get(i));
-            }
         }
     }
 
