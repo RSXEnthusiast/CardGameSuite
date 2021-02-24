@@ -1,5 +1,6 @@
 package com.example.cardgamesuiteapp.austenMPStuff;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -75,6 +76,8 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
      */
     public void GoToGameActivity() {
         //switch on game type. Then load the correct game...
+        onActivityMovedToBack();
+        
         Intent oldIntent = getIntent();
         Intent newIntent = new Intent(this, (Class) oldIntent.getSerializableExtra("gameClass"));
         newIntent.putExtra("multiplayer", true);
@@ -83,6 +86,19 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
         startActivity(newIntent);
 
     }
+
+    private void onActivityMovedToBack() {
+        _UIHandler.post(() -> {
+            _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
+        });
+    }
+
+    @Override
+   public void onTopResumedActivityChanged(boolean isTopResumedActivity) {
+        if(!isTopResumedActivity){
+            _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
+        }
+   }
 
 
 
