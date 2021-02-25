@@ -216,11 +216,12 @@ public class Fives extends AppCompatActivity {
                 playersReadyToContinue++;
                 DeckMultiplayerManager.readyToContinue();
                 if (playersReadyToContinue >= numPlayers - numAI) {
+                    playersReadyToContinue = 0;
+                    System.out.println("continuing from confirm button");
                     stage = fivesStage.memCards;
                     newRound();
-                    DeckMultiplayerManager.initialize(deck);
-                    playersReadyToContinue = 0;
                     viewConfirm.setText("Memorized");
+                    DeckMultiplayerManager.initialize(deck);
                 } else {
                     viewConfirm.setVisibility(View.INVISIBLE);
                 }
@@ -230,11 +231,11 @@ public class Fives extends AppCompatActivity {
                 playersReadyToContinue++;
                 DeckMultiplayerManager.readyToContinue();
                 if (playersReadyToContinue >= numPlayers - numAI) {
+                    playersReadyToContinue = 0;
                     stage = fivesStage.memCards;
                     newGame();
-                    DeckMultiplayerManager.initialize(deck);
-                    playersReadyToContinue = 0;
                     viewConfirm.setText("Memorized");
+                    DeckMultiplayerManager.initialize(deck);
                 } else {
                     viewConfirm.setVisibility(View.INVISIBLE);
                 }
@@ -1100,6 +1101,8 @@ public class Fives extends AppCompatActivity {
                 System.out.println("ReadyToContinue");
                 playersReadyToContinue++;
                 if (playersReadyToContinue >= numPlayers - numAI) {
+                    playersReadyToContinue = 0;
+                    System.out.println("continuing from peer");
                     stage = fivesStage.memCards;
                     boolean newGame = false;
                     if (viewConfirm.getText().equals("New Game")) {
@@ -1112,7 +1115,6 @@ public class Fives extends AppCompatActivity {
                     } else {
                         newRound();
                     }
-                    playersReadyToContinue = 0;
                 }
                 break;
         }
