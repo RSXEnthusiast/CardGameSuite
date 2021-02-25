@@ -1,22 +1,20 @@
 package com.example.cardgamesuiteapp.austenMPStuff;
 
-import android.os.CountDownTimer;
+import android.app.Activity;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.OnLifecycleEvent;
 
 import com.example.cardgamesuiteapp.BuildConfig;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Queue;
@@ -98,12 +96,8 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
 
    // ArrayList<String> _SocketEventAdders = new ArrayList<>();
     public void addSocketEvents(MultiPlayerConnectorEventAdder multiPlayerConnectorEventAdder){
-        //String socketEventAdderName=multiPlayerConnectorEventAdder.getClass().getCanonicalName();
-       // if(_SocketEventAdders.contains(socketEventAdderName)){return;} //don't add events twice!
-        //else {
-            //_SocketEventAdders.add(socketEventAdderName);
+
             multiPlayerConnectorEventAdder.AddSocketEvents(_Socket, this);
-        //}
     }
 
 
@@ -218,13 +212,45 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
         });
     }
 
+    public void setLifeCycleOwner(MultiPlayerConnectorLifeCycleOwner owner){
+        owner.setMultiPlayerConnectorAsLifeCycleObserver(this);
+        _CurrentLifeCycleOwner=owner;
+    }
 
-    Queue<SocketIOEventArg> _SocketEventsReceivedWhileAppSleeping = new LinkedList<>();
- boolean _AppIsSleeping = false;
+    public void removeLifeCycleOwner(MultiPlayerConnectorLifeCycleOwner owner){
+        owner.removeMultiPlayerConnectorAsLifeCycleObserver(this);
+        _CurrentLifeCycleOwner=null;
+    }
+
+
+    public void changeLifeCycleOwner(MultiPlayerConnectorLifeCycleOwner owner){
+        if(_CurrentLifeCycleOwner!=null) {
+            Activity activity = (Activity) _CurrentLifeCycleOwner;
+            if (activity != null)
+                _CurrentLifeCycleOwner.removeMultiPlayerConnectorAsLifeCycleObserver(this);
+        }
+
+        setLifeCycleOwner(owner);
+    }
+
+    MultiPlayerConnectorLifeCycleOwner _CurrentLifeCycleOwner=null;
+
+    public interface MultiPlayerConnectorLifeCycleOwner { // make sure your activity only has control over the MultiPlayerConnector's lifecycle events when it needs to
+         void setMultiPlayerConnectorAsLifeCycleObserver(MultiPlayerConnector multiPlayerConnector);
+
+         void removeMultiPlayerConnectorAsLifeCycleObserver(MultiPlayerConnector multiPlayerConnector);
+    }
+
+    Queue<SocketIOEventArg> _SocketEventsReceivedWhileCurrentLifeCycleActivityPause = new LinkedList<>();
+    boolean _CurrentLifeCycleActivityIsPaused = false;
+
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     @Override
     public void onResume(LifecycleOwner owner) {
-        _AppIsSleeping=false;
+        if(!(owner instanceof MultiPlayerConnectorLifeCycleOwner)){
+            return;
+        }
+        _CurrentLifeCycleActivityIsPaused =false;
         new Thread(new Runnable(){
             public void run() {
                 try {
@@ -233,8 +259,8 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
                     e.printStackTrace();
                 }
                 // do something here
-                while(!_SocketEventsReceivedWhileAppSleeping.isEmpty()){
-                    notifyObservers(_SocketEventsReceivedWhileAppSleeping.poll());
+                while(!_SocketEventsReceivedWhileCurrentLifeCycleActivityPause.isEmpty()){
+                    notifyObservers(_SocketEventsReceivedWhileCurrentLifeCycleActivityPause.poll());
                 }
                //send events
             }
@@ -244,13 +270,25 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     @Override
     public void onPause(LifecycleOwner owner) {
-             _AppIsSleeping=true;
+        if(!(owner instanceof MultiPlayerConnectorLifeCycleOwner)){
+            return;
+        }
+        _CurrentLifeCycleActivityIsPaused =true;
+    }
+
+    @Override
+    public void onDestroy(@NonNull LifecycleOwner owner) {
+        if(owner instanceof MultiPlayerConnectorLifeCycleOwner){
+            ((MultiPlayerConnectorLifeCycleOwner) owner).removeMultiPlayerConnectorAsLifeCycleObserver(this);
+            _CurrentLifeCycleActivityIsPaused =false;
+        }
     }
 
     @Override
     public void notifyObservers(Object arg) {
-        if(_AppIsSleeping){
-            _SocketEventsReceivedWhileAppSleeping.add((SocketIOEventArg) arg);
+
+        if(_CurrentLifeCycleActivityIsPaused){
+            _SocketEventsReceivedWhileCurrentLifeCycleActivityPause.add((SocketIOEventArg) arg);
             return;
         }
         setChanged();

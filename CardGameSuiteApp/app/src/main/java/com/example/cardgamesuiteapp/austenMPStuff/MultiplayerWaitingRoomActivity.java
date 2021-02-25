@@ -1,6 +1,5 @@
 package com.example.cardgamesuiteapp.austenMPStuff;
 
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,20 +9,18 @@ import androidx.annotation.NonNull;
 import com.example.cardgamesuiteapp.R;
 import com.google.android.material.snackbar.Snackbar;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentResultListener;
 
 import android.os.Handler;
-import android.os.PersistableBundle;
 import android.util.Log;
 
 import java.net.URISyntaxException;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
+public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements MultiPlayerConnector.MultiPlayerConnectorLifeCycleOwner {
 
     MultiPlayerConnector _MultiPlayerConnector;
     public Handler _UIHandler;
@@ -46,16 +43,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
         _GameType = (String) intent.getSerializableExtra("gameName");
 
         _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
-        //getLifecycle().addObserver(_MultiPlayerConnector); //allows the MultiPlayerConnector to be aware of lifecycle
-
-        try {
-            _MultiPlayerConnector.connectToServer();
-        } catch (URISyntaxException e) {
-            Log.d(TAG, "socket.io server url is malformed. check url in Server.Config");
-            e.printStackTrace();
-        }
-        //_MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
-
+        _MultiPlayerConnector.setLifeCycleOwner(this);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -76,7 +64,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
      */
     public void GoToGameActivity() {
         //switch on game type. Then load the correct game...
-        onActivityMovedToBack();
+        _MultiPlayerConnector.removeLifeCycleOwner(this);
         
         Intent oldIntent = getIntent();
         Intent newIntent = new Intent(this, (Class) oldIntent.getSerializableExtra("gameClass"));
@@ -87,18 +75,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
 
     }
 
-    private void onActivityMovedToBack() {
-        _UIHandler.post(() -> {
-            _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
-        });
-    }
 
-    @Override
-   public void onTopResumedActivityChanged(boolean isTopResumedActivity) {
-        if(!isTopResumedActivity){
-            _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
-        }
-   }
 
 
 
@@ -106,15 +83,29 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
-        getLifecycle().removeObserver(_MultiPlayerConnector);
+        //_MultiPlayerConnector.removeLifeCycleOwner(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         _MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
-        getLifecycle().addObserver(_MultiPlayerConnector); //allows the MultiPlayerConnector to be aware of lifecycle
+        //_MultiPlayerConnector.setLifeCycleOwner(this); //allows the MultiPlayerConnector to be aware of lifecycle
 
+    }
+
+    @Override
+    public void setMultiPlayerConnectorAsLifeCycleObserver(MultiPlayerConnector multiPlayerConnector) {
+        _UIHandler.post(() -> {
+            getLifecycle().addObserver(multiPlayerConnector);
+        });
+    }
+
+    @Override
+    public void removeMultiPlayerConnectorAsLifeCycleObserver(MultiPlayerConnector multiPlayerConnector) {
+        _UIHandler.post(() -> {
+            getLifecycle().removeObserver(multiPlayerConnector);
+        });
     }
 
     static class PlayerStatus {
