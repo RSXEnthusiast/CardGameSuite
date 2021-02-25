@@ -131,15 +131,22 @@ public class Solitaire extends AppCompatActivity {
 
         int columnToMoveCardFrom = findColumnOfSelectedCard(cardNum);
 
-        if(columnToMoveCardFrom != -1) {
+        if(columnToMoveCardFrom >= 0) {
             cardNum = getLastCardInColumn(columnToMoveCardFrom).getCardNum();
             lastTouchedCardNum = cardNum;
             selectPlayingCard(cardNum);
         }
         else if((deck.discardIsEmpty() || deck.peekTopDiscard() == cardNum) && isCardValidToMoveToDiscard(lastTouchedCardNum))
             moveCardToDiscard(lastTouchedCardNum);
-        else
-            moveCardToEmptyColumn(lastTouchedCardNum);
+        else if(cardNum == -2)
+            moveCardToEmptyColumn(lastTouchedCardNum, 0);
+        else if(cardNum == -3)
+            moveCardToEmptyColumn(lastTouchedCardNum, 1);
+        else if(cardNum == -4)
+            moveCardToEmptyColumn(lastTouchedCardNum, 2);
+        else if(cardNum == -5)
+            moveCardToEmptyColumn(lastTouchedCardNum, 3);
+
 
         updateViewInstruction();
     }
@@ -345,6 +352,14 @@ public class Solitaire extends AppCompatActivity {
         cardTouched(-1);
     }
 
+    public void clickColumn0Highlight(View view){cardTouched(-2);}
+
+    public void clickColumn1Highlight(View view){cardTouched(-3);}
+
+    public void clickColumn2Highlight(View view){cardTouched(-4);}
+
+    public void clickColumn3Highlight(View view){cardTouched(-5);}
+
 
     /************************ CARD ANIMATION ************************/
 
@@ -385,14 +400,14 @@ public class Solitaire extends AppCompatActivity {
      *
      * @param cardNum the value of the card that was tapped on
      */
-    private static void moveCardToEmptyColumn(int cardNum) {
+    private static void moveCardToEmptyColumn(int cardNum, int columnNum) {
 
         isAnimating = true;
         removeHighlightedChoices();
 
         //write stuff here Evan... doesAnEmptyColumnExist and getTotalNumberOfCardsOnPlayingTable method from below might be helpful
         if(doesAnEmptyColumnExist()){
-//            moveCardsToAnotherHand(findColumnOfSelectedCard(cardNum), , cardNum);
+            moveCardsToAnotherHand(findColumnOfSelectedCard(cardNum), columnNum, cardNum);
         }
 
 

@@ -107,6 +107,7 @@
         android:layout_width="80dp"
         android:layout_height="112dp"
         android:background="@drawable/rounded"
+        android:onClick="clickColumn0Highlight"
         app:layout_constraintStart_toStartOf="@id/column0"
         app:layout_constraintTop_toTopOf="@id/column0" />
 
@@ -115,6 +116,7 @@
         android:layout_width="80dp"
         android:layout_height="112dp"
         android:background="@drawable/rounded"
+        android:onClick="clickColumn1Highlight"
         app:layout_constraintStart_toStartOf="@id/column1"
         app:layout_constraintTop_toTopOf="@id/column1" />
 
@@ -123,6 +125,7 @@
         android:layout_width="80dp"
         android:layout_height="112dp"
         android:background="@drawable/rounded"
+        android:onClick="clickColumn2Highlight"
         app:layout_constraintStart_toStartOf="@id/column2"
         app:layout_constraintTop_toTopOf="@id/column2" />
 
@@ -131,6 +134,7 @@
         android:layout_width="80dp"
         android:layout_height="112dp"
         android:background="@drawable/rounded"
+        android:onClick="clickColumn3Highlight"
         app:layout_constraintStart_toStartOf="@id/column3"
         app:layout_constraintTop_toTopOf="@id/column3" />
 
