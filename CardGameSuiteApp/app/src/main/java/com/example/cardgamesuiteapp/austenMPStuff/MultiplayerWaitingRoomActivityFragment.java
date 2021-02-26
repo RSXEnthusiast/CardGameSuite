@@ -1,13 +1,11 @@
 package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import java.net.URISyntaxException;
@@ -93,7 +91,7 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
         ) {
             @Override
             public void handleOnBackPressed() {
-                _MultiPlayerConnector.Reset();
+                _MultiPlayerConnector.ResetConnection();
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
             }
 

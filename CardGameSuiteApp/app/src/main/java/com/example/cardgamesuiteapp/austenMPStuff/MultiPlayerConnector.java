@@ -327,7 +327,7 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
 
     }
 
-    public void Reset() {
+    public void ResetConnection() {
 
        Close();
        //_Socket.off();

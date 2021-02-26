@@ -137,7 +137,7 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
                 //_MultiPlayerConnector.emitEvent(ServerConfig.public_game_waiting_room_player_left);
                 _MultiplayerWaitingRoomActivity.changeFragment(SelectPublicOrPrivateFragment.class.getCanonicalName(), null);
 
-                _MultiPlayerConnector.Reset();
+                _MultiPlayerConnector.ResetConnection();
             }
 
 

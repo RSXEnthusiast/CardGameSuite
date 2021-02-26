@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
 
 import androidx.activity.OnBackPressedCallback;
@@ -17,7 +15,6 @@ import com.example.cardgamesuiteapp.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.net.URISyntaxException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -50,8 +47,8 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
         _joinPrivateButton.setOnClickListener(v -> privateGameSelected());
         _joinPublicButton.setOnClickListener(v -> toPublicGameWaitingRoomFragment());
 
-        _joinPrivateButton.setEnabled(_MultiPlayerConnector.Connected()); _joinPrivateButton.setTextColor(buttonColorStateList); _joinPrivateButton.setStrokeColor(buttonColorStateList);
-        _joinPublicButton.setEnabled(_MultiPlayerConnector.Connected()); _joinPublicButton.setTextColor(buttonColorStateList); _joinPublicButton.setStrokeColor(buttonColorStateList);
+         _joinPrivateButton.setTextColor(buttonColorStateList); _joinPrivateButton.setStrokeColor(buttonColorStateList);
+         _joinPublicButton.setTextColor(buttonColorStateList); _joinPublicButton.setStrokeColor(buttonColorStateList);
 
         SetMultiPlayerConnectorObserver(_multiPlayerConnectorObserver);
 
@@ -63,16 +60,12 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
     @Override
     public void onResume() {
         super.onResume();
-
-        try {
-            _MultiPlayerConnector.connectToServer();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+        _MultiPlayerConnector.ResetSocketEvents();
+        _MultiPlayerConnector.ResetConnection();
 
         System.out.println("resuming SelectPublicOrPrivate");
 
-        menuButtonsEnabledStatus(_MultiPlayerConnector.Connected());
+        menuButtonsEnabledStatus(true);
     }
 
 

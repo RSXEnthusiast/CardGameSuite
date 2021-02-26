@@ -9,12 +9,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
@@ -25,7 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -33,8 +30,6 @@ import java.util.Observer;
 import io.socket.client.Socket;
 
 import static android.graphics.Color.BLACK;
-import static android.graphics.Color.GRAY;
-import static android.graphics.Color.LTGRAY;
 
 public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivityFragment  {
     boolean _GameCreator=false;
@@ -181,7 +176,7 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
                                 public void onClick(DialogInterface dialog, int which) {
                                     // Continue with delete operation
                                     goBackToSelectPrivateOrPublic();
-                                    _MultiPlayerConnector.Reset();
+                                    _MultiPlayerConnector.ResetConnection();
 
                                 }
                             })
