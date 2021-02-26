@@ -34,7 +34,7 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
 
     private static MultiPlayerConnector _Instance = null;
 
-    private String serverUrl = (BuildConfig.DEBUG) ? ServerConfig.ServerURLDebug : ServerConfig.ServerURLProduction;
+    public String serverUrl = (BuildConfig.DEBUG) ? ServerConfig.ServerURLDebug : ServerConfig.ServerURLProduction;
     private Socket _Socket;
 
     public boolean Connected() {

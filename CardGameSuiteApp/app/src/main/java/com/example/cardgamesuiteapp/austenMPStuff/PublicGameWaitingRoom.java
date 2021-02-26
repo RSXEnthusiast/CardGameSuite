@@ -134,8 +134,10 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
             @Override
             public void handleOnBackPressed() {
 
-                _MultiPlayerConnector.emitEvent(ServerConfig.public_game_waiting_room_player_left);
+                //_MultiPlayerConnector.emitEvent(ServerConfig.public_game_waiting_room_player_left);
                 _MultiplayerWaitingRoomActivity.changeFragment(SelectPublicOrPrivateFragment.class.getCanonicalName(), null);
+
+                _MultiPlayerConnector.Reset();
             }
 
 

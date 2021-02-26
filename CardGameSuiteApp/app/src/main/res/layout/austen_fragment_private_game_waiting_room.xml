@@ -46,7 +46,7 @@
             />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/shareButton"
+            android:id="@+id/privateGameCodeShareButton"
             android:text="Share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -87,6 +87,7 @@
             android:paddingHorizontal="30dp"
             android:paddingVertical="20dp"
             android:textAlignment="center"
+            android:textColor="@color/black"
             android:background="@drawable/roundedrectangleblackstroke"
 
             >

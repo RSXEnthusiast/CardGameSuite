@@ -2,6 +2,7 @@ package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
     TextView _GameCodeView;
     TextView _NumberOfPlayersInRoomView;
     MaterialButton _StartButton;
+    MaterialButton _ShareButton;
     ArrayAdapter<String> _PlayerListViewArrayAdapter;
     ArrayList<String> _PlayerList = new ArrayList<>();
 
@@ -68,6 +70,11 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
         String playerName=extras.getString("playerName","noName");
 
         _StartButton.setVisibility((_GameCreator ? View.VISIBLE:View.GONE));
+        _StartButton.setOnClickListener(v -> startGame());
+
+        _ShareButton = view.findViewById(R.id.privateGameCodeShareButton);
+        _ShareButton.setOnClickListener(v -> shareGameCodeIntent());
+
 
         _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
             _GameCodeView.setText(_MultiPlayerConnector.getRoomCode());
@@ -82,6 +89,24 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
         _PlayerListViewArrayAdapter.add(playerName);
 
 
+
+    }
+
+    public void startGame() {
+        _MultiPlayerConnector.emitEvent(ServerConfig.initiatorSaysToStartGame);
+    }
+
+    public void shareGameCodeIntent() {
+
+        _MultiplayerWaitingRoomActivity._UIHandler.post(()-> {
+            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            String shareBody = _MultiPlayerConnector.getRoomCode();
+            String shareSub = "Card Game Room Code";
+            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub);
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+            startActivity(Intent.createChooser(sharingIntent, "Share room code using"));
+        });
     }
 
     @Override

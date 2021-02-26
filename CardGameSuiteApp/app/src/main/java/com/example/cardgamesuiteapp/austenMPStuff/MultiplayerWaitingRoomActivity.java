@@ -22,7 +22,7 @@ import java.util.Observer;
 
 public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements MultiPlayerConnector.MultiPlayerConnectorLifeCycleOwner {
 
-    MultiPlayerConnector _MultiPlayerConnector;
+    MultiPlayerConnector _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
     public Handler _UIHandler;
     public static String _GameType;
     public static int _MinNumPlayersRequiredForGame = 2;
@@ -42,8 +42,13 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         _GameType = (String) intent.getSerializableExtra("gameName");
 
-        _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
+
         _MultiPlayerConnector.setLifeCycleOwner(this);
+        try {
+            _MultiPlayerConnector.connectToServer();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -219,7 +224,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
             SharedPreferences sp = getSharedPreferences("fivesGameInfo", MODE_PRIVATE);
             switch (socketIOEventArg._EventName) {
                 case ServerConfig.eventConnectError:
-                    Snackbar.make(findViewById(R.id.multiPlayerWaitingRoomCoordinatorLayout), "Unable To Connect To Server WaitingRoomActivity", Snackbar.LENGTH_LONG)
+                    Snackbar.make(findViewById(R.id.multiPlayerWaitingRoomCoordinatorLayout), "Unable To Connect To Server: "+_MultiPlayerConnector.serverUrl, Snackbar.LENGTH_LONG)
                             .show();
                     break;
                 case ServerConfig.playerNumber:

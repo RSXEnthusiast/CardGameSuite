@@ -1,7 +1,10 @@
 package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -11,12 +14,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.cardgamesuiteapp.R;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.net.URISyntaxException;
+import java.util.Observable;
 import java.util.Observer;
 
 import io.socket.client.Socket;
+
+import static android.graphics.Color.BLACK;
 
 public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivityFragment {
 
@@ -37,11 +44,19 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Button joinPrivateButton = view.findViewById(R.id.privateButton);
-        Button joinPublicButton = view.findViewById(R.id.publicButton);
+        _joinPrivateButton = view.findViewById(R.id.privateButton);
+        _joinPublicButton = view.findViewById(R.id.publicButton);
 
-        joinPrivateButton.setOnClickListener(v -> privateGameSelected());
-        joinPublicButton.setOnClickListener(v -> toPublicGameWaitingRoomFragment());
+        _joinPrivateButton.setOnClickListener(v -> privateGameSelected());
+        _joinPublicButton.setOnClickListener(v -> toPublicGameWaitingRoomFragment());
+
+        _joinPrivateButton.setEnabled(_MultiPlayerConnector.Connected()); _joinPrivateButton.setTextColor(buttonColorStateList); _joinPrivateButton.setStrokeColor(buttonColorStateList);
+        _joinPublicButton.setEnabled(_MultiPlayerConnector.Connected()); _joinPublicButton.setTextColor(buttonColorStateList); _joinPublicButton.setStrokeColor(buttonColorStateList);
+
+        SetMultiPlayerConnectorObserver(_multiPlayerConnectorObserver);
+
+
+
 
     }
 
@@ -56,16 +71,15 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
         }
 
         System.out.println("resuming SelectPublicOrPrivate");
+
+        menuButtonsEnabledStatus(_MultiPlayerConnector.Connected());
     }
 
-    @Override
-    public void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
-        //no events to add
-    }
+
 
     @Override
     void SetMultiPlayerConnectorObserver(Observer multiPlayerConnectorObserver) {
-        multiPlayerConnectorObserver=null; //don't need to observe
+        _MultiPlayerConnectorObserver=multiPlayerConnectorObserver;
     }
 
 
@@ -86,7 +100,7 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
         }
 
         _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
-        Snackbar.make(_MultiplayerWaitingRoomActivity.findViewById(R.id.multiPlayerWaitingRoomCoordinatorLayout), "Unable To Connect To Server WaitingRoomActivity", Snackbar.LENGTH_LONG)
+        Snackbar.make(_MultiplayerWaitingRoomActivity.findViewById(R.id.multiPlayerWaitingRoomCoordinatorLayout), "Unable To Connect To Server...", Snackbar.LENGTH_LONG)
                 .show();
     });
 
@@ -128,4 +142,83 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
     }
 
 
+    private Observer _multiPlayerConnectorObserver = new Observer() {
+        @Override
+        public void update(Observable o, Object arg) {
+
+            SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
+
+            if(!socketIOEventArg.CompareEventWatcher(TAG)) return;
+            switch (socketIOEventArg._EventName) {
+
+                case Socket.EVENT_CONNECT:
+                case Socket.EVENT_DISCONNECT:
+                case Socket.EVENT_CONNECT_ERROR:
+
+                    _MultiplayerWaitingRoomActivity._UIHandler.post(()->{
+                            menuButtonsEnabledStatus(_MultiPlayerConnector.Connected());
+                    });
+                    break;
+            }
+        }
+    };
+
+
+    @Override
+    public  void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
+
+        socket.on(Socket.EVENT_CONNECT, args -> {
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(Socket.EVENT_CONNECT, TAG ,args);
+            multiPlayerConnector.notifyObservers(socketIOEventArg);
+        });
+        socket.on(Socket.EVENT_CONNECT_ERROR, args -> {
+
+            multiPlayerConnector.notifyObservers(new SocketIOEventArg(Socket.EVENT_CONNECT_ERROR, TAG, args));
+        });
+        socket.on(Socket.EVENT_DISCONNECT, args -> {
+
+            multiPlayerConnector.notifyObservers(new SocketIOEventArg(Socket.EVENT_DISCONNECT, TAG, args));
+        });
+
+
+
+    }
+
+
+
+
+    //----------------- ui elements
+
+    MaterialButton _joinPrivateButton;
+    MaterialButton _joinPublicButton ;
+
+
+    int[][] buttonColorStates = new int[][] {
+            new int[] { android.R.attr.state_enabled}, // enabled
+            new int[] {-android.R.attr.state_enabled}, // disabled
+            new int[] {-android.R.attr.state_checked}, // unchecked
+            new int[] { android.R.attr.state_pressed}  // pressed
+    };
+
+    int[] buttonColors = new int[] {
+            Color.BLACK,
+            Color.LTGRAY,
+            BLACK,
+            BLACK
+    };
+
+    ColorStateList buttonColorStateList = new ColorStateList(buttonColorStates, buttonColors);
+
+    private void menuButtonsEnabledStatus(boolean isEnabled) {
+
+            _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
+                _joinPrivateButton.setEnabled(isEnabled);
+                _joinPublicButton.setEnabled(isEnabled);
+              /*  if(isEnabled) _StartButton.setTextColor(BLACK);
+                else _StartButton.setTextColor(LTGRAY); */
+            });
+        }
 }
+
+
+
