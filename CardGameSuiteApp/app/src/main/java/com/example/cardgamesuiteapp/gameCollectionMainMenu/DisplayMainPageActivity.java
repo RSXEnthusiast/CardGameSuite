@@ -37,6 +37,9 @@ public class DisplayMainPageActivity extends AppCompatActivity implements Serial
         if (sp.getString("name", "name not found").equals("name not found")) {
             sp.edit().putString("name", "Name").apply();
         }
+        if (sp.getString("highlightAssistEnabled", "default").equals("default")) {
+            sp.edit().putString("highlightAssistEnabled", "On").apply();
+        }
     }
 
     @Override
@@ -70,6 +73,11 @@ public class DisplayMainPageActivity extends AppCompatActivity implements Serial
         startActivity(intent);
     }
 
+    public void clickFivesSettingsButton(View view) {
+        Intent intent = new Intent(this, DisplayFivesSettingsActivity.class);
+        startActivity(intent);
+    }
+
     public void clickPlaySolitaireButton(View view) {
         Intent intent = new Intent(this, Solitaire.class);
         startActivity(intent);
@@ -77,6 +85,11 @@ public class DisplayMainPageActivity extends AppCompatActivity implements Serial
 
     public void clickSolitaireRulesButton(View view) {
         Intent intent = new Intent(this, DisplaySolitaireRulesActivity.class);
+        startActivity(intent);
+    }
+
+    public void clickSolitaireSettingsButton(View view) {
+        Intent intent = new Intent(this, DisplaySolitaireSettingsActivity.class);
         startActivity(intent);
     }
 

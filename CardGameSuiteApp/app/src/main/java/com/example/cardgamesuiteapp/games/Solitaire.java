@@ -3,6 +3,7 @@ package com.example.cardgamesuiteapp.games;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -36,6 +37,7 @@ public class Solitaire extends AppCompatActivity {
     static Card viewAnimatedCard1;
     static CardAnimation viewAnimation1;
     static int lastTouchedCardNum;
+    static boolean highlightAssistEnabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,11 @@ public class Solitaire extends AppCompatActivity {
         viewDeckBack.bringToFront();
         setBackStyleToImageButton(viewDeckBack);
 
+        SharedPreferences settings = getSharedPreferences("preferences", MODE_PRIVATE);
+        if(settings.getString("highlightAssistEnabled", "valueNotFound").equals("On"))
+            highlightAssistEnabled = true;
+        else
+            highlightAssistEnabled = false;
         viewDeckHighlight = findViewById(R.id.highlightDeck);
         viewDeckHighlight.setVisibility(View.INVISIBLE);
         viewDiscardHighlight = findViewById(R.id.highlightDiscard);
@@ -292,7 +299,7 @@ public class Solitaire extends AppCompatActivity {
      * @param view is the deck ImageButton
      */
     public void clickDeckToDeal(View view) {
-        if(doesAnEmptyColumnExist() && getTotalNumberOfCardsOnPlayingTable() > 3)
+        if(doAnySuitsMatch(getSuits()) && (doesAColumnWithMoreThanOneCardExist() && doesAnEmptyColumnExist()))
             return ;
 
         try {
@@ -465,19 +472,23 @@ public class Solitaire extends AppCompatActivity {
      * @param cardNum the value of the card that was tapped on
      */
     private static void highlightAvailableChoices(int cardNum) {
-        if(deck.discardIsEmpty())
+        String [] suits = getSuits();
+
+        if (deck.discardIsEmpty() && doAnySuitsMatch(suits))
             viewDiscardHighlight.setVisibility(View.VISIBLE);
 
-        if(!doAnySuitsMatch(getSuits()) && cardNum > 0)
-            viewDeckHighlight.setVisibility(View.VISIBLE);
+        if(highlightAssistEnabled) {
+            if (cardNum > 0 && !doAnySuitsMatch(suits) && !(doesAColumnWithMoreThanOneCardExist() && doesAnEmptyColumnExist()))
+                viewDeckHighlight.setVisibility(View.VISIBLE);
+        }
 
-        if(viewColumns[0].getHand().isEmpty())
+        if (viewColumns[0].getHand().isEmpty())
             viewColumnHighlight0.setVisibility(View.VISIBLE);
-        if(viewColumns[1].getHand().isEmpty())
+        if (viewColumns[1].getHand().isEmpty())
             viewColumnHighlight1.setVisibility(View.VISIBLE);
-        if(viewColumns[2].getHand().isEmpty())
+        if (viewColumns[2].getHand().isEmpty())
             viewColumnHighlight2.setVisibility(View.VISIBLE);
-        if(viewColumns[3].getHand().isEmpty())
+        if (viewColumns[3].getHand().isEmpty())
             viewColumnHighlight3.setVisibility(View.VISIBLE);
     }
 
@@ -523,6 +534,20 @@ public class Solitaire extends AppCompatActivity {
             totalNumOfCards += viewColumns[i].getNumCards();
 
         return totalNumOfCards;
+    }
+
+    /**
+     * Returns a boolean defining if any column in the game contains more than one card
+     */
+    private static boolean doesAColumnWithMoreThanOneCardExist() {
+        boolean check = false;
+
+        for(int i = 0; i<viewColumns.length; i++) {
+            if(viewColumns[i].getNumCards() > 1)
+                check = true;
+        }
+
+        return check;
     }
 
 

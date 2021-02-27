@@ -15,8 +15,10 @@
         <activity android:name=".gameCollectionMainMenu.DisplaySettingsActivity" />
         <activity android:name=".games.Fives" />
         <activity android:name=".gameCollectionMainMenu.DisplayFivesRulesActivity" />
+        <activity android:name=".gameCollectionMainMenu.DisplayFivesSettingsActivity" />
         <activity android:name=".games.Solitaire" />
         <activity android:name=".gameCollectionMainMenu.DisplaySolitaireRulesActivity" />
+        <activity android:name=".gameCollectionMainMenu.DisplaySolitaireSettingsActivity" />
         <activity android:name=".singlePlayerMenus.FivesSinglePlayerMenu" />
         <activity
             android:name=".austenMPStuff.MultiplayerWaitingRoomActivity"

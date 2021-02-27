@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="left"
-            android:text="Discard cards that are matching in suite and have a face value less than another card in play. Move cards to empty columns and deal more cards from deck as desired"
+            android:text="Discard cards that are matching in suite and have a face value less than another card in play. Deal more cards from deck when no more moves are available and move cards to empty columns as desired."
             android:textColor="?colorOnSecondary"
             android:textSize="20sp">
         </TextView>
