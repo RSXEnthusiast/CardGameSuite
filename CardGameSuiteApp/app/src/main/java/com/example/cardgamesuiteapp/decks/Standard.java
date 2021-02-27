@@ -13,6 +13,21 @@ public class Standard extends Deck {
      * @param numPlayers         How many people are playing.
      */
     @SuppressWarnings("unchecked")
+    public Standard(boolean shuffleOnEmptyDeck, int numPlayers, int myPlayerNum) {
+        super(shuffleOnEmptyDeck, numPlayers, myPlayerNum);
+        Queue<Integer> deck = new LinkedList<Integer>();
+        for (int i = 1; i <= 13 * 4; i++) {
+            deck.add(i);
+        }
+        ArrayList<Integer>[] hands;
+        hands = new ArrayList[numPlayers];
+        for (int i = 0; i < hands.length; i++) {
+            hands[i] = new ArrayList<Integer>();
+        }
+        super.initializeDeckAndHands(deck, hands);
+        this.shuffleDiscardIntoDeck();
+    }
+
     public Standard(boolean shuffleOnEmptyDeck, int numPlayers) {
         super(shuffleOnEmptyDeck, numPlayers);
         Queue<Integer> deck = new LinkedList<Integer>();
@@ -75,22 +90,26 @@ public class Standard extends Deck {
                 result += "king";
                 break;
         }
-        result += "_";
+        result += "_" + getCardSuit(num);
+
+        return result;
+    }
+
+    /**
+     * @return a lowercase string representing the cards suit
+     */
+    public static String getCardSuit(int num) {
         switch ((num - 1) / 13) {
             case 0:
-                result += "h";
-                break;
+                return "h";
             case 1:
-                result += "c";
-                break;
+                return "c";
             case 2:
-                result += "d";
-                break;
+                return "d";
             case 3:
-                result += "s";
-                break;
+                return "s";
         }
-        return result;
+        return "-1";
     }
 
     /**
@@ -109,7 +128,18 @@ public class Standard extends Deck {
      * @param i The number representing the card considering an ace to be worth 1.
      * @return the numerical value of a card.
      */
-    public static int getNumericalValue(int i) {
+    public static int getNumericalValueAceOne(int i) {
         return (i - 1) % 13 + 1;
+    }
+
+    /**
+     * @param i The number representing the card considering an ace to be worth 14.
+     * @return the numerical value of a card.
+     */
+    public static int getNumericalValue(int i) {
+        int num = (i - 1) % 13 + 1;
+        if(num == 1)
+            return 14;
+        return num;
     }
 }

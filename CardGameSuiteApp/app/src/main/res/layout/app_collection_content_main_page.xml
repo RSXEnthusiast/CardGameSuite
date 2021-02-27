@@ -18,8 +18,8 @@
 
         <ImageButton
             android:id="@+id/settings_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="end"
             android:onClick="clickSettingsButton"
             android:src="@drawable/red_cog_icon"
@@ -39,7 +39,7 @@
             android:gravity="center">
 
             <Button
-                android:layout_width="340dp"
+                android:layout_width="330dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:text="@string/fives"
@@ -47,14 +47,35 @@
                 android:onClick="clickPlayFivesButton"
                 android:textSize="32sp"/>
 
-            <ImageButton
-                android:id="@+id/fives_info_button"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="start"
-                android:src="@drawable/red_info_icon"
-                android:onClick="clickFivesRulesButton"
-                android:contentDescription="@string/infoIcon" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="left">
+
+                <ImageButton
+                    android:id="@+id/fives_info_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="start"
+                    android:src="@drawable/red_info_icon"
+                    android:onClick="clickFivesRulesButton"
+                    android:contentDescription="@string/infoIcon" />
+
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="5dp"/>
+
+                <ImageButton
+                    android:id="@+id/fives_settings_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="start"
+                    android:contentDescription="@string/settings_cog_icon"
+                    android:onClick="clickFivesSettingsButton"
+                    android:src="@drawable/red_cog_icon_mini" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -72,7 +93,7 @@
             android:gravity="center">
 
             <Button
-                android:layout_width="340dp"
+                android:layout_width="330dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:text="@string/solitaire"
@@ -80,14 +101,35 @@
                 android:onClick="clickPlaySolitaireButton"
                 android:textSize="32sp"/>
 
-            <ImageButton
-                android:id="@+id/solitaire_info_button"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="start"
-                android:src="@drawable/red_info_icon"
-                android:onClick="clickSolitaireRulesButton"
-                android:contentDescription="@string/infoIcon" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="left">
+
+                <ImageButton
+                    android:id="@+id/solitaire_info_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="start"
+                    android:src="@drawable/red_info_icon"
+                    android:onClick="clickSolitaireRulesButton"
+                    android:contentDescription="@string/infoIcon" />
+
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="5dp"/>
+
+                <ImageButton
+                    android:id="@+id/solitaire_settings_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="start"
+                    android:contentDescription="@string/settings_cog_icon"
+                    android:onClick="clickSolitaireSettingsButton"
+                    android:src="@drawable/red_cog_icon_mini" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

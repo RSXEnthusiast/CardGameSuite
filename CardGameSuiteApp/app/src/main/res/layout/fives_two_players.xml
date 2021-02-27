@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".games.Fives">
 
-
     <Button
         android:id="@+id/confirmButton"
         android:layout_width="116dp"
@@ -39,7 +38,7 @@
         android:layout_marginEnd="288dp"
         android:layout_marginBottom="4dp"
         android:gravity="center"
-        android:text="Game Collection"
+        android:text="Home"
         android:textSize="11dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -58,7 +57,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.example.cardgamesuiteapp.display.Hand
+    <com.example.cardgamesuiteapp.display.FivesHand
         android:id="@+id/player1"
         android:layout_width="150dp"
         android:layout_height="210dp"
@@ -68,7 +67,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.99" />
 
-    <com.example.cardgamesuiteapp.display.Hand
+    <com.example.cardgamesuiteapp.display.FivesHand
         android:id="@+id/player2"
         android:layout_width="150dp"
         android:layout_height="210dp"

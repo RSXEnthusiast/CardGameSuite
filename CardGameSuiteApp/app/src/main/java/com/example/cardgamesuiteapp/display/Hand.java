@@ -1,16 +1,20 @@
 package com.example.cardgamesuiteapp.display;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Point;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import com.example.cardgamesuiteapp.R;
+
 import java.util.ArrayList;
 
-public class Hand extends ViewGroup {
+abstract public class Hand extends ViewGroup {
     int deviceWidth;
     ArrayList<Card> cards = new ArrayList<Card>();
 
@@ -27,7 +31,7 @@ public class Hand extends ViewGroup {
         init(context);
     }
 
-    private void init(Context context) {
+    void init(Context context) {
         final Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         Point deviceDisplay = new Point();
         display.getSize(deviceDisplay);
@@ -41,12 +45,13 @@ public class Hand extends ViewGroup {
      * @param hand the hand to be put into the array
      */
     public void initHand(ArrayList<Integer> hand) {
-        removeAllCards();
-        for (int card : hand) {
-            Card cardView = new Card(getContext());
-            cardView.updateImage(card);
-            this.addView(cardView);
-            cards.add(cardView);
+        if (cards.size() == 0) {
+            for (int card : hand) {
+                Card cardView = new Card(getContext());
+                cardView.updateImage(card);
+                this.addView(cardView);
+                cards.add(cardView);
+            }
         }
     }
 
@@ -62,25 +67,7 @@ public class Hand extends ViewGroup {
     }
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        final int count = getChildCount();
-
-        int cardWidth = getMeasuredWidth() / 2;
-        int cardHeight = getMeasuredHeight() / 2;
-
-        for (int i = 0; i < count; i++) {
-            View child = getChildAt(i);
-
-            if (child.getVisibility() == GONE) {
-                return;
-            }
-            left = cardWidth * (i % 2);
-            top = cardHeight * (i / 2);
-            right = cardWidth * (i % 2 + 1);
-            bottom = cardHeight * (i / 2 + 1);
-            child.layout(left, top, right, bottom);
-        }
-    }
+    abstract protected void onLayout(boolean changed, int left, int top, int right, int bottom);
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -214,5 +201,27 @@ public class Hand extends ViewGroup {
             }
         }
         return null;
+    }
+
+    public ArrayList<Card> getHand() {
+        return cards;
+    }
+
+    public void swapVisibility(int location) {
+        if (cards.get(location).getVisibility() == VISIBLE) {
+            cards.get(location).setVisibility(INVISIBLE);
+        } else {
+            cards.get(location).setVisibility(VISIBLE);
+        }
+    }
+
+    public void allCardsFaceDown() {
+        for (Card card : cards) {
+            card.setFaceUp(false);
+        }
+    }
+
+    public boolean isEmpty(){
+        return cards.isEmpty();
     }
 }

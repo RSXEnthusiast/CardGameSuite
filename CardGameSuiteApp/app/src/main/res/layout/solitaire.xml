@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".games.Solitaire">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/deck"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        android:onClick="clickDeckToDeal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.69"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.993" />
+
+    <com.example.cardgamesuiteapp.display.Card
+        android:id="@+id/discard"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.952"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.993" />
+
+    <com.example.cardgamesuiteapp.display.Card
+        android:id="@+id/animatedCard1"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.cardgamesuiteapp.display.SolitaireHand
+        android:id="@+id/column0"
+        android:layout_width="75dp"
+        android:layout_height="577.5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.043"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.example.cardgamesuiteapp.display.SolitaireHand
+        android:id="@+id/column1"
+        android:layout_width="75dp"
+        android:layout_height="577.5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.348"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.example.cardgamesuiteapp.display.SolitaireHand
+        android:id="@+id/column2"
+        android:layout_width="75dp"
+        android:layout_height="577.5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.651"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.example.cardgamesuiteapp.display.SolitaireHand
+        android:id="@+id/column3"
+        android:layout_width="75dp"
+        android:layout_height="577.5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.956"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <View
+        android:id="@+id/highlightDeck"
+        android:layout_width="80dp"
+        android:layout_height="112dp"
+        android:background="@drawable/rounded"
+        app:layout_constraintBottom_toBottomOf="@id/deck"
+        app:layout_constraintEnd_toEndOf="@id/deck"
+        app:layout_constraintStart_toStartOf="@id/deck"
+        app:layout_constraintTop_toTopOf="@id/deck" />
+
+    <View
+        android:id="@+id/highlightDiscard"
+        android:layout_width="80dp"
+        android:layout_height="112dp"
+        android:background="@drawable/rounded"
+        android:onClick="clickDiscardHighlight"
+        app:layout_constraintBottom_toBottomOf="@id/discard"
+        app:layout_constraintEnd_toEndOf="@id/discard"
+        app:layout_constraintStart_toStartOf="@id/discard"
+        app:layout_constraintTop_toTopOf="@id/discard" />
+
+    <View
+        android:id="@+id/highlightColumn0"
+        android:layout_width="80dp"
+        android:layout_height="112dp"
+        android:background="@drawable/rounded"
+        android:onClick="clickColumn0Highlight"
+        app:layout_constraintStart_toStartOf="@id/column0"
+        app:layout_constraintTop_toTopOf="@id/column0" />
+
+    <View
+        android:id="@+id/highlightColumn1"
+        android:layout_width="80dp"
+        android:layout_height="112dp"
+        android:background="@drawable/rounded"
+        android:onClick="clickColumn1Highlight"
+        app:layout_constraintStart_toStartOf="@id/column1"
+        app:layout_constraintTop_toTopOf="@id/column1" />
+
+    <View
+        android:id="@+id/highlightColumn2"
+        android:layout_width="80dp"
+        android:layout_height="112dp"
+        android:background="@drawable/rounded"
+        android:onClick="clickColumn2Highlight"
+        app:layout_constraintStart_toStartOf="@id/column2"
+        app:layout_constraintTop_toTopOf="@id/column2" />
+
+    <View
+        android:id="@+id/highlightColumn3"
+        android:layout_width="80dp"
+        android:layout_height="112dp"
+        android:background="@drawable/rounded"
+        android:onClick="clickColumn3Highlight"
+        app:layout_constraintStart_toStartOf="@id/column3"
+        app:layout_constraintTop_toTopOf="@id/column3" />
+
+    <TextView
+        android:id="@+id/winOrLose"
+        android:layout_width="214dp"
+        android:layout_height="62dp"
+        android:textColor="?colorPrimaryVariant"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="620dp"
+        android:orientation="vertical"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/returnToGameCollectionButton"
+        android:layout_width="116dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="288dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
+        android:text="Home"
+        android:textSize="11dp"
+        android:onClick="clickReturnToHome"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

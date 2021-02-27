@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.CardGameSuiteApp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="55dp">
+
+            <Space
+                android:layout_width="15dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="395dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Fives Settings"
+                android:textAllCaps="true"
+                android:textColor="?colorPrimary"
+                android:textSize="35sp"
+                android:textStyle="bold" />
+        </TableRow>
+
+    </LinearLayout>
+</ScrollView>

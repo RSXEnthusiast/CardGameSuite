@@ -1,20 +1,18 @@
 package com.example.cardgamesuiteapp.display;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplaySettingsActivity;
 import com.example.cardgamesuiteapp.games.Fives;
-import com.example.cardgamesuiteapp.R;
+import com.example.cardgamesuiteapp.games.Solitaire;
 import com.example.cardgamesuiteapp.decks.Standard;
 
 public class Card extends View implements View.OnTouchListener {
 
-    //    String that keeps track of the drawable to be displayed
+    //String that keeps track of the drawable to be displayed
     private int imageId;
     private int cardNum;
     private boolean isFaceUp = true;
@@ -35,7 +33,10 @@ public class Card extends View implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        Fives.cardTouched(cardNum);
+        if(getContext().toString().contains("Fives"))
+            Fives.cardTouched(cardNum);
+        else if(getContext().toString().contains("Solitaire"))
+            Solitaire.cardTouched(cardNum);
         return false;
     }
 

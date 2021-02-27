@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="outlinedButton" >
+        android:backgroundTint="@color/white"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:cornerRadius="23dp"
+        app:strokeColor="@color/black"
+        app:strokeWidth="4dp"
+    </style>
+</resources>

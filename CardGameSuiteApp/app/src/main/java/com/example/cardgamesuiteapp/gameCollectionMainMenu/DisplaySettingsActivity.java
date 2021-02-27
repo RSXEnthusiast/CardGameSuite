@@ -5,8 +5,13 @@ import android.content.Context;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.slider.Slider.OnSliderTouchListener;
 
+import android.content.SharedPreferences;
+import android.hardware.input.InputManager;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,8 +24,8 @@ public class DisplaySettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_collection_settings);
-
-        switch (getSharedPreferences("preferences", Context.MODE_PRIVATE).getString("cardStyle", "cardStyle not found")) {
+        SharedPreferences sp = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        switch (sp.getString("cardStyle", "cardStyle not found")) {
             case "light_":
                 findViewById(R.id.selectedLight).setVisibility(View.VISIBLE);
                 break;
@@ -34,7 +39,7 @@ public class DisplaySettingsActivity extends AppCompatActivity {
                 findViewById(R.id.selectedBigDark).setVisibility(View.VISIBLE);
                 break;
         }
-        switch (getSharedPreferences("preferences", Context.MODE_PRIVATE).getString("cardStyle", "cardStyle not found")) {
+        switch (sp.getString("backStyle", "backStyle not found")) {
             case "light_":
                 findViewById(R.id.selectedLightBack).setVisibility(View.VISIBLE);
                 break;
@@ -42,15 +47,9 @@ public class DisplaySettingsActivity extends AppCompatActivity {
                 findViewById(R.id.selectedDarkBack).setVisibility(View.VISIBLE);
                 break;
         }
-        findViewById(R.id.buttonLightStyle).setOnClickListener(v -> setLightStyle());
-        findViewById(R.id.buttonBigStyle).setOnClickListener(v -> setBigStyle());
-        findViewById(R.id.buttonDarkStyle).setOnClickListener(v -> setDarkStyle());
-        findViewById(R.id.buttonBigDarkStyle).setOnClickListener(v -> setBigDarkStyle());
-        findViewById(R.id.buttonDarkBack).setOnClickListener(v -> setDarkBack());
-        findViewById(R.id.buttonLightBack).setOnClickListener(v -> setLightBack());
-
+        ((EditText) findViewById(R.id.playerNameInput)).setText(sp.getString("name", "name not found"));
         Slider slider = findViewById(R.id.animationSpeedSlider);
-        slider.setValue(getSharedPreferences("preferences", Context.MODE_PRIVATE).getInt("animationSpeed", 0));
+        slider.setValue(sp.getInt("animationSpeed", 0));
         final OnSliderTouchListener touchListener = new Slider.OnSliderTouchListener() {
             @Override
             public void onStartTrackingTouch(@NonNull Slider slider) {
@@ -64,40 +63,68 @@ public class DisplaySettingsActivity extends AppCompatActivity {
         slider.addOnSliderTouchListener(touchListener);
     }
 
-    private void setLightBack() {
+    public void saveName(View view) {
+        // 3/4 of these lines of code are to simply hide the keyboard. Why are you like this android?
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(this.INPUT_METHOD_SERVICE);
+        view = this.getCurrentFocus();
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        editPreference("name", String.valueOf(((EditText) findViewById(R.id.playerNameInput)).getText()));
+    }
+
+    public void setLightBack(View view) {
         findViewById(R.id.selectedDarkBack).setVisibility(View.INVISIBLE);
         findViewById(R.id.selectedLightBack).setVisibility(View.VISIBLE);
         setBackStyle("light_");
     }
 
-    private void setDarkBack() {
+    public void setDarkBack(View view) {
         findViewById(R.id.selectedLightBack).setVisibility(View.INVISIBLE);
         findViewById(R.id.selectedDarkBack).setVisibility(View.VISIBLE);
         setBackStyle("dark_");
     }
 
-    private void setLightStyle() {
+    public void setLightStyle(View view) {
         setAllSelectedCardStyleViewsToInvisible();
         findViewById(R.id.selectedLight).setVisibility(View.VISIBLE);
         setDeckStyle("light_");
     }
 
-    private void setBigStyle() {
+    public void setBigStyle(View view) {
         setAllSelectedCardStyleViewsToInvisible();
         findViewById(R.id.selectedBig).setVisibility(View.VISIBLE);
         setDeckStyle("big_");
     }
 
-    private void setDarkStyle() {
+    public void setDarkStyle(View view) {
         setAllSelectedCardStyleViewsToInvisible();
         findViewById(R.id.selectedDark).setVisibility(View.VISIBLE);
         setDeckStyle("dark_");
     }
 
-    private void setBigDarkStyle() {
+    public void setBigDarkStyle(View view) {
         setAllSelectedCardStyleViewsToInvisible();
         findViewById(R.id.selectedBigDark).setVisibility(View.VISIBLE);
         setDeckStyle("bigdark_");
+    }
+
+    private void setDeckStyle(String style) {
+        editPreference("cardStyle", style);
+    }
+
+    private void setBackStyle(String style) {
+        editPreference("backStyle", style);
+    }
+
+    private void setAnimationSpeedOnSlider(int speed) {
+        editPreference("animationSpeed", speed);
+    }
+
+    private void editPreference(String name, String preference) {
+        getSharedPreferences("preferences", MODE_PRIVATE).edit().putString(name, preference).apply();
+    }
+
+    private void editPreference(String name, int preference) {
+        getSharedPreferences("preferences", MODE_PRIVATE).edit().putInt(name, preference).apply();
     }
 
     private void setAllSelectedCardStyleViewsToInvisible() {
@@ -105,17 +132,5 @@ public class DisplaySettingsActivity extends AppCompatActivity {
         findViewById(R.id.selectedBig).setVisibility(View.INVISIBLE);
         findViewById(R.id.selectedDark).setVisibility(View.INVISIBLE);
         findViewById(R.id.selectedBigDark).setVisibility(View.INVISIBLE);
-    }
-
-    private void setDeckStyle(String style) {
-        getSharedPreferences("preferences", MODE_PRIVATE).edit().putString("cardStyle", style).apply();
-    }
-
-    private void setBackStyle(String style) {
-        getSharedPreferences("preferences", MODE_PRIVATE).edit().putString("backStyle", style).apply();
-    }
-
-    private void setAnimationSpeedOnSlider(int speed) {
-        getSharedPreferences("preferences", MODE_PRIVATE).edit().putInt("animationSpeed", speed).apply();
     }
 }
