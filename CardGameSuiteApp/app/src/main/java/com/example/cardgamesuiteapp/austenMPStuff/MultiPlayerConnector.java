@@ -77,6 +77,9 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
      */
     public void connectToServer() throws URISyntaxException {
         if (_Socket == null) {
+            IO.Options opts = new IO.Options();
+            opts.transports = new String[]{WebSocket.NAME};
+
             _Socket = IO.socket(serverUrl); //initialize here because we don't want to do it in the constructor
             configureSocketEvents();
         }
@@ -102,9 +105,6 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
 
 
     private void configureSocketEvents() {
-
-        IO.Options opts = new IO.Options();
-        opts.transports = new String[]{WebSocket.NAME};
 
         addEssentialEvents();
     }
@@ -315,6 +315,22 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
     public void ResetSocketEvents() {
         _Socket.off();
         addEssentialEvents();
+    }
+
+    public void FullReset() {
+
+        if(_Socket!=null) {
+            _Socket.disconnect();
+
+            _Socket = null;
+        }
+        _RoomCode = "";
+        try {
+            connectToServer();
+        } catch (URISyntaxException e) {
+
+        }
+
     }
 
     /**

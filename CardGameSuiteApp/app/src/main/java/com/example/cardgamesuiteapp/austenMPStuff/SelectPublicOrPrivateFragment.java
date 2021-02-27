@@ -15,6 +15,7 @@ import com.example.cardgamesuiteapp.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.net.URISyntaxException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -60,12 +61,18 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
     @Override
     public void onResume() {
         super.onResume();
-        _MultiPlayerConnector.ResetSocketEvents();
-        _MultiPlayerConnector.ResetConnection();
+        //_MultiPlayerConnector.ResetSocketEvents();
+     //   _MultiPlayerConnector.ResetConnection();
+
+        try {
+            _MultiPlayerConnector.connectToServer();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
 
         System.out.println("resuming SelectPublicOrPrivate");
 
-        menuButtonsEnabledStatus(true);
+        menuButtonsEnabledStatus(_MultiPlayerConnector.Connected());
     }
 
 

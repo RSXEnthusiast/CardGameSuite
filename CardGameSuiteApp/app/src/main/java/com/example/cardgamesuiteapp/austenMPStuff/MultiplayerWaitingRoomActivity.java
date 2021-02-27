@@ -44,11 +44,14 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
 
 
         _MultiPlayerConnector.setLifeCycleOwner(this);
-        try {
+
+        _MultiPlayerConnector.FullReset();
+
+       /* try {
             _MultiPlayerConnector.connectToServer();
         } catch (URISyntaxException e) {
             e.printStackTrace();
-        }
+        }*/
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -77,6 +80,8 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
         newIntent.putExtra("numOnlineOpponents", _MinNumPlayersRequiredForGame - 1);
         newIntent.putExtra("numAI", 0);
         startActivity(newIntent);
+
+        this.finish();
 
     }
 
