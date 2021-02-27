@@ -75,13 +75,15 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
             _GameCodeView.setText(_MultiPlayerConnector.getRoomCode());
             TextView statusMessage = _MultiplayerWaitingRoomActivity.findViewById(R.id.statusMessage);
             statusMessage.setText(_GameCreator ? _CreatorStatusMessage: _JoinStatusMessage);
-        });
+
 
         _PlayerListViewArrayAdapter =
                 new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, _PlayerList);
         // Set The Adapter
         _PlayerListView.setAdapter(_PlayerListViewArrayAdapter);
         _PlayerListViewArrayAdapter.add(playerName);
+
+        });
 
 
 
@@ -113,6 +115,7 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
 
 
     private void addNewPlayerToRoomList(JSONArray playerNames) {
+        _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
         _PlayerList.clear();
         for (int i = 0; i < playerNames.length(); i++) {
             JSONObject player=null;
@@ -140,7 +143,7 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
 
         startButtonIsEnabled(numberOfPlayersInRoom>=2);//change 2 to the specific  min number of players required for type of game
 
-        _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
+
             _PlayerListViewArrayAdapter.notifyDataSetChanged();
         });
     }
