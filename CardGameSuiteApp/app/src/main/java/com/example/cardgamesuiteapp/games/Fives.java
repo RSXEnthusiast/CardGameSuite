@@ -403,7 +403,7 @@ public class Fives extends AppCompatActivity {
         }
         if (endTurn) {
             if (roundOver()) {
-                scoreRound();
+                new Fives().scoreRound();
             }
             deck.nextPlayer(multiplayer);
             updateViewInstruction();
@@ -434,7 +434,7 @@ public class Fives extends AppCompatActivity {
         }
         if (endTurn) {
             if (roundOver()) {
-                scoreRound();
+                new Fives().scoreRound();
             }
             deck.nextPlayer(multiplayer);
             updateViewInstruction();
@@ -499,7 +499,7 @@ public class Fives extends AppCompatActivity {
         }
         if (endTurn) {
             if (roundOver()) {
-                scoreRound();
+                new Fives().scoreRound();
             }
             deck.nextPlayer(multiplayer);
             updateViewInstruction();
@@ -531,14 +531,14 @@ public class Fives extends AppCompatActivity {
         return false;
     }
 
-    private static void newGame() {
+    private void newGame() {
         deck.shuffleDiscardIntoDeck();
         for (int i = 0; i < totalScores.length; i++) {
             totalScores[i] = 0;
             viewPlayerNames[i].setTextColor(Color.LTGRAY);
             viewPlayerScores[i].setTextColor(Color.LTGRAY);
         }
-        new Fives().newRound();
+        newRound();
     }
 
     /**
@@ -641,7 +641,7 @@ public class Fives extends AppCompatActivity {
     /**
      * This method is used to score the game after each round.
      */
-    public static void scoreRound() {
+    public void scoreRound() {
         for (int i = 0; i < deck.getNumPlayers(); i++) {
             // Duplicates
             ArrayList<Integer> toRemove = new ArrayList<Integer>();
@@ -680,7 +680,7 @@ public class Fives extends AppCompatActivity {
             viewConfirm.setText("Continue");
         }
         updateViewInstruction();
-        viewConfirm.setVisibility(View.VISIBLE);
+        setConfirmButtonVisible();
     }
 
     /**
@@ -847,7 +847,7 @@ public class Fives extends AppCompatActivity {
             }
         }
         if (roundOver()) {
-            scoreRound();
+            new Fives().scoreRound();
         }
     }
 
@@ -887,7 +887,7 @@ public class Fives extends AppCompatActivity {
         AIStage = fivesStage.draw;
         nextCurAnimatedPlayer();
         if (roundOver()) {
-            scoreRound();
+            new Fives().scoreRound();
         }
     }
 
@@ -896,7 +896,7 @@ public class Fives extends AppCompatActivity {
         AIStage = fivesStage.draw;
         nextCurAnimatedPlayer();
         if (roundOver()) {
-            scoreRound();
+            new Fives().scoreRound();
         }
     }
 
@@ -947,7 +947,7 @@ public class Fives extends AppCompatActivity {
             }
         }
         if (roundOver()) {
-            scoreRound();
+            new Fives().scoreRound();
         }
     }
 
