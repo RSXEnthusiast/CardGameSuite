@@ -53,9 +53,9 @@
                 android:id="@+id/numPlayersJoinedToRoom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="--"
+                android:text="1"
                 android:textColor="?colorPrimaryVariant"
-                android:textSize="15dp" />
+                android:textSize="20dp" />
 
             <ProgressBar
                 android:id="@+id/progressBar"

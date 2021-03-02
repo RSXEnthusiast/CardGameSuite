@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.cardgamesuiteapp.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -101,11 +102,21 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
                     //_MultiplayerWaitingRoomActivity.badInputDialog("Unable To Connect To Server" + TAG);
                     //showBadInputDialogForTesting();
                     break;
+                case ServerConfig.roomPlayerCountUpdate:
+
+                    updateRoomCount( (JSONArray) socketIOEventArg._JsonObject.opt("playerNames") );
+                    break;
             }
         }
     };
 
+    private void updateRoomCount(JSONArray playerNames) {
+        _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
+            TextView activePlayersTextView = getActivity().findViewById(R.id.numPlayersJoinedToRoom);
+            activePlayersTextView.setText("" + playerNames.length());
+        });
 
+    }
 
 
     public void updatePublicWaitingRoomActivePlayerCount(JSONObject jsonObject) {
@@ -160,6 +171,11 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
             Log.d(TAG, "public game room found");
             multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.publicGameRoomRequestComplete, TAG, args));
         });
+    socket.on(ServerConfig.roomPlayerCountUpdate, args -> {
+        //Log.d(TAG, "");
+        SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.roomPlayerCountUpdate, TAG, args);
+        multiPlayerConnector.notifyObservers(socketIOEventArg);
+    });
 
     socket.on(ServerConfig.startGame, args -> {
         Log.d(TAG, "start public game received");
