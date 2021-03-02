@@ -23,7 +23,7 @@ public class MultiplayerOrSinglePlayerMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.austen_fragment_first);
-        ((TextView) findViewById(R.id.gameTitle)).setText((String) getIntent().getSerializableExtra("gameName"));
+        ((TextView) findViewById(R.id.gameTitle)).setText(((String) getIntent().getSerializableExtra("gameName")).toUpperCase());
         Button viewOfflineSinglePlayer = findViewById(R.id.offlineSinglePlayer);
         Button viewOnlineMultiplayer = findViewById(R.id.onlineMultiplayer);
         viewOfflineSinglePlayer.setOnClickListener(v -> startOfflineSinglePlayer());
