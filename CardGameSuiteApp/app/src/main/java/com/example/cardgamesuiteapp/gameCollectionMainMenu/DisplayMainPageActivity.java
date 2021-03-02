@@ -22,7 +22,6 @@ public class DisplayMainPageActivity extends AppCompatActivity implements Serial
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.app_collection_activity_main_page);
         setContentView(R.layout.app_collection_content_main_page);
         SharedPreferences sp = getSharedPreferences("preferences", MODE_PRIVATE);
         if (sp.getString("cardStyle", "default").equals("default")) {
