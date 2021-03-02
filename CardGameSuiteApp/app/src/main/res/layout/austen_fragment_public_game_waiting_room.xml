@@ -7,10 +7,10 @@
     <LinearLayout
         android:id="@+id/privateGameWaitingLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/gameTitle"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="30dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="20dp">
@@ -20,8 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Finding An opponent"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textColor="?colorPrimaryVariant"
+            android:textSize="30sp"
             />
         <LinearLayout
         android:layout_width="match_parent"
@@ -29,32 +29,47 @@
         android:layout_marginTop="25dp"
 
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Number of Active Players: "
-            android:textColor="@color/black"
+            android:textColor="?colorPrimaryVariant"
             android:textSize="15dp" />
         <TextView
             android:id="@+id/numActivePublicPlayers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="--"
-            android:textColor="@color/black"
+            android:textColor="?colorPrimaryVariant"
             android:textSize="15dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Players joined to game: "
+                android:textColor="?colorPrimaryVariant"
+                android:textSize="20dp" />
+            <TextView
+                android:id="@+id/numPlayersJoinedToRoom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="--"
+                android:textColor="?colorPrimaryVariant"
+                android:textSize="15dp" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminateTint="?colorPrimaryVariant"
+                android:indeterminate="true"
+                android:progress="1"
+                android:paddingTop="50dp"/>
         </LinearLayout>
 
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminateTint="@color/white"
-            android:indeterminate="true"
-            android:progress="1"
-            android:paddingTop="50dp"/>
+
 
     </LinearLayout>
 

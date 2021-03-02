@@ -7,12 +7,14 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
@@ -58,6 +60,24 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
         _NumberOfPlayersInRoomView= view.findViewById(R.id.numPlayersInRoomView);
         _PlayerListView = view.findViewById(R.id.playerList);
         _StartButton = view.findViewById(R.id.startButton);
+
+        TypedValue typedValue = new TypedValue();
+        getContext().getTheme().resolveAttribute(R.attr.colorOnPrimary,typedValue,true);
+        @ColorInt int primaryTextColor=typedValue.data;
+
+        TypedValue typedValue2 = new TypedValue();
+        getContext().getTheme().resolveAttribute(R.attr.colorOnSecondary,typedValue2,true);
+        @ColorInt int offTextColor=typedValue2.data;
+
+        startButtonColors = new int[] {
+                primaryTextColor,
+                offTextColor,
+                BLACK,
+                BLACK
+        };
+
+        startButtonColorStateList= new ColorStateList(startButtonColorStates, startButtonColors);
+
         _MultiplayerWaitingRoomActivity._UIHandler.post(() -> { _StartButton.setEnabled(false); _StartButton.setTextColor(startButtonColorStateList); _StartButton.setStrokeColor(startButtonColorStateList);});
 
          Bundle extras = getArguments();

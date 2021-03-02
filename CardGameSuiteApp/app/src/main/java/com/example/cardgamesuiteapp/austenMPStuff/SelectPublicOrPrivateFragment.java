@@ -2,12 +2,15 @@ package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -28,6 +31,8 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
 
     private static final String TAG = SelectPublicOrPrivateFragment.class.getSimpleName();
 
+
+
     public SelectPublicOrPrivateFragment() {
         super(R.layout.austen_fragment_select_public_or_private_buttons);
     }
@@ -47,6 +52,23 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
 
         _joinPrivateButton.setOnClickListener(v -> privateGameSelected());
         _joinPublicButton.setOnClickListener(v -> toPublicGameWaitingRoomFragment());
+
+        TypedValue typedValue = new TypedValue();
+        getContext().getTheme().resolveAttribute(R.attr.colorOnPrimary,typedValue,true);
+        @ColorInt int primaryTextColor=typedValue.data;
+
+        TypedValue typedValue2 = new TypedValue();
+        getContext().getTheme().resolveAttribute(R.attr.colorOnSecondary,typedValue2,true);
+        @ColorInt int offTextColor=typedValue2.data;
+
+       buttonColors = new int[] {
+                primaryTextColor,
+                offTextColor,
+                BLACK,
+                BLACK
+        };
+
+        buttonColorStateList= new ColorStateList(buttonColorStates, buttonColors);
 
          _joinPrivateButton.setTextColor(buttonColorStateList); _joinPrivateButton.setStrokeColor(buttonColorStateList);
          _joinPublicButton.setTextColor(buttonColorStateList); _joinPublicButton.setStrokeColor(buttonColorStateList);
@@ -200,14 +222,9 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
             new int[] { android.R.attr.state_pressed}  // pressed
     };
 
-    int[] buttonColors = new int[] {
-            Color.BLACK,
-            Color.LTGRAY,
-            BLACK,
-            BLACK
-    };
+    int[] buttonColors;
 
-    ColorStateList buttonColorStateList = new ColorStateList(buttonColorStates, buttonColors);
+    ColorStateList buttonColorStateList;
 
     private void menuButtonsEnabledStatus(boolean isEnabled) {
 

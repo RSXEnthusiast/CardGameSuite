@@ -1,6 +1,7 @@
 package com.example.cardgamesuiteapp.austenMPStuff;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 
@@ -18,6 +19,7 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
     MultiPlayerConnector _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
     Observer _MultiPlayerConnectorObserver;
     MultiplayerWaitingRoomActivity _MultiplayerWaitingRoomActivity;
+
 
     public MultiplayerWaitingRoomActivityFragment(int fragment_Rid) {
         super(fragment_Rid);

@@ -5,7 +5,7 @@
 
     android:id="@+id/createPrivateGame"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_below="@+id/gameTitle"
     android:layout_alignParentLeft="true"
     android:layout_marginTop="0dp"
@@ -18,9 +18,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Create Private Game"
-        android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textColor="?colorPrimaryVariant"
+        android:textSize="20sp"
         android:paddingBottom="20dp"
+        />
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Player Name:"
+        android:textColor="?colorPrimaryVariant"
+        android:textSize="15sp"
+        android:paddingBottom="5dp"
         />
 
     <EditText
@@ -32,25 +42,25 @@
         android:inputType="textPersonName"
         android:hint="Your Player Name"
         android:textColorHint="#b5b5b5"
-        android:textColor="@color/black"
+        android:textColor="?colorOnSecondary"
         android:background="@drawable/roundedrectangle"
-        android:backgroundTint="@color/white"
+
         android:padding="5dp"
         android:layout_margin="15dp"/>
 
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/createButton"
+        android:text="Create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:text="Create"
+        android:backgroundTint="?colorPrimaryVariant"
+
         android:textAllCaps="false"
-        android:textColor="@color/black"
+        android:textColor="?colorOnPrimary"
         android:textSize="18sp"
-        app:cornerRadius="23dp"
-        app:strokeColor="@color/black"
-        app:strokeWidth="4dp" />
+        app:cornerRadius="4dp"
+        />
 
 
 

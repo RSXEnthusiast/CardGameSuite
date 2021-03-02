@@ -5,7 +5,7 @@
 
     android:id="@+id/joinPrivateGame"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_below="@+id/gameTitle"
     android:layout_alignParentLeft="true"
     android:layout_marginTop="0dp"
@@ -18,11 +18,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Join Private Game"
-        android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textColor="?colorPrimaryVariant"
+        android:textSize="20sp"
         android:paddingBottom="20dp"
         />
 
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Player Name:"
+        android:textColor="?colorPrimaryVariant"
+        android:textSize="15sp"
+        android:paddingBottom="10dp"
+        />
     <EditText
         android:id="@+id/playerNameInput"
         android:layout_width="wrap_content"
@@ -32,11 +41,12 @@
         android:inputType="textPersonName"
         android:hint="Player Name"
         android:textColorHint="#b5b5b5"
-        android:textColor="@color/black"
+        android:textColor="?colorOnSecondary"
         android:background="@drawable/roundedrectangle"
-        android:backgroundTint="@color/white"
+
         android:padding="5dp"
-        android:layout_margin="0dp"/> 
+        android:layout_margin="0sp"/>
+
     <EditText
         android:id="@+id/gameCodeInput"
         android:layout_width="wrap_content"
@@ -45,24 +55,25 @@
         android:textAlignment="center"
         android:hint="Game Code"
         android:textColorHint="#b5b5b5"
-        android:textColor="@color/black"
+        android:textColor="?colorOnSecondary"
         android:background="@drawable/roundedrectangle"
-        android:backgroundTint="@color/white"
+
         android:padding="5dp"
         android:layout_margin="15dp"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/joinButton"
+        android:text="Join"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:text="Join"
+        android:backgroundTint="?colorPrimaryVariant"
+
         android:textAllCaps="false"
-        android:textColor="@color/black"
+        android:textColor="?colorOnPrimary"
         android:textSize="18sp"
-        app:cornerRadius="23dp"
-        app:strokeColor="@color/black"
-        app:strokeWidth="4dp" />
+        app:cornerRadius="4dp"
+         />
+
 
 
 

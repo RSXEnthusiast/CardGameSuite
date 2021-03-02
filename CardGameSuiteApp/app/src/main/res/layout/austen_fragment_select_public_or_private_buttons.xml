@@ -2,7 +2,7 @@
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/selectModeButtonsView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/gameTitle"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="0dp"
@@ -16,37 +16,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Multiplayer Options"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textColor="?colorPrimaryVariant"
+            android:textSize="30sp"
             />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
         <com.google.android.material.button.MaterialButton
             android:id="@+id/publicButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
             android:text="Random Opponent"
+            android:backgroundTint="?colorPrimaryVariant"
             android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:cornerRadius="23dp"
-            app:strokeColor="@color/black"
-            app:strokeWidth="4dp" />
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            app:cornerRadius="4dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/privateButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
             android:text="Private Game"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:cornerRadius="23dp"
-            app:strokeColor="@color/black"
-            app:strokeWidth="4dp" />
 
-        
+            android:backgroundTint="?colorPrimaryVariant"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            app:cornerRadius="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1" />
+
+        </LinearLayout>
 
 
 
