@@ -134,61 +134,7 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
         }).on(EVENT_DISCONNECT, args -> {
             Log.d(TAG, "socket.io socket disconnected");
 
-        });/*.on("ipaddr", args -> {
-                Log.d(TAG, "connectToSignallingServer: ipaddr");
-            }).on("created", args -> {
-                Log.d(TAG, "connectToSignallingServer: created");
-                isInitiator = true;
-            }).on("full", args -> {
-                Log.d(TAG, "connectToSignallingServer: full");
-            }).on("join", args -> {
-                Log.d(TAG, "connectToSignallingServer: join");
-                Log.d(TAG, "connectToSignallingServer: Another peer made a request to join room");
-                Log.d(TAG, "connectToSignallingServer: This peer is the initiator of room");
-                isChannelReady = true;
-            }).on("joined", args -> {
-                Log.d(TAG, "connectToSignallingServer: joined");
-                isChannelReady = true;
-            }).on("log", args -> {
-                for (Object arg : args) {
-                    Log.d(TAG, "connectToSignallingServer: " + String.valueOf(arg));
-                }
-            }).on("message", args -> {
-                Log.d(TAG, "connectToSignallingServer: got a message");
-            }).on("message", args -> {
-                try {
-                    if (args[0] instanceof String) {
-                        String message = (String) args[0];
-                        if (message.equals("got user media")) {
-                            maybeStart();
-                        }
-                    } else {
-                        JSONObject message = (JSONObject) args[0];
-                        Log.d(TAG, "connectToSignallingServer: got message " + message);
-                        if (message.getString("type").equals("offer")) {
-                            Log.d(TAG, "connectToSignallingServer: received an offer " + isInitiator + " " + isStarted);
-                            if (!isInitiator && !isStarted) {
-                                maybeStart();
-                            }
-                            peerConnection.setRemoteDescription(new SimpleSdpObserver(), new SessionDescription(OFFER, message.getString("sdp")));
-                            doAnswer();
-                        } else if (message.getString("type").equals("answer") && isStarted) {
-                            peerConnection.setRemoteDescription(new SimpleSdpObserver(), new SessionDescription(ANSWER, message.getString("sdp")));
-                        } else if (message.getString("type").equals("candidate") && isStarted) {
-                            Log.d(TAG, "connectToSignallingServer: receiving candidates");
-                            IceCandidate candidate = new IceCandidate(message.getString("id"), message.getInt("label"), message.getString("candidate"));
-                            peerConnection.addIceCandidate(candidate);
-                        }
-                        *//*else if (message === 'bye' && isStarted) {
-                        handleRemoteHangup();
-                    }*//*
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }).on(EVENT_DISCONNECT, args -> {
-                Log.d(TAG, "connectToSignallingServer: disconnect");
-            });*/
+        });
 
         _Socket.on(ServerConfig.startGame, args -> {
             Log.d(TAG, "start game received");
@@ -297,12 +243,6 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
     }
 
 
-    /*public void emitEvent(String emitEvent, boolean emitWithObject) {
-        if (emitWithObject){
-            _Socket.emit(emitEvent,_EmitObject);
-        }
-        else _Socket.emit(emitEvent);
-    }*/
 
     public void emitEvent(String emitEvent, JSONObject obj) {
         _Socket.emit(emitEvent, obj);

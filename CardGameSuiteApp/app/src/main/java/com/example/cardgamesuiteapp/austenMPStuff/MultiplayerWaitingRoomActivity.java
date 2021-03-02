@@ -47,11 +47,6 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
 
         _MultiPlayerConnector.FullReset();
 
-       /* try {
-            _MultiPlayerConnector.connectToServer();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }*/
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -61,8 +56,6 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
         }
 
 
-       /* Snackbar.make(findViewById(R.id.multiPlayerWaitingRoomCoordinatorLayout), _GameType, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();*/
 
     }
 
@@ -171,52 +164,12 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
             new AlertDialog.Builder(this)
                     .setTitle("Check Input")
                     .setMessage(message)
-                    // Specifying a listener allows you to take an action before dismissing the dialog.
-                    // The dialog is automatically dismissed when a dialog button is clicked.
-                    /* .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                         public void onClick(DialogInterface dialog, int which) {
-                             // Continue with delete operation
-                         }
-                     })*/
 
-                    // A null listener allows the button to dismiss the dialog and take no further action.
                     .setNegativeButton(android.R.string.ok, null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         });
     }
-
-
-
-   /* public void retryConnectionDialog(String message) {
-
-        _UIHandler.post(() -> {
-            new AlertDialog.Builder(this)
-                    .setTitle("Unable to connect to server")
-                    .setMessage(message)
-
-                    .setPositiveButton("Yes", (dialog, id) -> {
-
-                        retryConnectingToServer();
-                    })
-                    .setNegativeButton("No", (dialog, id) -> {
-                        // if this button is clicked, just close
-                        // the dialog box and do nothing
-                        dialog.cancel();
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-        });
-    }*/
-
-   /* private void retryConnectingToServer(){
-        try {
-            _MultiPlayerConnector.connectToSignallingServer();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
-*/
 
 
 
@@ -242,20 +195,6 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
         }
     };
 
-  /*  private void addPeerMessage() {
-
-        _UIHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                TextView roomCodeView= findViewById(R.id.message_view);
-                roomCodeView.setText(_MultiPlayerConnector.msg);
-
-            }
-        });
-    }*/
 
 
-    public void onGameReadyToPlay() {
-
-    }
 }

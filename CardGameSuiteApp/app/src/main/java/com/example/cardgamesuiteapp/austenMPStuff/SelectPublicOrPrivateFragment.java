@@ -92,8 +92,6 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
     @Override
     public void onResume() {
         super.onResume();
-        //_MultiPlayerConnector.ResetSocketEvents();
-     //   _MultiPlayerConnector.ResetConnection();
 
         try {
             _MultiPlayerConnector.connectToServer();
@@ -240,8 +238,7 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
             _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
                 _joinPrivateButton.setEnabled(isEnabled);
                 _joinPublicButton.setEnabled(isEnabled);
-              /*  if(isEnabled) _StartButton.setTextColor(BLACK);
-                else _StartButton.setTextColor(LTGRAY); */
+
             });
         }
 }

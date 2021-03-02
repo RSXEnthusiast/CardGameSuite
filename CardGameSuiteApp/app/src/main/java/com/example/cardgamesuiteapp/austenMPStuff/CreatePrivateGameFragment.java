@@ -60,8 +60,7 @@ public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFra
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //p2psocket.emit('private-game-room-request', {numPlayersRequiredForGame:2, gameType: 'fives'})
-                //_ParentActivity._MultiPlayerConnector.joinToPublicGame(2, _ParentActivity._GameType);
+
                 TextView playerNameInput = view.findViewById(R.id.playerNameInput);
 
                 createButton.setClickable(false); ///wait until success
@@ -71,7 +70,7 @@ public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFra
                 } else {
                     createButton.setClickable(true);
                 }
-                //getParentFragmentManager().setFragmentResult("setGameCreator", result);
+
             }
 
 

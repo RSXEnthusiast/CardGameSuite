@@ -50,12 +50,9 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
         Button joinButton = view.findViewById(R.id.joinButton);
 
         joinButton.setOnClickListener(v -> {
-            //p2psocket.emit('private-game-room-request', {numPlayersRequiredForGame:2, gameType: 'fives'})
-            //_ParentActivity._MultiPlayerConnector.joinToPublicGame(2, _ParentActivity._GameType);
 
             emitJoinPrivateGame(playerNameTextInput, gameCodeTextInput);
 
-            //getParentFragmentManager().setFragmentResult("setGameCreator", result);
         });
     }
 
@@ -110,13 +107,7 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
             new AlertDialog.Builder(_MultiplayerWaitingRoomActivity)
                     .setTitle("Unable to find game")
                     .setMessage("Check with your friend to make sure your game code is still active and correct.")
-                    // Specifying a listener allows you to take an action before dismissing the dialog.
-                    // The dialog is automatically dismissed when a dialog button is clicked.
-                    /* .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                         public void onClick(DialogInterface dialog, int which) {
-                             // Continue with delete operation
-                         }
-                     })*/
+
 
                     // A null listener allows the button to dismiss the dialog and take no further action.
                     .setNegativeButton(android.R.string.ok, null)
