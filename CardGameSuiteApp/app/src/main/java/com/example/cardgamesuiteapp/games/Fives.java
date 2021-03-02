@@ -3,6 +3,7 @@ package com.example.cardgamesuiteapp.games;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,8 +32,12 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Queue;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Fives extends AppCompatActivity {
     static int numPlayers;//total number of players
@@ -342,6 +347,15 @@ public class Fives extends AppCompatActivity {
                 viewDeck.updateImage(deck.peekTopDraw());
                 viewDiscardHighlight.setVisibility(View.INVISIBLE);
                 updateViewInstruction();
+                if (incomingData.isEmpty()) {
+                    handlingIncomingData = false;
+                } else {
+                    try {
+                        new Fives().handleIncomingData(incomingData.poll());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         } else if (isValidTapOnCardInHand(cardNum)) {
             int cardLocation = deck.getCardLocation(deck.getMyPlayerNum(), cardNum);
@@ -376,6 +390,15 @@ public class Fives extends AppCompatActivity {
                 viewDiscard.updateImage(deck.peekTopDiscard());
                 viewDiscardHighlight.setVisibility(View.INVISIBLE);
                 updateViewInstruction();
+                if (incomingData.isEmpty()) {
+                    handlingIncomingData = false;
+                } else {
+                    try {
+                        new Fives().handleIncomingData(incomingData.poll());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
         if (endTurn) {
@@ -389,6 +412,7 @@ public class Fives extends AppCompatActivity {
             }
         }
     }
+
 
     /**
      * This method is called when a card is touched and the current stage is discardedFromDraw
@@ -462,6 +486,15 @@ public class Fives extends AppCompatActivity {
                 viewPlayers[deck.getMyPlayerNum()].updateCard(cardLocation, deck.getHand(deck.getMyPlayerNum()).get(cardLocation));
                 viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(cardLocation);
                 updateViewInstruction();
+                if (incomingData.isEmpty()) {
+                    handlingIncomingData = false;
+                } else {
+                    try {
+                        new Fives().handleIncomingData(incomingData.poll());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
         if (endTurn) {
@@ -498,20 +531,20 @@ public class Fives extends AppCompatActivity {
         return false;
     }
 
-    private void newGame() {
+    private static void newGame() {
         deck.shuffleDiscardIntoDeck();
         for (int i = 0; i < totalScores.length; i++) {
             totalScores[i] = 0;
             viewPlayerNames[i].setTextColor(Color.LTGRAY);
             viewPlayerScores[i].setTextColor(Color.LTGRAY);
         }
-        newRound();
+        new Fives().newRound();
     }
 
     /**
      * Called every time that there is a new round, to reset the table
      */
-    public static void newRound() {
+    public void newRound() {
         try {
             deck.deal(4);
             deck.discardFromDeck();
@@ -519,7 +552,7 @@ public class Fives extends AppCompatActivity {
             e.printStackTrace();
         }
         stage = fivesStage.memCards;
-        viewConfirm.setVisibility(View.VISIBLE);
+        setConfirmButtonVisible();
         updateEntireScreen();
     }
 
@@ -803,6 +836,15 @@ public class Fives extends AppCompatActivity {
             viewDiscard.updateImage(deck.peekTopDiscard());
             AIStage = fivesStage.draw;
             nextCurAnimatedPlayer();
+            if (incomingData.isEmpty()) {
+                handlingIncomingData = false;
+            } else {
+                try {
+                    new Fives().handleIncomingData(incomingData.poll());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
         if (roundOver()) {
             scoreRound();
@@ -828,6 +870,15 @@ public class Fives extends AppCompatActivity {
             }
             viewDeck.updateImage(deck.peekTopDraw());
             viewDiscard.updateImage(deck.peekTopDiscard());
+            if (incomingData.isEmpty()) {
+                handlingIncomingData = false;
+            } else {
+                try {
+                    new Fives().handleIncomingData(incomingData.poll());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -840,7 +891,7 @@ public class Fives extends AppCompatActivity {
         }
     }
 
-    private void AIFlippedCardByCardNum(int cardNum) {
+    private static void AIFlippedCardByCardNum(int cardNum) {
         viewPlayers[curAnimatedPlayer].flipCardByNum(cardNum);
         AIStage = fivesStage.draw;
         nextCurAnimatedPlayer();
@@ -885,6 +936,15 @@ public class Fives extends AppCompatActivity {
             nextCurAnimatedPlayer();
             viewDiscard.updateImage(deck.peekTopDiscard());
             AIStage = fivesStage.draw;
+            if (incomingData.isEmpty()) {
+                handlingIncomingData = false;
+            } else {
+                try {
+                    new Fives().handleIncomingData(incomingData.poll());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
         if (roundOver()) {
             scoreRound();
@@ -1044,58 +1104,70 @@ public class Fives extends AppCompatActivity {
         memCards, draw, drewFromDeck, discardedFromDeck, drewFromDiscard, roundOver, gameOver
     }
 
+    private static Queue<JSONObject> incomingData = new LinkedList<>();
+    static boolean handlingIncomingData = false;
+
     private Observer _MultiPlayerConnectorObserver = new Observer() {
         @Override
         public void update(Observable o, Object arg) {
             SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
             if (socketIOEventArg._EventName.equals(ServerConfig.gameData)) {
-                try {
-                    handleIncomingData(socketIOEventArg._JsonObject);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                incomingData.add(socketIOEventArg._JsonObject);
+                if (!handlingIncomingData) {
+                    handleIncomingData(incomingData.poll());
                 }
             }
         }
     };
 
+    private static void handleNextData() {
+        if (incomingData.isEmpty()) {
+            handlingIncomingData = false;
+        } else {
+            new Fives().handleIncomingData(incomingData.poll());
+        }
+    }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    public void handleIncomingData(JSONObject incomingData) throws Exception {
+    public void handleIncomingData(JSONObject data) {
+        handlingIncomingData = true;
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
-        switch (gson.fromJson((String) incomingData.opt("operation"), Operation.class)) {
+        switch (gson.fromJson((String) data.opt("operation"), Operation.class)) {
             case discardFromDeck:
                 System.out.println("discardFromDeck");
                 discardFromDeckReceived();
                 break;
             case initialize:
                 System.out.println("initialize");
-                initializeReceived(incomingData);
+                initializeReceived(data);
                 break;
             case drawIntoIndex:
                 System.out.println("playerDrawIntoIndex");
-                playerDrawIntoIndexReceived(incomingData);
+                playerDrawIntoIndexReceived(data);
                 break;
             case drawIntoIndexFromDiscard:
                 System.out.println("playerDrawIntoIndexFromDiscard");
-                playerDrawIntoIndexFromDiscardReceived(incomingData);
+                playerDrawIntoIndexFromDiscardReceived(data);
                 break;
             case recover:
                 System.out.println("recover");
-                recoverReceived(incomingData);
+                recoverReceived(data);
                 break;
             case nextPlayer:
                 System.out.println("NextPlayer");
                 deck.nextPlayerFromPeer();
                 updateViewInstruction();
+                handleNextData();
                 break;
             case flipCardInHand:
                 System.out.println("Flip Card");
-                flipCardReceived(incomingData);
+                flipCardReceived(data);
+                handleNextData();
                 break;
             case flipDeck:
                 System.out.println("FlipDeck");
                 viewDeck.flipCard();
+                handleNextData();
                 break;
             case readyToContinue:
                 System.out.println("ReadyToContinue");
@@ -1109,50 +1181,53 @@ public class Fives extends AppCompatActivity {
                         newGame = true;
                     }
                     viewConfirm.setText("Memorized");
-                    setVisibility(viewConfirm, View.VISIBLE);
+                    setConfirmButtonVisible();
                     if (newGame) {
                         newGame();
                     } else {
                         newRound();
                     }
                 }
+                handleNextData();
                 break;
         }
     }
 
-    private void setVisibility(final Button view, final int visibility) {
+    private void setConfirmButtonVisible() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                view.setVisibility(visibility);
+                viewConfirm.setVisibility(View.VISIBLE);
             }
         });
     }
 
-    private void flipCardReceived(JSONObject data) {
+    private static void flipCardReceived(JSONObject data) {
         AIFlippedCardByCardNum((int) data.opt("cardNum"));
     }
 
 
-    private void initializeReceived(JSONObject deck) {
-        this.deck.initializeFromPeer(deck);
+    private static void initializeReceived(JSONObject deck) {
+        Fives.deck.initializeFromPeer(deck);
         updateEntireScreen();
+        handleNextData();
     }
 
-    private void recoverReceived(JSONObject deck) {
+    private static void recoverReceived(JSONObject deck) {
+        handleNextData();
     }
 
-    private void playerDrawIntoIndexFromDiscardReceived(JSONObject data) throws Exception {
+    private static void playerDrawIntoIndexFromDiscardReceived(JSONObject data) {
         AIStage = fivesStage.drewFromDiscard;
         AIDrewFromDiscard((Integer) data.opt("location"));
     }
 
-    private void playerDrawIntoIndexReceived(JSONObject data) throws Exception {
+    private static void playerDrawIntoIndexReceived(JSONObject data) {
         AIStage = fivesStage.drewFromDeck;
         AIKeptDraw((Integer) data.opt("location"));
     }
 
-    private void discardFromDeckReceived() throws Exception {
+    private static void discardFromDeckReceived() {
         AIStage = fivesStage.discardedFromDeck;
         AIDiscardedDraw();
     }
