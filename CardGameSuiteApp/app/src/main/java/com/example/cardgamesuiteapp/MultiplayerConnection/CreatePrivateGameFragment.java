@@ -1,8 +1,7 @@
-package com.example.cardgamesuiteapp.austenMPStuff;
+package com.example.cardgamesuiteapp.MultiplayerConnection;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import com.example.cardgamesuiteapp.R;
 
@@ -27,7 +25,7 @@ import io.socket.client.Socket;
 
 public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFragment  {
     public CreatePrivateGameFragment() {
-        super(R.layout.austen_fragment_create_private_game);
+        super(R.layout.mpconnection_fragment_create_private_game);
 
         SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
 

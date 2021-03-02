@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.austenMPStuff;
+package com.example.cardgamesuiteapp.MultiplayerConnection;
 
 public interface IMultiPlayerConnectorObserverSubscriber {
 

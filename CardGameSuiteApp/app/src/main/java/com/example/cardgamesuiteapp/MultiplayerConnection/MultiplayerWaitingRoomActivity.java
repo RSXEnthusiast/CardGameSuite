@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.austenMPStuff;
+package com.example.cardgamesuiteapp.MultiplayerConnection;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,9 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentResultListener;
 
 import android.os.Handler;
-import android.util.Log;
 
-import java.net.URISyntaxException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -34,7 +32,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.austen_activity_multiplayer_waiting_room);
+        setContentView(R.layout.mpconnection_activity_multiplayer_waiting_room);
         initializeFragmentResultListeners();
         _UIHandler = new Handler();
 

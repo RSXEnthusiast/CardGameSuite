@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.austenMPStuff;
+package com.example.cardgamesuiteapp.MultiplayerConnection;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -26,7 +26,7 @@ public class JoinPrivateGameFragment extends MultiplayerWaitingRoomActivityFragm
 
 
     public JoinPrivateGameFragment() {
-        super(R.layout.austen_fragment_join_private_game);
+        super(R.layout.mpconnection_fragment_join_private_game);
         SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
 
     }

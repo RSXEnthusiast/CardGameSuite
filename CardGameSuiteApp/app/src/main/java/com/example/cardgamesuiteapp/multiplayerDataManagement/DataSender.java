@@ -2,8 +2,8 @@ package com.example.cardgamesuiteapp.multiplayerDataManagement;
 
 import org.json.JSONObject;
 
-import com.example.cardgamesuiteapp.austenMPStuff.MultiPlayerConnector;
-import com.example.cardgamesuiteapp.austenMPStuff.ServerConfig;
+import com.example.cardgamesuiteapp.MultiplayerConnection.MultiPlayerConnector;
+import com.example.cardgamesuiteapp.MultiplayerConnection.ServerConfig;
 
 public class DataSender {
     @SuppressWarnings("rawtypes")

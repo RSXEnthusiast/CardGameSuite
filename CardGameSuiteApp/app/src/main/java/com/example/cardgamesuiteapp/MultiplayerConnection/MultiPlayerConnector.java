@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.austenMPStuff;
+package com.example.cardgamesuiteapp.MultiplayerConnection;
 
 import android.app.Activity;
 import android.util.Log;

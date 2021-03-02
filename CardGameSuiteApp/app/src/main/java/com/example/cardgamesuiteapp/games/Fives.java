@@ -3,7 +3,6 @@ package com.example.cardgamesuiteapp.games;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,10 +13,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.cardgamesuiteapp.R;
-import com.example.cardgamesuiteapp.austenMPStuff.MultiPlayerConnector;
-import com.example.cardgamesuiteapp.austenMPStuff.MultiplayerOrSinglePlayerMenu;
-import com.example.cardgamesuiteapp.austenMPStuff.ServerConfig;
-import com.example.cardgamesuiteapp.austenMPStuff.SocketIOEventArg;
+import com.example.cardgamesuiteapp.MultiplayerConnection.MultiPlayerConnector;
+import com.example.cardgamesuiteapp.MultiplayerConnection.MultiplayerOrSinglePlayerMenu;
+import com.example.cardgamesuiteapp.MultiplayerConnection.ServerConfig;
+import com.example.cardgamesuiteapp.MultiplayerConnection.SocketIOEventArg;
 import com.example.cardgamesuiteapp.deckMultiplayerManagement.DeckMultiplayerManager;
 import com.example.cardgamesuiteapp.decks.Standard;
 import com.example.cardgamesuiteapp.display.Card;
@@ -36,8 +35,6 @@ import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Fives extends AppCompatActivity {
     static int numPlayers;//total number of players

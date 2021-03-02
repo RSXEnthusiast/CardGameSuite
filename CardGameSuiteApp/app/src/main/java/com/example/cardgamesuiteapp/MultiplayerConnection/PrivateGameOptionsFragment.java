@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.austenMPStuff;
+package com.example.cardgamesuiteapp.MultiplayerConnection;
 
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +11,7 @@ import com.example.cardgamesuiteapp.R;
 
 public class PrivateGameOptionsFragment extends Fragment {
     public PrivateGameOptionsFragment() {
-        super(R.layout.austen_fragment_private_options);
+        super(R.layout.mpconnection_fragment_private_options);
     }
 
 

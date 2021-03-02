@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.austenMPStuff;
+package com.example.cardgamesuiteapp.MultiplayerConnection;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ public class MultiplayerOrSinglePlayerMenu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.austen_offline_or_online);
+        setContentView(R.layout.mpconnection_offline_or_online);
         ((TextView) findViewById(R.id.gameTitle)).setText(((String) getIntent().getSerializableExtra("gameName")).toUpperCase());
         Button viewOfflineSinglePlayer = findViewById(R.id.offlineSinglePlayer);
         Button viewOnlineMultiplayer = findViewById(R.id.onlineMultiplayer);

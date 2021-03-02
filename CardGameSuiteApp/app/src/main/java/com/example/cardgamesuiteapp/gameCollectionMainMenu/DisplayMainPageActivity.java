@@ -8,7 +8,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cardgamesuiteapp.austenMPStuff.MultiplayerOrSinglePlayerMenu;
+import com.example.cardgamesuiteapp.MultiplayerConnection.MultiplayerOrSinglePlayerMenu;
 import com.example.cardgamesuiteapp.games.Fives;
 import com.example.cardgamesuiteapp.R;
 import com.example.cardgamesuiteapp.games.Solitaire;

@@ -19,11 +19,11 @@
         <activity android:name=".gameCollectionMainMenu.DisplaySolitaireRulesActivity" />
         <activity android:name=".singlePlayerMenus.FivesSinglePlayerMenu" />
         <activity
-            android:name=".austenMPStuff.MultiplayerWaitingRoomActivity"
+            android:name=".MultiplayerConnection.MultiplayerWaitingRoomActivity"
             android:label="@string/title_activity_multiplayer_waiting_room"
-            android:parentActivityName=".austenMPStuff.MultiplayerOrSinglePlayerMenu" />
+            android:parentActivityName=".MultiplayerConnection.MultiplayerOrSinglePlayerMenu" />
         <activity
-            android:name=".austenMPStuff.MultiplayerOrSinglePlayerMenu"
+            android:name=".MultiplayerConnection.MultiplayerOrSinglePlayerMenu"
             android:label="@string/app_name" />
         <activity
             android:name=".gameCollectionMainMenu.DisplayMainPageActivity"

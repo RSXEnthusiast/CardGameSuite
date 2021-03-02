@@ -1,9 +1,7 @@
-package com.example.cardgamesuiteapp.austenMPStuff;
+package com.example.cardgamesuiteapp.MultiplayerConnection;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
@@ -34,7 +32,7 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
 
 
     public SelectPublicOrPrivateFragment() {
-        super(R.layout.austen_fragment_select_public_or_private_buttons);
+        super(R.layout.mpconnection_fragment_select_public_or_private_buttons);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.austenMPStuff;
+package com.example.cardgamesuiteapp.MultiplayerConnection;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -40,7 +40,7 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
     private static final String TAG = PrivateGameWaitingRoomFragment.class.getSimpleName();
     public PrivateGameWaitingRoomFragment() {
 
-        super(R.layout.austen_fragment_private_game_waiting_room);
+        super(R.layout.mpconnection_fragment_private_game_waiting_room);
         SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
 
     }

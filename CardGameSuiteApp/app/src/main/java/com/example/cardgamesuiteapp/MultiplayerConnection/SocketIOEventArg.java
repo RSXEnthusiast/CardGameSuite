@@ -1,6 +1,4 @@
-package com.example.cardgamesuiteapp.austenMPStuff;
-
-import android.os.Message;
+package com.example.cardgamesuiteapp.MultiplayerConnection;
 
 import org.json.JSONObject;
 

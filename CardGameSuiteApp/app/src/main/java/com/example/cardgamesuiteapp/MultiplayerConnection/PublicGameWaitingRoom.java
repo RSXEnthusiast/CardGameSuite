@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.austenMPStuff;
+package com.example.cardgamesuiteapp.MultiplayerConnection;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -26,7 +26,7 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
     private static final String TAG = PublicGameWaitingRoom.class.getSimpleName();
 
     public PublicGameWaitingRoom() {
-        super(R.layout.austen_fragment_public_game_waiting_room);
+        super(R.layout.mpconnection_fragment_public_game_waiting_room);
         SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
 
 
