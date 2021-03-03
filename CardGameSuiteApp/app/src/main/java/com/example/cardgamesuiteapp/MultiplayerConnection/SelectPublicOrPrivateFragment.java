@@ -2,6 +2,7 @@ package com.example.cardgamesuiteapp.MultiplayerConnection;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
