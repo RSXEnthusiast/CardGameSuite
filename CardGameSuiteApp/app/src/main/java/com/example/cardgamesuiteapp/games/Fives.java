@@ -36,13 +36,19 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
 
-public class Fives extends AppCompatActivity {
-    private static int numPlayers;//total number of players
-    private static int numOnlineOpponents;// Number of online opponents
-    private static int numAI;//number of AI players
-    private static Standard deck;// The Deck object
-    private static boolean multiplayer;
+public class Fives extends MultiPlayerGame {
+    static int numPlayers;//total number of players
+    static int numOnlineOpponents;// Number of online opponents
+    static int numAI;//number of AI players
+    static Standard deck;// The Deck object
+    static boolean multiplayer;
     MultiPlayerConnector _MultiPlayerConnector;
+    public static final MultiPlayerGameInfo gameInfo = new MultiPlayerGameInfo(2,6);
+
+
+    public static MultiPlayerGameInfo getGameInfo() {
+        return gameInfo;
+    }
 
     //View object names will always be preceded by "view"
     //View objects used for every Fives game

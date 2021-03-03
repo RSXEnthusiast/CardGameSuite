@@ -26,13 +26,10 @@ public class PrivateGameOptionsFragment extends Fragment {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //p2psocket.emit('private-game-room-request', {numPlayersRequiredForGame:2, gameType: 'fives'})
-                //_ParentActivity._MultiPlayerConnector.joinToPublicGame(2, _ParentActivity._GameType);
 
                 Bundle result = new Bundle();
                 result.putString("fragmentClassName", CreatePrivateGameFragment.class.getCanonicalName());
                 result.putBoolean("gameCreator", true);
-                // The child fragment needs to still set the result on its parent fragment manager
                 getParentFragmentManager().setFragmentResult("changeFragment", result);
 
             }
@@ -43,17 +40,10 @@ public class PrivateGameOptionsFragment extends Fragment {
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //p2psocket.emit('public-game-room-request', {numPlayersRequiredForGame:2, gameType: 'fives'})
-                //_ParentActivity._MultiPlayerConnector.joinToPublicGame(2, _ParentActivity._GameType);
-
                 Bundle result = new Bundle();
                 result.putString("fragmentClassName", JoinPrivateGameFragment.class.getCanonicalName());
                 result.putBoolean("gameCreator", false);
                 getParentFragmentManager().setFragmentResult("changeFragment", result);
-               /* Bundle result = new Bundle();
-                result.putString("fragmentClassName", Public.class.getCanonicalName());
-                // The child fragment needs to still set the result on its parent fragment manager
-                getParentFragmentManager().setFragmentResult("changeFragment", result);*/
             }
 
 

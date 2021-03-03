@@ -55,21 +55,30 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
         getContext().getTheme().resolveAttribute(R.attr.colorOnPrimary,typedValue,true);
         @ColorInt int primaryTextColor=typedValue.data;
 
-        TypedValue typedValue2 = new TypedValue();
-        getContext().getTheme().resolveAttribute(R.attr.colorOnSecondary,typedValue2,true);
-        @ColorInt int offTextColor=typedValue2.data;
-
-       buttonColors = new int[] {
+       int [] buttonTextColors = new int[] {
                 primaryTextColor,
-                offTextColor,
+                Color.LTGRAY,
                 BLACK,
                 BLACK
         };
 
-        buttonColorStateList= new ColorStateList(buttonColorStates, buttonColors);
+        ColorStateList buttonTextColorStateList= new ColorStateList(buttonColorStates, buttonTextColors);
 
-         _joinPrivateButton.setTextColor(buttonColorStateList); _joinPrivateButton.setStrokeColor(buttonColorStateList);
-         _joinPublicButton.setTextColor(buttonColorStateList); _joinPublicButton.setStrokeColor(buttonColorStateList);
+        TypedValue backGroundColorTypeValue = new TypedValue();
+        getContext().getTheme().resolveAttribute(R.attr.colorPrimaryVariant,backGroundColorTypeValue,true);
+        @ColorInt int backGroundColor=backGroundColorTypeValue.data;
+
+        int [] buttonBackgroundColors = new int[] {
+                backGroundColor,
+                Color.GRAY,
+                BLACK,
+                BLACK
+        };
+
+        ColorStateList buttonBackgroundColorStateList= new ColorStateList(buttonColorStates, buttonBackgroundColors);
+
+         _joinPrivateButton.setTextColor(buttonTextColorStateList); _joinPrivateButton.setBackgroundTintList(buttonBackgroundColorStateList);
+         _joinPublicButton.setTextColor(buttonTextColorStateList); _joinPublicButton.setBackgroundTintList(buttonBackgroundColorStateList);
 
         SetMultiPlayerConnectorObserver(_multiPlayerConnectorObserver);
 
@@ -81,8 +90,6 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
     @Override
     public void onResume() {
         super.onResume();
-        //_MultiPlayerConnector.ResetSocketEvents();
-     //   _MultiPlayerConnector.ResetConnection();
 
         try {
             _MultiPlayerConnector.connectToServer();
@@ -229,8 +236,7 @@ public class SelectPublicOrPrivateFragment extends  MultiplayerWaitingRoomActivi
             _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {
                 _joinPrivateButton.setEnabled(isEnabled);
                 _joinPublicButton.setEnabled(isEnabled);
-              /*  if(isEnabled) _StartButton.setTextColor(BLACK);
-                else _StartButton.setTextColor(LTGRAY); */
+
             });
         }
 }

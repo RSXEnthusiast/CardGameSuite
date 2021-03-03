@@ -65,20 +65,30 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
         getContext().getTheme().resolveAttribute(R.attr.colorOnPrimary,typedValue,true);
         @ColorInt int primaryTextColor=typedValue.data;
 
-        TypedValue typedValue2 = new TypedValue();
-        getContext().getTheme().resolveAttribute(R.attr.colorOnSecondary,typedValue2,true);
-        @ColorInt int offTextColor=typedValue2.data;
-
-        startButtonColors = new int[] {
+        int [] buttonTextColors = new int[] {
                 primaryTextColor,
-                offTextColor,
+                Color.LTGRAY,
                 BLACK,
                 BLACK
         };
 
-        startButtonColorStateList= new ColorStateList(startButtonColorStates, startButtonColors);
+        ColorStateList buttonTextColorStateList= new ColorStateList(startButtonColorStates, buttonTextColors);
 
-        _MultiplayerWaitingRoomActivity._UIHandler.post(() -> { _StartButton.setEnabled(false); _StartButton.setTextColor(startButtonColorStateList); _StartButton.setStrokeColor(startButtonColorStateList);});
+        TypedValue backGroundColorTypeValue = new TypedValue();
+        getContext().getTheme().resolveAttribute(R.attr.colorPrimaryVariant,backGroundColorTypeValue,true);
+        @ColorInt int backGroundColor=backGroundColorTypeValue.data;
+
+        int [] buttonBackgroundColors = new int[] {
+                backGroundColor,
+                Color.GRAY,
+                BLACK,
+                BLACK
+        };
+
+        ColorStateList buttonBackgroundColorStateList= new ColorStateList(startButtonColorStates, buttonBackgroundColors);
+
+
+        _MultiplayerWaitingRoomActivity._UIHandler.post(() -> {  _StartButton.setBackgroundTintList(buttonBackgroundColorStateList); _StartButton.setTextColor(buttonTextColorStateList); _StartButton.setEnabled(false);});
 
          Bundle extras = getArguments();
         _GameCreator= extras.getBoolean("gameCreator",false);//also get player name if creator
@@ -283,12 +293,7 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
             new int[] { android.R.attr.state_pressed}  // pressed
     };
 
-    int[] startButtonColors = new int[] {
-            Color.BLACK,
-            Color.LTGRAY,
-            BLACK,
-            BLACK
-    };
+
 
     private void startButtonIsEnabled(boolean isEnabled) {
         if(_GameCreator){
@@ -300,7 +305,7 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
         }
     }
 
-    ColorStateList startButtonColorStateList = new ColorStateList(startButtonColorStates, startButtonColors);
+
 
     @Override
     void SetMultiPlayerConnectorObserver(Observer multiPlayerConnectorObserver) {
