@@ -37,40 +37,40 @@ import java.util.Observer;
 import java.util.Queue;
 
 public class Fives extends AppCompatActivity {
-    static int numPlayers;//total number of players
-    static int numOnlineOpponents;// Number of online opponents
-    static int numAI;//number of AI players
-    static Standard deck;// The Deck object
-    static boolean multiplayer;
+    private static int numPlayers;//total number of players
+    private static int numOnlineOpponents;// Number of online opponents
+    private static int numAI;//number of AI players
+    private static Standard deck;// The Deck object
+    private static boolean multiplayer;
     MultiPlayerConnector _MultiPlayerConnector;
 
     //View object names will always be preceded by "view"
     //View objects used for every Fives game
-    static Hand[] viewPlayers;// The custom player views
-    static Card viewDiscard;// The discard view
-    static Card viewDeck;// The deck view
-    static TextView viewInstruction;// The instruction view
-    static Button viewConfirm;// The button the user will press once they've memorized their cards
-    static Button viewReturnToAppCollection;// The button the user will press to return to the main menu
-    static Button viewReturnToPlayerMenu;// The button the user will press to return to the player menu
-    static Button viewReturnToGameMainMenu;// The button the user will press to return to the game's main menu
-    static TextView[] viewPlayerNames;// The textViews of the player names
-    static TextView[] viewPlayerScores;// The textView of the player scores.
-    static View viewDiscardHighlight;// Simply the "highlight" of th discard, mainly used for setting the highlight to visible/invisible
-    static Card viewAnimatedCard1;
-    static CardAnimation viewAnimation1;
-    static Card viewAnimatedCard2;
-    static CardAnimation viewAnimation2;
+    private static Hand[] viewPlayers;// The custom player views
+    private static Card viewDiscard;// The discard view
+    private static Card viewDeck;// The deck view
+    private static TextView viewInstruction;// The instruction view
+    private static Button viewConfirm;// The button the user will press once they've memorized their cards
+    private static Button viewReturnToAppCollection;// The button the user will press to return to the main menu
+    private static Button viewReturnToPlayerMenu;// The button the user will press to return to the player menu
+    private static Button viewReturnToGameMainMenu;// The button the user will press to return to the game's main menu
+    private static TextView[] viewPlayerNames;// The textViews of the player names
+    private static TextView[] viewPlayerScores;// The textView of the player scores.
+    private static View viewDiscardHighlight;// Simply the "highlight" of th discard, mainly used for setting the highlight to visible/invisible
+    private static Card viewAnimatedCard1;
+    private static CardAnimation viewAnimation1;
+    private static Card viewAnimatedCard2;
+    private static CardAnimation viewAnimation2;
 
-    static fivesStage stage;// The current stage of play
-    static int[] totalScores;// Keeps track of the cumulative score of the game
-    static ArrayList<Integer> winnerIndex;
-    static int loserIndex;
-    static boolean isAnimating;
-    static boolean preAnimation;
-    static int curAnimatedPlayer;
-    static int lastTouchedCardNum;
-    static int playersReadyToContinue;
+    private static fivesStage stage;// The current stage of play
+    private static int[] totalScores;// Keeps track of the cumulative score of the game
+    private static ArrayList<Integer> winnerIndex;
+    private static int loserIndex;
+    private static boolean isAnimating;
+    private static boolean preAnimation;
+    private static int curAnimatedPlayer;
+    private static int lastTouchedCardNum;
+    private static int playersReadyToContinue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
