@@ -99,7 +99,8 @@ public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFra
         JSONObject args = new JSONObject();
         try {
             args.put("playerName", playerName);
-            args.put("minPlayersRequiredForGame", MultiplayerWaitingRoomActivity._MinNumPlayersRequiredForGame);
+            args.put("minPlayersRequiredForGame", _MultiplayerWaitingRoomActivity._MultiPlayerGameInfo.minNumberPlayers);
+            args.put("maxNumberPlayers", _MultiplayerWaitingRoomActivity._MultiPlayerGameInfo.maxNumberPlayers);
             args.put("gameType", MultiplayerWaitingRoomActivity._GameType);
         } catch (JSONException e) {
             e.printStackTrace();

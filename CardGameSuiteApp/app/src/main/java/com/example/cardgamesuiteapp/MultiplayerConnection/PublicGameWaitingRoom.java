@@ -5,12 +5,16 @@ import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.example.cardgamesuiteapp.R;
+import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,7 +26,7 @@ import java.util.Observer;
 import io.socket.client.Socket;
 
 
-public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragment  {
+public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragment implements NumberPicker.OnValueChangeListener  {
     private static final String TAG = PublicGameWaitingRoom.class.getSimpleName();
 
     public PublicGameWaitingRoom() {
@@ -34,23 +38,44 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
 
     String _DefaultFragmentStatusMessage = "Private Game Joined";
     String _StatusMessage = "Finding An Opponent";
+    NumberPicker _GameSizePicker;
+    LinearLayout _WaitingLayout;
+    LinearLayout _PickerLayout;
+    MaterialButton _SearchForGameButton;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        _GameSizePicker= _MultiplayerWaitingRoomActivity.findViewById(R.id.gameSizePicker);
+        _WaitingLayout= _MultiplayerWaitingRoomActivity.findViewById(R.id.publicGameWaitingLayout);
+        _PickerLayout = _MultiplayerWaitingRoomActivity.findViewById(R.id.gameSizePickerLayout);
+        _SearchForGameButton = _MultiplayerWaitingRoomActivity.findViewById(R.id.searchForGameButton);
+        _SearchForGameButton.setOnClickListener(v -> searchForGame());
 
 
-        requestPublicGameRoom();
-       /* Bundle extras = getArguments();
+        _WaitingLayout.setVisibility(View.GONE);
+        _GameSizePicker.setOnValueChangedListener(this);
 
-        boolean gameCreator=false;
-        gameCreator= extras.getBoolean("gameCreator");
+        _GameSizePicker.setMinValue(_MultiplayerWaitingRoomActivity._MultiPlayerGameInfo.minNumberPlayers);
+        _GameSizePicker.setMaxValue(_MultiplayerWaitingRoomActivity._MultiPlayerGameInfo.maxNumberPlayers);
 
-        if (gameCreator) {
-            TextView statusMessage = view.findViewById(R.id.statusMessage);
-            statusMessage.setText(_CreatorStatusMessage);
-        }*/
+    }
 
+    public void searchForGame(){
+        _GameSizePicker.setVisibility(View.GONE);
+        _WaitingLayout.setVisibility(View.VISIBLE);
+        requestPublicGameRoom(_GameSize);
+    }
+
+    int _GameSize=2;
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+        _GameSize=newVal;
 
     }
 
@@ -59,10 +84,11 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
         _MultiPlayerConnectorObserver = multiPlayerConnectorObserver;
     }
 
-    private void requestPublicGameRoom() {
+    private void requestPublicGameRoom(int numberOfPlayers) {
         JSONObject obj = new JSONObject();
         try {
-            obj.put("minPlayersRequiredForGame", MultiplayerWaitingRoomActivity._MinNumPlayersRequiredForGame);
+            obj.put("minPlayersRequiredForGame", numberOfPlayers);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

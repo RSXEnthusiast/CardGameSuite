@@ -5,29 +5,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:id="@+id/privateGameWaitingLayout"
+        android:id="@+id/publicGameWaitingLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/gameTitle"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="0dp"
         android:layout_marginBottom="30dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="20dp">
 
-        <TextView
-            android:id="@+id/statusMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Finding An opponent"
-            android:textColor="?colorPrimaryVariant"
-            android:textSize="30sp"
-            />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Number of Active Players: "
+            android:text="Total Number of Active Players: "
             android:textColor="?colorPrimaryVariant"
             android:textSize="15dp" />
         <TextView
@@ -40,7 +33,7 @@
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="0dp"
 
         android:gravity="center"
         android:orientation="vertical">
@@ -48,7 +41,7 @@
 
 
             <TextView
-                android:layout_marginTop="20dp"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Waiting for opponents"
@@ -62,9 +55,11 @@
                 android:indeterminateTint="?colorPrimaryVariant"
                 android:indeterminate="true"
                 android:progress="1"
-                android:paddingTop="5dp"/>
+                android:paddingTop="5dp"
+                android:layout_marginTop="10dp"/>
 
             <TextView
+                android:layout_marginTop="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Players joined to game: "
@@ -76,7 +71,8 @@
                 android:layout_height="wrap_content"
                 android:text="1"
                 android:textColor="?colorPrimaryVariant"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:layout_marginTop="10dp"/>
         </LinearLayout>
 
 
@@ -84,6 +80,47 @@
 
     </LinearLayout>
 
+
+    <LinearLayout
+        android:id="@+id/gameSizePickerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/gameTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="How many players do you want to play with?"
+            android:textColor="?colorPrimaryVariant"
+            android:textSize="30sp"
+            />
+
+        <NumberPicker
+            android:id="@+id/gameSizePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ></NumberPicker>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/searchForGameButton"
+            android:text="Find A Game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="?colorPrimaryVariant"
+
+            android:textAllCaps="false"
+            android:textColor="?colorOnPrimary"
+            android:textSize="18sp"
+            app:cornerRadius="4dp"
+            />
+    </LinearLayout>
 
 
 

@@ -6,6 +6,7 @@ import android.view.View;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.net.URISyntaxException;
@@ -22,13 +23,19 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
 
     public MultiplayerWaitingRoomActivityFragment(int fragment_Rid) {
         super(fragment_Rid);
+
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        _MultiplayerWaitingRoomActivity = (MultiplayerWaitingRoomActivity) getActivity();
+        _MultiPlayerConnector.addSocketEvents(this);
+    }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        _MultiplayerWaitingRoomActivity = (MultiplayerWaitingRoomActivity) getActivity();
-        _MultiPlayerConnector.addSocketEvents(this);
+
     }
 
     /**

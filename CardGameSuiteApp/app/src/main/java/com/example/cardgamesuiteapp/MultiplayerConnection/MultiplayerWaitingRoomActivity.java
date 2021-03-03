@@ -26,8 +26,8 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
     MultiPlayerConnector _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
     public Handler _UIHandler;
     public static String _GameType;
-    public static int _MinNumPlayersRequiredForGame;
-    public static int _MaxNumPlayersRequiredForGame;
+    public MultiPlayerGameInfo _MultiPlayerGameInfo;
+
 
 
     String _CurrentFragmentClassName;
@@ -45,7 +45,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         _GameType = (String) intent.getSerializableExtra("gameName");
 
-        Class gameClass = ((Class) intent.getSerializableExtra("gameClass"));//.getGameInfo().minNumberPlayers;
+        Class gameClass = ((Class) intent.getSerializableExtra("gameClass"));
 
         Method method = null;
         try {
@@ -54,9 +54,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
             e.printStackTrace();
         }
         try {
-            MultiPlayerGameInfo gameInfo = (MultiPlayerGameInfo) method.invoke(null);
-            _MinNumPlayersRequiredForGame = gameInfo.minNumberPlayers;
-            _MaxNumPlayersRequiredForGame = gameInfo.maxNumberPlayers;
+            _MultiPlayerGameInfo = (MultiPlayerGameInfo) method.invoke(null);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -90,7 +88,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
         Intent oldIntent = getIntent();
         Intent newIntent = new Intent(this, (Class) oldIntent.getSerializableExtra("gameClass"));
         newIntent.putExtra("multiplayer", true);
-        newIntent.putExtra("numOnlineOpponents", _MinNumPlayersRequiredForGame - 1);
+        newIntent.putExtra("numOnlineOpponents", _MultiPlayerGameInfo.minNumberPlayers - 1);
         newIntent.putExtra("numAI", 0);
         startActivity(newIntent);
 
