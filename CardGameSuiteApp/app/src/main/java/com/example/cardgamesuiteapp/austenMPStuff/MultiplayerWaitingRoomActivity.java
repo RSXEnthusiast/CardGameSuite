@@ -7,6 +7,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.example.cardgamesuiteapp.R;
+import com.example.cardgamesuiteapp.games.MultiPlayerGame;
+import com.example.cardgamesuiteapp.games.MultiPlayerGameInfo;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AlertDialog;
@@ -16,6 +18,8 @@ import androidx.fragment.app.FragmentResultListener;
 import android.os.Handler;
 import android.util.Log;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.util.Observable;
 import java.util.Observer;
@@ -25,7 +29,9 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
     MultiPlayerConnector _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
     public Handler _UIHandler;
     public static String _GameType;
-    public static int _MinNumPlayersRequiredForGame = 2;
+    public static int _MinNumPlayersRequiredForGame;
+    public static int _MaxNumPlayersRequiredForGame;
+
 
     String _CurrentFragmentClassName;
 
@@ -41,6 +47,25 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
         // get notified on updates from the MultiplayerConnector
         Intent intent = getIntent();
         _GameType = (String) intent.getSerializableExtra("gameName");
+
+        Class gameClass= ((Class) intent.getSerializableExtra("gameClass"));//.getGameInfo().minNumberPlayers;
+
+        Method method = null;
+        try {
+            method = gameClass.getMethod("getGameInfo");
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        try {
+           MultiPlayerGameInfo gameInfo= (MultiPlayerGameInfo) method.invoke(null);
+            _MinNumPlayersRequiredForGame=gameInfo.minNumberPlayers;
+            _MaxNumPlayersRequiredForGame=gameInfo.maxNumberPlayers;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
 
 
         _MultiPlayerConnector.setLifeCycleOwner(this);

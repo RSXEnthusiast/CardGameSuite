@@ -39,13 +39,19 @@ import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Fives extends AppCompatActivity {
+public class Fives extends MultiPlayerGame {
     static int numPlayers;//total number of players
     static int numOnlineOpponents;// Number of online opponents
     static int numAI;//number of AI players
     static Standard deck;// The Deck object
     static boolean multiplayer;
     MultiPlayerConnector _MultiPlayerConnector;
+    public static final MultiPlayerGameInfo gameInfo = new MultiPlayerGameInfo(2,6);
+
+
+    public static MultiPlayerGameInfo getGameInfo() {
+        return gameInfo;
+    }
 
     //View object names will always be preceded by "view"
     //View objects used for every Fives game
