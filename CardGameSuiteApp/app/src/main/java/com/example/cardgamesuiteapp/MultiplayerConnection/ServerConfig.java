@@ -19,7 +19,7 @@ public class ServerConfig {
 
     public static final String startGame = "start-game";
     public static final String gameData = "game-data";
-    public static final String playerReady = "player-ready";
+    public static final String playerReadyForInitialGameData = "player-ready-for-game-data";
     public static final String getReady= "get-ready";
     public static final String leaveRoom = "leave-room";
     public static final String playerNumbers = "player_numbers"; //the server sends all players number and associated name

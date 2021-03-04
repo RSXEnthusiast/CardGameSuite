@@ -84,7 +84,18 @@ public class Fives extends MultiPlayerGame {
 
         _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
         _MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
-        initFives();
+
+
+        multiplayer = (boolean) getIntent().getSerializableExtra("multiplayer");
+        if (multiplayer ) {
+            _LoadingDialog = ProgressDialog.show(Fives.this, "",
+                    "Initializing. Please wait...", true);
+
+            _MultiPlayerConnector.emitEvent(ServerConfig.playerReadyForInitialGameData);
+        }
+        else {
+            initFives();
+        }
     }
 
     @Override
@@ -94,7 +105,7 @@ public class Fives extends MultiPlayerGame {
     private void initFives() {
         numOnlineOpponents = (int) getIntent().getSerializableExtra("numOnlineOpponents");
         numAI = (int) getIntent().getSerializableExtra("numAI");
-        multiplayer = (boolean) getIntent().getSerializableExtra("multiplayer");
+
         numPlayers = numAI + numOnlineOpponents + 1;
         setContentView();
         ((TextView) findViewById(R.id.scoresText)).setTextColor(Color.LTGRAY);
@@ -143,11 +154,8 @@ public class Fives extends MultiPlayerGame {
         curAnimatedPlayer = 0;
         playersReadyToContinue = 0;
         newGame();
-        if (multiplayer ) {
-            _LoadingDialog = ProgressDialog.show(Fives.this, "",
-                    "Initializing. Please wait...", true);
-        }
-        _MultiPlayerConnector.emitEvent(ServerConfig.playerReady);
+
+
     }
 
     static void nextCurAnimatedPlayer() {
@@ -1125,7 +1133,7 @@ public class Fives extends MultiPlayerGame {
                 }
             }
             if(socketIOEventArg._EventName.equals(ServerConfig.startGame)){
-
+                initFives();
                 if ( deck.getMyPlayerNum() == 0) {
                     DeckMultiplayerManager.initialize(deck);
                     _LoadingDialog.dismiss();
