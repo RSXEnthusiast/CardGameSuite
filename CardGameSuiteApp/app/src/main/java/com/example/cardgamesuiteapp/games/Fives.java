@@ -44,10 +44,12 @@ public class Fives extends MultiPlayerGame {
     static Standard deck;// The Deck object
     static boolean multiplayer;
     MultiPlayerConnector _MultiPlayerConnector;
-    public static final MultiPlayerGameInfo gameInfo = new MultiPlayerGameInfo(2,6);
+    public static final MultiPlayerGameInfo gameInfo = new MultiPlayerGameInfo(2, 6);
+
     public static MultiPlayerGameInfo getGameInfo() {
         return gameInfo;
     }
+
     Handler _UIHandler;
     ProgressDialog _LoadingDialog;
     //View object names will always be preceded by "view"
@@ -74,7 +76,6 @@ public class Fives extends MultiPlayerGame {
     private static int loserIndex;
     private static boolean isAnimating;
     private static boolean preAnimation;
-    private static int curAnimatedPlayer;
     private static int lastTouchedCardNum;
     private static int playersReadyToContinue;
 
@@ -140,18 +141,13 @@ public class Fives extends MultiPlayerGame {
         viewAnimation2 = new CardAnimation(viewAnimatedCard2, false, this);
         isAnimating = false;
         preAnimation = true;
-        curAnimatedPlayer = 0;
         playersReadyToContinue = 0;
         newGame();
-        if (multiplayer ) {
+        if (multiplayer) {
             _LoadingDialog = ProgressDialog.show(Fives.this, "",
                     "Initializing. Please wait...", true);
         }
         _MultiPlayerConnector.emitEvent(ServerConfig.playerReady);
-    }
-
-    static void nextCurAnimatedPlayer() {
-        curAnimatedPlayer = (curAnimatedPlayer + 1) % numPlayers;
     }
 
     private void returnToPlayerMenu() {
@@ -332,6 +328,7 @@ public class Fives extends MultiPlayerGame {
         boolean endTurn = false;
         if (deck.peekTopDiscard() == cardNum) {
             if (preAnimation) {
+                handlingIncomingData = true;
                 //Logic for discarded from draw
                 viewAnimatedCard1.updateImage(deck.peekTopDraw());
                 isAnimating = true;
@@ -353,20 +350,12 @@ public class Fives extends MultiPlayerGame {
                 viewDeck.updateImage(deck.peekTopDraw());
                 viewDiscardHighlight.setVisibility(View.INVISIBLE);
                 updateViewInstruction();
-                if (incomingData.isEmpty()) {
-                    handlingIncomingData = false;
-                } else {
-                    try {
-                        new Fives().handleIncomingData(incomingData.poll());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         } else if (isValidTapOnCardInHand(cardNum)) {
             int cardLocation = deck.getCardLocation(deck.getMyPlayerNum(), cardNum);
             if (preAnimation) {
                 //Logic for swapped with hand
+                handlingIncomingData = true;
                 isAnimating = true;
                 preAnimation = false;
                 viewAnimatedCard1.updateImage(deck.peekTopDraw());
@@ -379,7 +368,6 @@ public class Fives extends MultiPlayerGame {
                     DeckMultiplayerManager.drewFromDeck(cardLocation);
                 }
             } else {
-                nextCurAnimatedPlayer();
                 stage = fivesStage.draw;//reset stage, turn over.
                 endTurn = true;
                 preAnimation = true;
@@ -396,15 +384,6 @@ public class Fives extends MultiPlayerGame {
                 viewDiscard.updateImage(deck.peekTopDiscard());
                 viewDiscardHighlight.setVisibility(View.INVISIBLE);
                 updateViewInstruction();
-                if (incomingData.isEmpty()) {
-                    handlingIncomingData = false;
-                } else {
-                    try {
-                        new Fives().handleIncomingData(incomingData.poll());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         }
         if (endTurn) {
@@ -413,6 +392,7 @@ public class Fives extends MultiPlayerGame {
             }
             deck.nextPlayer(multiplayer);
             updateViewInstruction();
+            handleNextData();
             if (numAI > 0 && deck.getCurPlayersTurn() >= numOnlineOpponents + 1) {
                 runAITurns();
             }
@@ -433,7 +413,6 @@ public class Fives extends MultiPlayerGame {
             //logic for flipping over card in hand.
             viewPlayers[deck.getMyPlayerNum()].flipCardByNum(cardNum);
             updateViewInstruction();
-            nextCurAnimatedPlayer();
             if (multiplayer) {
                 DeckMultiplayerManager.flipCardInHand(cardNum);
             }
@@ -443,6 +422,7 @@ public class Fives extends MultiPlayerGame {
                 new Fives().scoreRound();
             }
             deck.nextPlayer(multiplayer);
+            handleNextData();
             updateViewInstruction();
             if (numAI > 0 && deck.getCurPlayersTurn() >= numOnlineOpponents + 1) {
                 runAITurns();
@@ -460,6 +440,7 @@ public class Fives extends MultiPlayerGame {
         if (isValidTapOnCardInHand(cardNum)) {
             int cardLocation = deck.getCardLocation(deck.getMyPlayerNum(), cardNum);
             if (preAnimation) {
+                handlingIncomingData = true;
                 viewAnimatedCard1.updateImage(deck.peekTopDiscard());
                 isAnimating = true;
                 preAnimation = false;
@@ -476,7 +457,6 @@ public class Fives extends MultiPlayerGame {
                     DeckMultiplayerManager.drewFromDiscard(cardLocation);
                 }
             } else {
-                nextCurAnimatedPlayer();
                 endTurn = true;
                 stage = fivesStage.draw;//reset stage, turn over.
                 preAnimation = true;
@@ -492,15 +472,6 @@ public class Fives extends MultiPlayerGame {
                 viewPlayers[deck.getMyPlayerNum()].updateCard(cardLocation, deck.getHand(deck.getMyPlayerNum()).get(cardLocation));
                 viewPlayers[deck.getMyPlayerNum()].flipCardByIndex(cardLocation);
                 updateViewInstruction();
-                if (incomingData.isEmpty()) {
-                    handlingIncomingData = false;
-                } else {
-                    try {
-                        new Fives().handleIncomingData(incomingData.poll());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         }
         if (endTurn) {
@@ -508,6 +479,7 @@ public class Fives extends MultiPlayerGame {
                 new Fives().scoreRound();
             }
             deck.nextPlayer(multiplayer);
+            handleNextData();
             updateViewInstruction();
             if (numAI > 0 && deck.getCurPlayersTurn() >= numOnlineOpponents + 1) {
                 runAITurns();
@@ -794,13 +766,12 @@ public class Fives extends MultiPlayerGame {
                 }
                 break;
         }
-        if (deck.getCurPlayersTurn() > numOnlineOpponents + 1) {
-            deck.nextPlayerFromPeer();
-        }
+        deck.nextPlayerFromPeer();
         updateViewInstruction();
         if (!deck.isMyTurn() && numAI > 0) {
             runAITurns();
         }
+        handleNextData();
     }
 
     /**
@@ -829,28 +800,18 @@ public class Fives extends MultiPlayerGame {
             viewAnimation2.cardAnimate(getCardInHandX(cardNum), viewDiscard.getX(), getCardInHandY(cardNum), viewDiscard.getY());
         } else {
             beforeAnimationAI = true;
-            viewPlayers[curAnimatedPlayer].swapVisibility(lastLocation);
-            viewPlayers[curAnimatedPlayer].updateCard(location, deck.peekTopDraw());
-            viewPlayers[curAnimatedPlayer].flipCardByIndex(location);
+            viewPlayers[deck.getCurPlayersTurn()].swapVisibility(lastLocation);
+            viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDraw());
+            viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
             try {
-                deck.discardByIndex(curAnimatedPlayer, location);
-                deck.draw(curAnimatedPlayer, location);
+                deck.discardByIndex(deck.getCurPlayersTurn(), location);
+                deck.draw(deck.getCurPlayersTurn(), location);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             viewDeck.updateImage(deck.peekTopDraw());
             viewDiscard.updateImage(deck.peekTopDiscard());
             AIStage = fivesStage.draw;
-            nextCurAnimatedPlayer();
-            if (incomingData.isEmpty()) {
-                handlingIncomingData = false;
-            } else {
-                try {
-                    new Fives().handleIncomingData(incomingData.poll());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
         }
         if (roundOver()) {
             new Fives().scoreRound();
@@ -876,31 +837,21 @@ public class Fives extends MultiPlayerGame {
             }
             viewDeck.updateImage(deck.peekTopDraw());
             viewDiscard.updateImage(deck.peekTopDiscard());
-            if (incomingData.isEmpty()) {
-                handlingIncomingData = false;
-            } else {
-                try {
-                    new Fives().handleIncomingData(incomingData.poll());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            handleNextData();
         }
     }
 
     private static void AIFlippedCardByIndex(int location) {
-        viewPlayers[curAnimatedPlayer].flipCardByIndex(location);
+        viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
         AIStage = fivesStage.draw;
-        nextCurAnimatedPlayer();
         if (roundOver()) {
             new Fives().scoreRound();
         }
     }
 
     private static void AIFlippedCardByCardNum(int cardNum) {
-        viewPlayers[curAnimatedPlayer].flipCardByNum(cardNum);
+        viewPlayers[deck.getCurPlayersTurn()].flipCardByNum(cardNum);
         AIStage = fivesStage.draw;
-        nextCurAnimatedPlayer();
         if (roundOver()) {
             new Fives().scoreRound();
         }
@@ -930,27 +881,17 @@ public class Fives extends MultiPlayerGame {
             beforeAnimationAI = true;
             viewDiscard.setVisibility(View.VISIBLE);
             viewDiscard.updateImage(viewAnimatedCard2.getCardNum());
-            viewPlayers[curAnimatedPlayer].swapVisibility(location);
-            viewPlayers[curAnimatedPlayer].updateCard(location, deck.peekTopDiscard());
-            viewPlayers[curAnimatedPlayer].flipCardByIndex(location);
+            viewPlayers[deck.getCurPlayersTurn()].swapVisibility(location);
+            viewPlayers[deck.getCurPlayersTurn()].updateCard(location, deck.peekTopDiscard());
+            viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
             try {
-                deck.drawFromDiscard(curAnimatedPlayer, location);
-                deck.discardByIndex(curAnimatedPlayer, location + 1);
+                deck.drawFromDiscard(deck.getCurPlayersTurn(), location);
+                deck.discardByIndex(deck.getCurPlayersTurn(), location + 1);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            nextCurAnimatedPlayer();
             viewDiscard.updateImage(deck.peekTopDiscard());
             AIStage = fivesStage.draw;
-            if (incomingData.isEmpty()) {
-                handlingIncomingData = false;
-            } else {
-                try {
-                    new Fives().handleIncomingData(incomingData.poll());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
         }
         if (roundOver()) {
             new Fives().scoreRound();
@@ -1120,20 +1061,19 @@ public class Fives extends MultiPlayerGame {
             if (socketIOEventArg._EventName.equals(ServerConfig.gameData)) {
                 incomingData.add(socketIOEventArg._JsonObject);
                 if (!handlingIncomingData) {
-                    handleIncomingData(incomingData.poll());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            handleIncomingData(incomingData.poll());
+                        }
+                    });
                 }
             }
-            if(socketIOEventArg._EventName.equals(ServerConfig.startGame)){
-
-                if ( deck.getMyPlayerNum() == 0) {
+            if (socketIOEventArg._EventName.equals(ServerConfig.startGame)) {
+                if (deck.getMyPlayerNum() == 0) {
                     DeckMultiplayerManager.initialize(deck);
                     _LoadingDialog.dismiss();
                 }
-
-
-
-
-
             }
         }
     };
@@ -1158,7 +1098,9 @@ public class Fives extends MultiPlayerGame {
             case initialize:
                 System.out.println("initialize");
                 initializeReceived(data);
-                _LoadingDialog.dismiss();
+                if (_LoadingDialog != null) {
+                    _LoadingDialog.dismiss();
+                }
                 break;
             case drawIntoIndex:
                 System.out.println("playerDrawIntoIndex");
@@ -1171,12 +1113,6 @@ public class Fives extends MultiPlayerGame {
             case recover:
                 System.out.println("recover");
                 recoverReceived(data);
-                break;
-            case nextPlayer:
-                System.out.println("NextPlayer");
-                deck.nextPlayerFromPeer();
-                updateViewInstruction();
-                handleNextData();
                 break;
             case flipCardInHand:
                 System.out.println("Flip Card");
