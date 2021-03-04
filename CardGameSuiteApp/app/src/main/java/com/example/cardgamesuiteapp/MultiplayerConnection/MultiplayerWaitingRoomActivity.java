@@ -149,9 +149,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
     }
 
 
-    private void resetPlayerStatus() {
-        PlayerStatus._initiator = false;
-    }
+
 
     protected void changeFragment(String className, Bundle bundle) {
         Class fragmentClass = null;

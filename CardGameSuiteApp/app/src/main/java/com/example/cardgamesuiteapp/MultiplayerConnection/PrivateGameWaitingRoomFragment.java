@@ -255,7 +255,7 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
                     informPlayerGameIsDeleted();
 
                     break;
-                case ServerConfig.startGame:
+                case ServerConfig.getReady:
                     //go to game
                     _MultiplayerWaitingRoomActivity.GoToGameActivity();
                     break;
@@ -326,9 +326,9 @@ public class PrivateGameWaitingRoomFragment extends MultiplayerWaitingRoomActivi
 
         });
 
-        socket.on(ServerConfig.startGame, args -> {
+        socket.on(ServerConfig.getReady, args -> {
             Log.d(TAG, "start private game received");
-            multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.startGame, TAG, args));
+            multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.getReady, TAG, args));
         });
     }
 }

@@ -119,7 +119,7 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
                 case ServerConfig.NUM_ACTIVE_PUBLIC_PLAYERS:
                     updatePublicWaitingRoomActivePlayerCount(socketIOEventArg._JsonObject);
                     break;
-                case ServerConfig.startGame:
+                case ServerConfig.getReady:
                     //go to game
                     _MultiplayerWaitingRoomActivity.GoToGameActivity();
                     break;
@@ -203,9 +203,9 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
         multiPlayerConnector.notifyObservers(socketIOEventArg);
     });
 
-    socket.on(ServerConfig.startGame, args -> {
+    socket.on(ServerConfig.getReady, args -> {
         Log.d(TAG, "start public game received");
-        multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.startGame, TAG, args));
+        multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.getReady, TAG, args));
     });
 
 

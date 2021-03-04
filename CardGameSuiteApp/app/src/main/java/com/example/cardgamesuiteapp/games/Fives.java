@@ -1,13 +1,14 @@
 package com.example.cardgamesuiteapp.games;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -44,12 +45,11 @@ public class Fives extends MultiPlayerGame {
     static boolean multiplayer;
     MultiPlayerConnector _MultiPlayerConnector;
     public static final MultiPlayerGameInfo gameInfo = new MultiPlayerGameInfo(2,6);
-
-
     public static MultiPlayerGameInfo getGameInfo() {
         return gameInfo;
     }
-
+    Handler _UIHandler;
+    ProgressDialog _LoadingDialog;
     //View object names will always be preceded by "view"
     //View objects used for every Fives game
     private static Hand[] viewPlayers;// The custom player views
@@ -81,6 +81,7 @@ public class Fives extends MultiPlayerGame {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        _UIHandler = new Handler();
         _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
         _MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
         initFives();
@@ -142,9 +143,11 @@ public class Fives extends MultiPlayerGame {
         curAnimatedPlayer = 0;
         playersReadyToContinue = 0;
         newGame();
-        if (multiplayer && deck.getMyPlayerNum() == 0) {
-            DeckMultiplayerManager.initialize(deck);
+        if (multiplayer ) {
+            _LoadingDialog = ProgressDialog.show(Fives.this, "",
+                    "Initializing. Please wait...", true);
         }
+        _MultiPlayerConnector.emitEvent(ServerConfig.playerReady);
     }
 
     static void nextCurAnimatedPlayer() {
@@ -1120,6 +1123,18 @@ public class Fives extends MultiPlayerGame {
                     handleIncomingData(incomingData.poll());
                 }
             }
+            if(socketIOEventArg._EventName.equals(ServerConfig.startGame)){
+
+                if ( deck.getMyPlayerNum() == 0) {
+                    DeckMultiplayerManager.initialize(deck);
+                    _LoadingDialog.dismiss();
+                }
+
+
+
+
+
+            }
         }
     };
 
@@ -1143,6 +1158,7 @@ public class Fives extends MultiPlayerGame {
             case initialize:
                 System.out.println("initialize");
                 initializeReceived(data);
+                _LoadingDialog.dismiss();
                 break;
             case drawIntoIndex:
                 System.out.println("playerDrawIntoIndex");
