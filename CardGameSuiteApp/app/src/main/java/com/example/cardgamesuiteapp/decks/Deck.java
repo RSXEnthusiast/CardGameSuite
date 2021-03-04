@@ -74,9 +74,9 @@ public abstract class Deck implements Serializable {
      */
     public void nextPlayer(boolean multiplayer) {
         nextPlayerFromPeer();
-        if (multiplayer) {
-            DeckMultiplayerManager.nextPlayer();
-        }
+//        if (multiplayer) {
+//            DeckMultiplayerManager.nextPlayer();
+//        }
     }
 
     public void nextPlayerFromPeer() {
