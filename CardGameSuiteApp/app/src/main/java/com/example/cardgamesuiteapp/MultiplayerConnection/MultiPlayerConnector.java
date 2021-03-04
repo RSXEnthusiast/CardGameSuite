@@ -156,6 +156,11 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
             SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.playerNumbers, args);
             notifyObservers(socketIOEventArg);
         });
+        _Socket.on(ServerConfig.playerDisconnected, args -> {
+            Log.d(TAG, "playerDisconnected");
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.playerDisconnected, args);
+            notifyObservers(socketIOEventArg);
+        });
     }
 
     public void setLifeCycleOwner(MultiPlayerConnectorLifeCycleOwner owner){
