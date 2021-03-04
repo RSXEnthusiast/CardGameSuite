@@ -5,9 +5,9 @@ public class ServerConfig {
     public static final String ServerURLProduction = "http://thecardgameserver.azurewebsites.net/";//"http://chatserver.azurewebsites.net/"; //Joel's IP
     //    public static final String ServerURLProduction = "http://192.168.1.160:3030/";//"http://chatserver.azurewebsites.net/"; //Austen's IP
 //    public static final String ServerURLDebug = "http://192.168.56.1:3030/"; // Joel's IP
-    //public static final String ServerURLDebug = "http://10.42.0.145:3030/"; // Austen's IP
+    public static final String ServerURLDebug = "http://10.42.0.145:3030/"; // Austen's IP
    //public static final String ServerURLDebug = "http://thecardgameserver.azurewebsites.net/";
-    public static final String ServerURLDebug = "http://67.182.152.56:3030/"; // Grandpa Server
+    // public static final String ServerURLDebug = "http://67.182.152.56:3030/"; // Grandpa Server
 
     //events from Server:
 
@@ -21,9 +21,11 @@ public class ServerConfig {
     public static final String gameData = "game-data";
     public static final String playerReady = "player-ready";
     public static final String getReady= "get-ready";
+    public static final String leaveRoom = "leave-room";
     public static final String playerNumbers = "player_numbers"; //the server sends all players number and associated name
     public static final String playerNumber = "player_number"; //the players number and the players name
     public static final String playerListRequest= "player-list-request";
+    public static final String playerDisconnected= "player-disconnected";
 
 
     //------------------------- public game

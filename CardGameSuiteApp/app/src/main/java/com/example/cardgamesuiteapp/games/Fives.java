@@ -48,7 +48,7 @@ public class Fives extends MultiPlayerGame {
     public static MultiPlayerGameInfo getGameInfo() {
         return gameInfo;
     }
-    Handler _UIHandler;
+
     ProgressDialog _LoadingDialog;
     //View object names will always be preceded by "view"
     //View objects used for every Fives game
@@ -81,7 +81,7 @@ public class Fives extends MultiPlayerGame {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        _UIHandler = new Handler();
+
         _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
         _MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
         initFives();
@@ -175,6 +175,7 @@ public class Fives extends MultiPlayerGame {
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Fives.this, c);
                 startActivity(intent);
+                endGame();
             }
         });
         builder.setNegativeButton("Cancel", null);
@@ -1129,14 +1130,42 @@ public class Fives extends MultiPlayerGame {
                     DeckMultiplayerManager.initialize(deck);
                     _LoadingDialog.dismiss();
                 }
+            }
 
-
-
-
-
+            if(socketIOEventArg._EventName.equals(ServerConfig.playerDisconnected)){// this means a player has left
+                    alertThatPlayerHasLeft();
             }
         }
     };
+
+    private void endGame(){
+
+            _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
+            _MultiPlayerConnector.Close();
+            finish();
+
+    }
+    private void alertThatPlayerHasLeft() {
+        _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Player Left Game");
+        builder.setMessage("Sorry a player has left the game. The game cannot continue.");
+        builder.setPositiveButton("Return to menu", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Fives.this, MultiplayerOrSinglePlayerMenu.class);
+                startActivity(intent);
+                endGame();
+            }
+        });
+
+        _UIHandler.post(()-> {
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        });
+
+    }
 
     private static void handleNextData() {
         if (incomingData.isEmpty()) {
