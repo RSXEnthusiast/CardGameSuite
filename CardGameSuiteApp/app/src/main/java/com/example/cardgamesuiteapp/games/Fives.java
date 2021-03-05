@@ -179,6 +179,9 @@ public class Fives extends MultiPlayerGame {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Fives.this, c);
+                intent.putExtra("gameClass", Fives.class); // this is where we are coming from
+                intent.putExtra("gameName", "Fives");
+                intent.putExtra("singlePlayerClass", FivesSinglePlayerMenu.class);
                 startActivity(intent);
                 if(multiplayer) endMultiPlayerGame();
                 finish();
@@ -1123,6 +1126,9 @@ public class Fives extends MultiPlayerGame {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Fives.this, MultiplayerOrSinglePlayerMenu.class);
+                intent.putExtra("gameClass", Fives.class); // this is where we are coming from
+                intent.putExtra("gameName", "Fives");
+                intent.putExtra("singlePlayerClass", FivesSinglePlayerMenu.class);
                 startActivity(intent);
                 endMultiPlayerGame();
                 finish();
