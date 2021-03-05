@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -78,6 +79,7 @@ public class Fives extends MultiPlayerGame {
     private static boolean preAnimation;
     private static int lastTouchedCardNum;
     private static int playersReadyToContinue;
+    private static int colorOnSecondary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,10 +107,10 @@ public class Fives extends MultiPlayerGame {
     private void initFives() {
 
         numAI = (int) getIntent().getSerializableExtra("numAI");
-
+        TypedArray ta = getTheme().obtainStyledAttributes(R.styleable.ViewStyle);
+        colorOnSecondary = ta.getColor(R.styleable.ViewStyle_colorOnSecondary, 0);
         numPlayers = numAI + numOnlineOpponents + 1;
         setContentView();
-        ((TextView) findViewById(R.id.scoresText)).setTextColor(Color.LTGRAY);
         viewPlayers = new Hand[numPlayers];
         viewPlayerNames = new TextView[numPlayers];
         viewPlayerScores = new TextView[numPlayers];
@@ -128,7 +130,6 @@ public class Fives extends MultiPlayerGame {
         viewDiscardHighlight.setVisibility(View.INVISIBLE);
         viewDeck = findViewById(R.id.deck);
         viewInstruction = findViewById(R.id.instruction);
-        viewInstruction.setTextColor(Color.LTGRAY);
 
         viewConfirm = findViewById(R.id.confirmButton);
         viewConfirm.setOnClickListener(v -> confirmButtonTapped());
@@ -153,8 +154,6 @@ public class Fives extends MultiPlayerGame {
         preAnimation = true;
         playersReadyToContinue = 0;
         newGame();
-
-
     }
 
     private void returnToPlayerMenu() {
@@ -521,8 +520,8 @@ public class Fives extends MultiPlayerGame {
         deck.shuffleDiscardIntoDeck();
         for (int i = 0; i < totalScores.length; i++) {
             totalScores[i] = 0;
-            viewPlayerNames[i].setTextColor(Color.LTGRAY);
-            viewPlayerScores[i].setTextColor(Color.LTGRAY);
+            viewPlayerNames[i].setTextColor(colorOnSecondary);
+            viewPlayerScores[i].setTextColor(colorOnSecondary);
         }
         newRound();
     }
@@ -700,8 +699,8 @@ public class Fives extends MultiPlayerGame {
             if (totalScores[i] < minScore) {
                 minScore = totalScores[i];
             }
-            viewPlayerNames[i].setTextColor(Color.LTGRAY);
-            viewPlayerScores[i].setTextColor(Color.LTGRAY);
+            viewPlayerNames[i].setTextColor(colorOnSecondary);
+            viewPlayerScores[i].setTextColor(colorOnSecondary);
         }
         for (int i = 0; i < totalScores.length; i++) {
             if (totalScores[i] <= minScore) {
