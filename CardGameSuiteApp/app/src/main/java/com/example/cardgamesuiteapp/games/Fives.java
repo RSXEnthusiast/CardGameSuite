@@ -83,12 +83,14 @@ public class Fives extends MultiPlayerGame {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
-        _MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
         _UIHandler = new Handler();
 
         multiplayer = (boolean) getIntent().getSerializableExtra("multiplayer");
+
         if (multiplayer) {
+            _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
+            _MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
+
             _LoadingDialog = ProgressDialog.show(Fives.this, "",
                     "Initializing. Please wait...", true);
 
@@ -178,7 +180,8 @@ public class Fives extends MultiPlayerGame {
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Fives.this, c);
                 startActivity(intent);
-                endGame();
+                if(multiplayer) endMultiPlayerGame();
+                finish();
             }
         });
         builder.setNegativeButton("Cancel", null);
@@ -1103,11 +1106,10 @@ public class Fives extends MultiPlayerGame {
         }
     };
 
-    private void endGame() {
+    private void endMultiPlayerGame() {
 
         _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
         _MultiPlayerConnector.Close();
-        finish();
 
     }
 
@@ -1122,7 +1124,8 @@ public class Fives extends MultiPlayerGame {
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Fives.this, MultiplayerOrSinglePlayerMenu.class);
                 startActivity(intent);
-                endGame();
+                endMultiPlayerGame();
+                finish();
             }
         });
 
