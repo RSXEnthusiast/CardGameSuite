@@ -88,7 +88,6 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
         Intent oldIntent = getIntent();
         Intent newIntent = new Intent(this, (Class) oldIntent.getSerializableExtra("gameClass"));
         newIntent.putExtra("multiplayer", true);
-        newIntent.putExtra("numOnlineOpponents", _MultiPlayerGameInfo.minNumberPlayers - 1);
         newIntent.putExtra("numAI", 0);
         startActivity(newIntent);
 

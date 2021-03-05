@@ -104,10 +104,10 @@ public class Fives extends MultiPlayerGame {
     }
 
     private void initFives() {
-        numOnlineOpponents = (int) getIntent().getSerializableExtra("numOnlineOpponents");
+
         numAI = (int) getIntent().getSerializableExtra("numAI");
 
-        numPlayers = numAI + numOnlineOpponents + 1;
+        numPlayers = numAI + numOnlineOpponents;
         setContentView();
         ((TextView) findViewById(R.id.scoresText)).setTextColor(Color.LTGRAY);
         viewPlayers = new Hand[numPlayers];
@@ -1082,6 +1082,7 @@ public class Fives extends MultiPlayerGame {
             if(socketIOEventArg._EventName.equals(ServerConfig.playerNumber)){ // once player number is received that signals game is ready to start
 
                 int myPlayerNumber = (int) socketIOEventArg._JsonObject.opt("playerNumber");
+                numOnlineOpponents = (int) socketIOEventArg._JsonObject.opt("numberOfPlayersInRoom");
                 getSharedPreferences("fivesGameInfo", MODE_PRIVATE).edit().putInt("myNumber", myPlayerNumber).apply();
 
                 _UIHandler.post(()->{
