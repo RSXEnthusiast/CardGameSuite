@@ -182,7 +182,7 @@ public class Fives extends MultiPlayerGame {
                 intent.putExtra("gameName", "Fives");
                 intent.putExtra("singlePlayerClass", FivesSinglePlayerMenu.class);
                 startActivity(intent);
-                if(multiplayer) endMultiPlayerGame();
+                if (multiplayer) endMultiPlayerGame();
                 finish();
             }
         });
@@ -233,7 +233,9 @@ public class Fives extends MultiPlayerGame {
                 viewConfirm.setVisibility(View.INVISIBLE);
                 break;
             case "Continue":
-                playersReadyToContinue++;
+                for (int i = 0; i < numAI + 1; i++) {
+                    playersReadyToContinue++;
+                }
                 DeckMultiplayerManager.readyToContinue();
                 if (playersReadyToContinue >= numPlayers - numAI) {
                     playersReadyToContinue = 0;
@@ -248,7 +250,9 @@ public class Fives extends MultiPlayerGame {
                 updateViewInstruction();
                 break;
             case "New Game":
-                playersReadyToContinue++;
+                for (int i = 0; i < numAI + 1; i++) {
+                    playersReadyToContinue++;
+                }
                 DeckMultiplayerManager.readyToContinue();
                 if (playersReadyToContinue >= numPlayers - numAI) {
                     playersReadyToContinue = 0;
@@ -1089,7 +1093,7 @@ public class Fives extends MultiPlayerGame {
             if (socketIOEventArg._EventName.equals(ServerConfig.playerNumber)) { // once player number is received that signals game is ready to start
 
                 int myPlayerNumber = (int) socketIOEventArg._JsonObject.opt("playerNumber");
-                numOnlineOpponents = (int) socketIOEventArg._JsonObject.opt("numberOfPlayersInRoom") - 1 ;
+                numOnlineOpponents = (int) socketIOEventArg._JsonObject.opt("numberOfPlayersInRoom") - 1;
 
                 getSharedPreferences("fivesGameInfo", MODE_PRIVATE).edit().putInt("myNumber", myPlayerNumber).apply();
 
