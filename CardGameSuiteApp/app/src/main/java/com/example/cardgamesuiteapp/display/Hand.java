@@ -45,11 +45,13 @@ abstract public class Hand extends ViewGroup {
      * @param hand the hand to be put into the array
      */
     public void initHand(ArrayList<Integer> hand) {
-        for (int card : hand) {
-            Card cardView = new Card(getContext());
-            cardView.updateImage(card);
-            this.addView(cardView);
-            cards.add(cardView);
+        if (cards.size() == 0) {
+            for (int card : hand) {
+                Card cardView = new Card(getContext());
+                cardView.updateImage(card);
+                this.addView(cardView);
+                cards.add(cardView);
+            }
         }
     }
 
@@ -217,5 +219,9 @@ abstract public class Hand extends ViewGroup {
         for (Card card : cards) {
             card.setFaceUp(false);
         }
+    }
+
+    public boolean isEmpty(){
+        return cards.isEmpty();
     }
 }

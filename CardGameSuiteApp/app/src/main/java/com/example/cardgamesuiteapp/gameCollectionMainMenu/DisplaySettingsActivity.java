@@ -39,7 +39,7 @@ public class DisplaySettingsActivity extends AppCompatActivity {
                 findViewById(R.id.selectedBigDark).setVisibility(View.VISIBLE);
                 break;
         }
-        switch (sp.getString("cardStyle", "cardStyle not found")) {
+        switch (sp.getString("backStyle", "backStyle not found")) {
             case "light_":
                 findViewById(R.id.selectedLightBack).setVisibility(View.VISIBLE);
                 break;

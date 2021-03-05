@@ -11,7 +11,6 @@
         android:id="@+id/deck"
         android:layout_width="75dp"
         android:layout_height="105dp"
-        android:onClick="clickDeckToDeal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.69"
@@ -32,6 +31,27 @@
 
     <com.example.cardgamesuiteapp.display.Card
         android:id="@+id/animatedCard1"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.cardgamesuiteapp.display.Card
+        android:id="@+id/animatedCard2"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.cardgamesuiteapp.display.Card
+        android:id="@+id/animatedCard3"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.cardgamesuiteapp.display.Card
+        android:id="@+id/animatedCard4"
         android:layout_width="75dp"
         android:layout_height="105dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,6 +116,7 @@
         android:layout_width="80dp"
         android:layout_height="112dp"
         android:background="@drawable/rounded"
+        android:onClick="clickDiscardHighlight"
         app:layout_constraintBottom_toBottomOf="@id/discard"
         app:layout_constraintEnd_toEndOf="@id/discard"
         app:layout_constraintStart_toStartOf="@id/discard"
@@ -106,6 +127,7 @@
         android:layout_width="80dp"
         android:layout_height="112dp"
         android:background="@drawable/rounded"
+        android:onClick="clickColumn0Highlight"
         app:layout_constraintStart_toStartOf="@id/column0"
         app:layout_constraintTop_toTopOf="@id/column0" />
 
@@ -114,6 +136,7 @@
         android:layout_width="80dp"
         android:layout_height="112dp"
         android:background="@drawable/rounded"
+        android:onClick="clickColumn1Highlight"
         app:layout_constraintStart_toStartOf="@id/column1"
         app:layout_constraintTop_toTopOf="@id/column1" />
 
@@ -122,6 +145,7 @@
         android:layout_width="80dp"
         android:layout_height="112dp"
         android:background="@drawable/rounded"
+        android:onClick="clickColumn2Highlight"
         app:layout_constraintStart_toStartOf="@id/column2"
         app:layout_constraintTop_toTopOf="@id/column2" />
 
@@ -130,6 +154,7 @@
         android:layout_width="80dp"
         android:layout_height="112dp"
         android:background="@drawable/rounded"
+        android:onClick="clickColumn3Highlight"
         app:layout_constraintStart_toStartOf="@id/column3"
         app:layout_constraintTop_toTopOf="@id/column3" />
 

@@ -7,6 +7,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
 import com.example.cardgamesuiteapp.games.Fives;
+import com.example.cardgamesuiteapp.games.Solitaire;
 
 public class CardAnimation {
 
@@ -41,7 +42,12 @@ public class CardAnimation {
             public void onAnimationEnd(Animation a) {
                 cardToAnimate.animate().alpha(0f).setDuration(0);
                 if (callPostAnimation) {
-                    Fives.postAnimation();
+                    if(context.toString().contains("Fives"))
+                        Fives.postAnimation();
+                    else if(context.toString().contains("Solitaire")){
+                        Solitaire.postAnimation();
+                    }
+
                 }
             }
         });

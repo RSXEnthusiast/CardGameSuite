@@ -128,7 +128,18 @@ public class Standard extends Deck {
      * @param i The number representing the card considering an ace to be worth 1.
      * @return the numerical value of a card.
      */
-    public static int getNumericalValue(int i) {
+    public static int getNumericalValueAceOne(int i) {
         return (i - 1) % 13 + 1;
+    }
+
+    /**
+     * @param i The number representing the card considering an ace to be worth 14.
+     * @return the numerical value of a card.
+     */
+    public static int getNumericalValue(int i) {
+        int num = (i - 1) % 13 + 1;
+        if(num == 1)
+            return 14;
+        return num;
     }
 }
