@@ -21,64 +21,26 @@ import java.util.Observer;
 import io.socket.client.Socket;
 
 
-
-
-public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFragment  {
+public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFragment {
     public CreatePrivateGameFragment() {
         super(R.layout.mpconnection_fragment_create_private_game);
 
         SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
-
-
-        Observer multiPlayerConnectorObservers = new Observer() {
-            @Override
-            public void update(Observable o, Object arg) {
-
-            }
-        };
-
     }
 
     private static final String TAG = CreatePrivateGameFragment.class.getSimpleName();
 
 
-    String _PlayerName="";
+    String _PlayerName = "";
+
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        SharedPreferences sp = getActivity().getApplicationContext().getSharedPreferences("playerInfo", Context.MODE_PRIVATE);
-        if (sp.contains("playerName")){
-            _PlayerName= sp.getString("playerName", "");
-        }
-        TextView playerNameInput = view.findViewById(R.id.playerNameInput);
-        playerNameInput.setText(_PlayerName);
-
-        Button createButton = view.findViewById(R.id.createButton);
-
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                TextView playerNameInput = view.findViewById(R.id.playerNameInput);
-
-                createButton.setClickable(false); ///wait until success
-
-                if (emitCreatePrivateGame(playerNameInput)) {
-
-                } else {
-                    createButton.setClickable(true);
-                }
-
-            }
-
-
-        });
 
     }
 
     @Override
     void SetMultiPlayerConnectorObserver(Observer thisMultiPlayerConnectorObserver) {
-        _MultiPlayerConnectorObserver=thisMultiPlayerConnectorObserver;
+        _MultiPlayerConnectorObserver = thisMultiPlayerConnectorObserver;
     }
 
 
@@ -106,7 +68,7 @@ public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFra
             e.printStackTrace();
         }
 
-        _PlayerName=playerName;
+        _PlayerName = playerName;
         SharedPreferences sp = getActivity().getApplicationContext().getSharedPreferences("playerInfo", Context.MODE_PRIVATE);
         sp.edit().putString("playerName", _PlayerName).apply();
         _MultiPlayerConnector.emitEvent(ServerConfig.privateGameRoomRequest, args);
@@ -114,7 +76,6 @@ public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFra
         return true;
 
     }
-
 
 
     private void goToPrivateGameWaitingRoom() {
@@ -131,7 +92,7 @@ public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFra
         @Override
         public void update(Observable o, Object arg) {
             SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
-            if(!socketIOEventArg.CompareEventWatcher(TAG)) return;
+            if (!socketIOEventArg.CompareEventWatcher(TAG)) return;
 
             switch (socketIOEventArg._EventName) {
 
@@ -153,7 +114,7 @@ public class CreatePrivateGameFragment extends MultiplayerWaitingRoomActivityFra
         socket.on(ServerConfig.privateGameRoomRequestComplete, args -> {
             Log.d(TAG, "created Room");
             multiPlayerConnector.setRoomCode(((JSONObject) args[0]).opt("gameRoomName").toString());
-            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.privateGameRoomRequestComplete,TAG, null);
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.privateGameRoomRequestComplete, TAG, null);
             multiPlayerConnector.notifyObservers(socketIOEventArg);
 
         });
