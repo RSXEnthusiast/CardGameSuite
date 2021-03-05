@@ -401,6 +401,17 @@ public abstract class Deck implements Serializable {
         return -1;
     }
 
+    public int whichPlayerHasCard(int cardNum){
+        for(int i = 0; i < hands.length; i++){
+            ArrayList<Integer> hand = getHand(i);
+            for(int j = 0; j < hand.size(); j++){
+                if(hand.get(j) == cardNum)
+                    return i;
+            }
+        }
+        return -1;
+    }
+
     protected abstract boolean compareNumericalValues(Integer integer, int value);
 
     /**

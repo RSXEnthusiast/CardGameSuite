@@ -11,7 +11,6 @@
         android:id="@+id/deck"
         android:layout_width="75dp"
         android:layout_height="105dp"
-        android:onClick="clickDeckToDeal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.69"
@@ -32,6 +31,27 @@
 
     <com.example.cardgamesuiteapp.display.Card
         android:id="@+id/animatedCard1"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.cardgamesuiteapp.display.Card
+        android:id="@+id/animatedCard2"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.cardgamesuiteapp.display.Card
+        android:id="@+id/animatedCard3"
+        android:layout_width="75dp"
+        android:layout_height="105dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.cardgamesuiteapp.display.Card
+        android:id="@+id/animatedCard4"
         android:layout_width="75dp"
         android:layout_height="105dp"
         app:layout_constraintStart_toStartOf="parent"

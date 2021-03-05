@@ -45,7 +45,7 @@ public class CardAnimation {
                     if(context.toString().contains("Fives"))
                         Fives.postAnimation();
                     else if(context.toString().contains("Solitaire")){
-
+                        Solitaire.postAnimation();
                     }
 
                 }

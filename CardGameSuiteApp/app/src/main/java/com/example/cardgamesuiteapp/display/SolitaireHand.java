@@ -71,7 +71,6 @@ public class SolitaireHand extends Hand {
         return finalCard;
     }
 
-    /** Testing method please remove**/
     public Card finalCard(){
         return cards.get(cards.size()-1);
     }
