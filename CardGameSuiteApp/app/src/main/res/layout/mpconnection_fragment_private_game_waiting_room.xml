@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    android:layout_height="match_parent">
 
 
     <LinearLayout
@@ -21,66 +20,65 @@
             android:id="@+id/statusMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10sp"
             android:text="Private Game Joined"
             android:textColor="?colorPrimaryVariant"
-            android:textSize="16sp"
-            android:layout_marginBottom="10sp"
-            />
+            android:textSize="16sp" />
 
         <TextView
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?colorPrimaryVariant"
-            android:textSize="20dp"
+            android:layout_marginBottom="8sp"
             android:text="Game Code:"
-            android:layout_marginBottom="8sp"/>
+            android:textColor="?colorPrimaryVariant"
+            android:textSize="20dp" />
+
         <TextView
             android:id="@+id/gameCodeView"
-            android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:text="GHDKS"
             android:background="@drawable/roundedrectangle"
-            android:backgroundTint="@color/white"
-            />
+            android:padding="10dp"
+            android:text="GHDKS"
+            android:textColor="?colorOnSecondary"
+            android:textSize="20dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/privateGameCodeShareButton"
-            android:text="Share"
-
             android:layout_width="wrap_content"
+
             android:layout_height="wrap_content"
             android:backgroundTint="?colorPrimaryVariant"
+            android:text="Share"
 
             android:textAllCaps="false"
             android:textColor="?colorOnPrimary"
             android:textSize="18sp"
-            app:cornerRadius="4dp"
-            />
+            app:cornerRadius="4dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="25dp"
 
+            android:layout_marginBottom="8sp"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8sp">
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Number of players joined: "
                 android:textColor="?colorPrimaryVariant"
                 android:textSize="15dp" />
+
             <TextView
                 android:id="@+id/numPlayersInRoomView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1"
-                android:textColor="@color/black"
+                android:textColor="?colorOnSecondary"
                 android:textSize="15dp" />
         </LinearLayout>
 
@@ -88,34 +86,35 @@
             android:id="@+id/playerList"
             android:layout_width="match_parent"
             android:layout_height="150dp"
+            android:background="@drawable/roundedrectangleblackstroke"
             android:paddingHorizontal="30dp"
             android:paddingVertical="20dp"
             android:textAlignment="center"
             android:textColor="?colorPrimaryVariant"
-            android:background="@drawable/roundedrectangleblackstroke"
 
             >
 
         </ListView>
+
         <TextView
-            android:padding="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="15dp"
             android:text="*Wait for Game Creator to Start the Game"
             android:textColor="?colorPrimaryVariant"
             android:textSize="15dp" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/startButton"
-            android:text="Start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="?colorPrimaryVariant"
+            android:text="Start"
 
             android:textAllCaps="false"
             android:textColor="?colorOnPrimary"
             android:textSize="18sp"
-            app:cornerRadius="4dp"
-            />
+            app:cornerRadius="4dp" />
 
 
     </LinearLayout>
