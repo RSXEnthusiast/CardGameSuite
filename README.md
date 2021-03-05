@@ -1,2 +1,2 @@
 # CardGameSuite
-This is our senior project, a card game suit.
+The goal of this project is to create a card game suite application that features nontraditional card games for android mobile devices. The application includes an easy-to-use online and AI multiplayer use, card animation movement and a variety of settings to create an individualized experience for each user. This project is ever growing and adapting as new games are added over time.
