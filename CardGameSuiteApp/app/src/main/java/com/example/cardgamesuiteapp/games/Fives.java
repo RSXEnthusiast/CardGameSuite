@@ -85,7 +85,7 @@ public class Fives extends MultiPlayerGame {
 
         _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
         _MultiPlayerConnector.addObserver(_MultiPlayerConnectorObserver);
-
+        _UIHandler = new Handler();
 
         multiplayer = (boolean) getIntent().getSerializableExtra("multiplayer");
         if (multiplayer ) {
@@ -1078,12 +1078,19 @@ public class Fives extends MultiPlayerGame {
                     });
                 }
             }
-            if(socketIOEventArg._EventName.equals(ServerConfig.startGame)){
-                initFives();
-                if ( deck.getMyPlayerNum() == 0) {
-                    DeckMultiplayerManager.initialize(deck);
-                    _LoadingDialog.dismiss();
-                }
+
+            if(socketIOEventArg._EventName.equals(ServerConfig.playerNumber)){ // once player number is received that signals game is ready to start
+
+                int myPlayerNumber = (int) socketIOEventArg._JsonObject.opt("playerNumber");
+                getSharedPreferences("fivesGameInfo", MODE_PRIVATE).edit().putInt("myNumber", myPlayerNumber).apply();
+
+                _UIHandler.post(()->{
+                    initFives();
+                    if ( deck.getMyPlayerNum() == 0) {
+                       DeckMultiplayerManager.initialize(deck);
+                       _LoadingDialog.dismiss();
+                    }
+                });
             }
 
             if(socketIOEventArg._EventName.equals(ServerConfig.playerDisconnected)){// this means a player has left

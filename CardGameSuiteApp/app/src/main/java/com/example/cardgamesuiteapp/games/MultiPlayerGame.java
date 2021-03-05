@@ -11,7 +11,7 @@ public abstract class MultiPlayerGame extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        _UIHandler = new Handler();
+
     }
 
     public static MultiPlayerGameInfo getGameInfo() {
