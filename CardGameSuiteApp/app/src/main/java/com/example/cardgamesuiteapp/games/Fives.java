@@ -88,13 +88,12 @@ public class Fives extends MultiPlayerGame {
         _UIHandler = new Handler();
 
         multiplayer = (boolean) getIntent().getSerializableExtra("multiplayer");
-        if (multiplayer ) {
+        if (multiplayer) {
             _LoadingDialog = ProgressDialog.show(Fives.this, "",
                     "Initializing. Please wait...", true);
 
             _MultiPlayerConnector.emitEvent(ServerConfig.playerReadyForInitialGameData);
-        }
-        else {
+        } else {
             initFives();
         }
     }
@@ -764,9 +763,11 @@ public class Fives extends MultiPlayerGame {
         switch (AIStage) {
             case drewFromDiscard:
                 AIDrewFromDiscard(lastLocation);
+                deck.nextPlayerFromPeer();
                 break;
             case drewFromDeck:
                 AIKeptDraw(lastLocation);
+                deck.nextPlayerFromPeer();
                 break;
             case discardedFromDeck:
                 AIDiscardedDraw();
@@ -775,7 +776,6 @@ public class Fives extends MultiPlayerGame {
                 }
                 break;
         }
-        deck.nextPlayerFromPeer();
         updateViewInstruction();
         if (!deck.isMyTurn() && numAI > 0) {
             runAITurns();
@@ -853,6 +853,7 @@ public class Fives extends MultiPlayerGame {
     private static void AIFlippedCardByIndex(int location) {
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
         AIStage = fivesStage.draw;
+        deck.nextPlayerFromPeer();
         if (roundOver()) {
             new Fives().scoreRound();
         }
@@ -861,6 +862,7 @@ public class Fives extends MultiPlayerGame {
     private static void AIFlippedCardByCardNum(int cardNum) {
         viewPlayers[deck.getCurPlayersTurn()].flipCardByNum(cardNum);
         AIStage = fivesStage.draw;
+        deck.nextPlayerFromPeer();
         if (roundOver()) {
             new Fives().scoreRound();
         }
@@ -1079,34 +1081,35 @@ public class Fives extends MultiPlayerGame {
                 }
             }
 
-            if(socketIOEventArg._EventName.equals(ServerConfig.playerNumber)){ // once player number is received that signals game is ready to start
+            if (socketIOEventArg._EventName.equals(ServerConfig.playerNumber)) { // once player number is received that signals game is ready to start
 
                 int myPlayerNumber = (int) socketIOEventArg._JsonObject.opt("playerNumber");
                 numOnlineOpponents = (int) socketIOEventArg._JsonObject.opt("numberOfPlayersInRoom");
                 getSharedPreferences("fivesGameInfo", MODE_PRIVATE).edit().putInt("myNumber", myPlayerNumber).apply();
 
-                _UIHandler.post(()->{
+                _UIHandler.post(() -> {
                     initFives();
-                    if ( deck.getMyPlayerNum() == 0) {
-                       DeckMultiplayerManager.initialize(deck);
-                       _LoadingDialog.dismiss();
+                    if (deck.getMyPlayerNum() == 0) {
+                        DeckMultiplayerManager.initialize(deck);
+                        _LoadingDialog.dismiss();
                     }
                 });
             }
 
-            if(socketIOEventArg._EventName.equals(ServerConfig.playerDisconnected)){// this means a player has left
-                    alertThatPlayerHasLeft();
+            if (socketIOEventArg._EventName.equals(ServerConfig.playerDisconnected)) {// this means a player has left
+                alertThatPlayerHasLeft();
             }
         }
     };
 
-    private void endGame(){
+    private void endGame() {
 
-            _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
-            _MultiPlayerConnector.Close();
-            finish();
+        _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
+        _MultiPlayerConnector.Close();
+        finish();
 
     }
+
     private void alertThatPlayerHasLeft() {
         _MultiPlayerConnector.deleteObserver(_MultiPlayerConnectorObserver);
 
@@ -1122,7 +1125,7 @@ public class Fives extends MultiPlayerGame {
             }
         });
 
-        _UIHandler.post(()-> {
+        _UIHandler.post(() -> {
             AlertDialog dialog = builder.create();
             dialog.show();
         });

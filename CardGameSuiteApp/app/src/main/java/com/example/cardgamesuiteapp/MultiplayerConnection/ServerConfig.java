@@ -5,7 +5,7 @@ public class ServerConfig {
     public static final String ServerURLProduction = "http://thecardgameserver.azurewebsites.net/";//"http://chatserver.azurewebsites.net/"; //Joel's IP
     //    public static final String ServerURLProduction = "http://192.168.1.160:3030/";//"http://chatserver.azurewebsites.net/"; //Austen's IP
 //    public static final String ServerURLDebug = "http://192.168.56.1:3030/"; // Joel's IP
-    //public static final String ServerURLDebug = "http://10.42.0.145:3030/"; // Austen's IP
+//    public static final String ServerURLDebug = "http://10.42.0.145:3030/"; // Austen's IP
    //public static final String ServerURLDebug = "http://thecardgameserver.azurewebsites.net/";
      public static final String ServerURLDebug = "http://67.182.152.56:3030/"; // Grandpa Server
 
