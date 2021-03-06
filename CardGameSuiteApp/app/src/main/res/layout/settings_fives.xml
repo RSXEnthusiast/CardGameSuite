@@ -33,5 +33,32 @@
                 android:textStyle="bold" />
         </TableRow>
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
+
+        <TableRow
+
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Size of game when matched with random players"
+                android:textColor="?colorPrimaryVariant"
+                android:textSize="30sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="90dp">
+
+            <NumberPicker
+                android:id="@+id/gameSizePicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+        </TableRow>
     </LinearLayout>
 </ScrollView>

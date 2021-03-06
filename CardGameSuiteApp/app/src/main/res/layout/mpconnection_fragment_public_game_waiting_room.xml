@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/publicGameWaitingLayout"
@@ -23,6 +23,7 @@
             android:text="Total Number of Active Players: "
             android:textColor="?colorPrimaryVariant"
             android:textSize="15dp" />
+
         <TextView
             android:id="@+id/numActivePublicPlayers"
             android:layout_width="wrap_content"
@@ -30,14 +31,14 @@
             android:text="--"
             android:textColor="?colorPrimaryVariant"
             android:textSize="15dp" />
+
         <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
 
-        android:gravity="center"
-        android:orientation="vertical">
-
+            android:gravity="center"
+            android:orientation="vertical">
 
 
             <TextView
@@ -47,82 +48,38 @@
                 android:text="Waiting for opponents"
                 android:textColor="?colorPrimaryVariant"
                 android:textSize="14dp" />
+
             <ProgressBar
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:indeterminateTint="?colorPrimaryVariant"
+                android:layout_marginTop="10dp"
                 android:indeterminate="true"
-                android:progress="1"
+                android:indeterminateTint="?colorPrimaryVariant"
                 android:paddingTop="5dp"
-                android:layout_marginTop="10dp"/>
+                android:progress="1" />
 
             <TextView
-                android:layout_marginTop="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:text="Players joined to game: "
                 android:textColor="?colorPrimaryVariant"
                 android:textSize="20dp" />
+
             <TextView
                 android:id="@+id/numPlayersJoinedToRoom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:text="1"
                 android:textColor="?colorPrimaryVariant"
-                android:textSize="20dp"
-                android:layout_marginTop="10dp"/>
+                android:textSize="20dp" />
         </LinearLayout>
 
 
-
-
     </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/gameSizePickerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/gameTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="20dp">
-
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="How many players do you want to play with?"
-            android:textColor="?colorPrimaryVariant"
-            android:textSize="30sp"
-            />
-
-        <NumberPicker
-            android:id="@+id/gameSizePicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            ></NumberPicker>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/searchForGameButton"
-            android:text="Find A Game"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="?colorPrimaryVariant"
-
-            android:textAllCaps="false"
-            android:textColor="?colorOnPrimary"
-            android:textSize="18sp"
-            app:cornerRadius="4dp"
-            />
-    </LinearLayout>
-
-
 
 
 

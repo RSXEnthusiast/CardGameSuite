@@ -1,6 +1,7 @@
 package com.example.cardgamesuiteapp.MultiplayerConnection;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -26,57 +27,32 @@ import java.util.Observer;
 import io.socket.client.Socket;
 
 
-public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragment implements NumberPicker.OnValueChangeListener  {
+public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragment {
     private static final String TAG = PublicGameWaitingRoom.class.getSimpleName();
 
     public PublicGameWaitingRoom() {
         super(R.layout.mpconnection_fragment_public_game_waiting_room);
         SetMultiPlayerConnectorObserver(multiPlayerConnectorObserver);
-
-
     }
 
     String _DefaultFragmentStatusMessage = "Private Game Joined";
     String _StatusMessage = "Finding An Opponent";
-    NumberPicker _GameSizePicker;
-    LinearLayout _WaitingLayout;
-    LinearLayout _PickerLayout;
-    MaterialButton _SearchForGameButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        _GameSizePicker= _MultiplayerWaitingRoomActivity.findViewById(R.id.gameSizePicker);
-        _WaitingLayout= _MultiplayerWaitingRoomActivity.findViewById(R.id.publicGameWaitingLayout);
-        _PickerLayout = _MultiplayerWaitingRoomActivity.findViewById(R.id.gameSizePickerLayout);
-        _SearchForGameButton = _MultiplayerWaitingRoomActivity.findViewById(R.id.searchForGameButton);
-        _SearchForGameButton.setOnClickListener(v -> searchForGame());
-
-
-        _WaitingLayout.setVisibility(View.GONE);
-        _GameSizePicker.setOnValueChangedListener(this);
-
-        _GameSizePicker.setMinValue(_MultiplayerWaitingRoomActivity._MultiPlayerGameInfo.minNumberPlayers);
-        _GameSizePicker.setMaxValue(_MultiplayerWaitingRoomActivity._MultiPlayerGameInfo.maxNumberPlayers);
-
-    }
-
-    public void searchForGame(){
-        _GameSizePicker.setVisibility(View.GONE);
-        _WaitingLayout.setVisibility(View.VISIBLE);
-        requestPublicGameRoom(_GameSize);
-    }
-
-    int _GameSize=2;
-    @Override
-    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-        _GameSize=newVal;
-
+        SharedPreferences sp = getContext().getApplicationContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        int numPlayers = 2;
+        switch (MultiplayerWaitingRoomActivity._GameType) {
+            case "Fives":
+                numPlayers = sp.getInt("numFivesRandomPlayers", 2);
+                break;
+        }
+        requestPublicGameRoom(numPlayers);
     }
 
     @Override
@@ -113,7 +89,7 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
 
             SocketIOEventArg socketIOEventArg = (SocketIOEventArg) arg;
 
-            if(!socketIOEventArg.CompareEventWatcher(TAG)) return;
+            if (!socketIOEventArg.CompareEventWatcher(TAG)) return;
             switch (socketIOEventArg._EventName) {
 
                 case ServerConfig.NUM_ACTIVE_PUBLIC_PLAYERS:
@@ -130,7 +106,7 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
                     break;
                 case ServerConfig.roomPlayerCountUpdate:
 
-                    updateRoomCount( (JSONArray) socketIOEventArg._JsonObject.opt("playerNames") );
+                    updateRoomCount((JSONArray) socketIOEventArg._JsonObject.opt("playerNames"));
                     break;
             }
         }
@@ -184,29 +160,29 @@ public class PublicGameWaitingRoom extends MultiplayerWaitingRoomActivityFragmen
                 callback);
     }
 
-@Override
-    public  void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
+    @Override
+    public void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector) {
 
         socket.on(ServerConfig.NUM_ACTIVE_PUBLIC_PLAYERS, args -> {
             Log.d(TAG, "num active players received");
 
-            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.NUM_ACTIVE_PUBLIC_PLAYERS, TAG ,args);
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.NUM_ACTIVE_PUBLIC_PLAYERS, TAG, args);
             multiPlayerConnector.notifyObservers(socketIOEventArg);
         });
         socket.on(ServerConfig.publicGameRoomRequestComplete, args -> {
             Log.d(TAG, "public game room found");
             multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.publicGameRoomRequestComplete, TAG, args));
         });
-    socket.on(ServerConfig.roomPlayerCountUpdate, args -> {
-        //Log.d(TAG, "");
-        SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.roomPlayerCountUpdate, TAG, args);
-        multiPlayerConnector.notifyObservers(socketIOEventArg);
-    });
+        socket.on(ServerConfig.roomPlayerCountUpdate, args -> {
+            //Log.d(TAG, "");
+            SocketIOEventArg socketIOEventArg = new SocketIOEventArg(ServerConfig.roomPlayerCountUpdate, TAG, args);
+            multiPlayerConnector.notifyObservers(socketIOEventArg);
+        });
 
-    socket.on(ServerConfig.getReady, args -> {
-        Log.d(TAG, "start public game received");
-        multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.getReady, TAG, args));
-    });
+        socket.on(ServerConfig.getReady, args -> {
+            Log.d(TAG, "start public game received");
+            multiPlayerConnector.notifyObservers(new SocketIOEventArg(ServerConfig.getReady, TAG, args));
+        });
 
 
     }
