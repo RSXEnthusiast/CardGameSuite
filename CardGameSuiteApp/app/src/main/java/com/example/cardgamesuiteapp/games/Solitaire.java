@@ -31,7 +31,6 @@ public class Solitaire extends AppCompatActivity {
     static View viewColumnHighlight2;
     static View viewColumnHighlight3;
     static TextView viewWinOrLose;
-    static boolean isAnimating;
     static boolean swappingHands;
     static boolean isDealing;
     private static int dealtCard;
@@ -90,7 +89,6 @@ public class Solitaire extends AppCompatActivity {
         viewAnimatedCard1 = findViewById(R.id.animatedCard1);
         viewAnimatedCard1.bringToFront();
         viewAnimation1 = new CardAnimation(viewAnimatedCard1, true, this);
-        isAnimating = false;
         newGame();
     }
 
@@ -136,11 +134,10 @@ public class Solitaire extends AppCompatActivity {
      * @param cardNum the value of the card that was tapped on
      */
     public static void cardTouched(int cardNum) {
-        if (isAnimating)
+        if (swappingHands || isDealing)
             return;
 
         int columnToMoveCardFrom = findColumnOfSelectedCard(cardNum);
-
 
         if(columnToMoveCardFrom >= 0) {
             cardNum = getLastCardInColumn(columnToMoveCardFrom).getCardNum();
@@ -264,6 +261,7 @@ public class Solitaire extends AppCompatActivity {
         return suits;
     }
 
+
     /******************** END OF GAME METHODS **********************/
 
     /**
@@ -302,16 +300,16 @@ public class Solitaire extends AppCompatActivity {
      *
      */
     public static void clickDeckToDeal() {
-        if(doAnySuitsMatch(getSuits()) && (doesAColumnWithMoreThanOneCardExist() && doesAnEmptyColumnExist() || isDealing)){
-            System.out.println("initial deal if statement");
+        if(isDealing || swappingHands)
             return;
-        }
-        dealACard();
 
+        if(doAnySuitsMatch(getSuits()) && (doesAColumnWithMoreThanOneCardExist() && doesAnEmptyColumnExist()))
+            return;
+
+        dealACard();
 
         if(deck.deckIsEmpty())
             viewDeckBack.setVisibility(View.INVISIBLE);
-
     }
 
     private static void dealACard(){
@@ -325,23 +323,6 @@ public class Solitaire extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private static void dealAnimation(){
-        isDealing = true;
-        viewAnimatedCard1.updateImage(dealtCard);
-        System.out.println("Dealt column: " + dealtColumn);
-        System.out.println("hand is empty: " + viewColumns[dealtColumn].isEmpty());
-        if(viewColumns[dealtColumn].isEmpty() == true){
-            System.out.println("hand is empty entered if statement");
-            viewAnimation1.cardAnimate(viewDeckBack.getX(), viewColumns[dealtColumn].getX(),
-                    viewDeckBack.getY(), viewColumns[dealtColumn].getY());
-        } else {
-            Card lastCardInHand = viewColumns[dealtColumn].finalCard();
-            viewAnimation1.cardAnimate(viewDeckBack.getX(), viewColumns[dealtColumn].getX() + lastCardInHand.getX(),
-                    viewDeckBack.getY(), viewColumns[dealtColumn].getY() + lastCardInHand.getY() + 99);
-        }
-
     }
 
     /**
@@ -432,6 +413,20 @@ public class Solitaire extends AppCompatActivity {
 
     }
 
+    private static void dealAnimation(){
+        isDealing = true;
+        viewAnimatedCard1.updateImage(dealtCard);
+        if(viewColumns[dealtColumn].isEmpty()){
+            viewAnimation1.cardAnimate(viewDeckBack.getX(), viewColumns[dealtColumn].getX(),
+                    viewDeckBack.getY(), viewColumns[dealtColumn].getY());
+        } else {
+            Card lastCardInHand = viewColumns[dealtColumn].finalCard();
+            viewAnimation1.cardAnimate(viewDeckBack.getX(), viewColumns[dealtColumn].getX() + lastCardInHand.getX(),
+                    viewDeckBack.getY(), viewColumns[dealtColumn].getY() + lastCardInHand.getY() + 90);
+        }
+
+    }
+
     /**
      * This method is called when a card on the playing table is selected and an empty column is touched
      *
@@ -440,7 +435,6 @@ public class Solitaire extends AppCompatActivity {
     private static void moveCardToEmptyColumn(int cardNum, int endingHand) {
         removeHighlightedChoices();
         int startingHand = findColumnOfSelectedCard(cardNum);
-//        View movingTo = getViewColumnHighlight(endingHand);
 
         if(doesAnEmptyColumnExist()){
             deck.discardByValue(startingHand, cardNum);
@@ -459,7 +453,6 @@ public class Solitaire extends AppCompatActivity {
         swappingHands = true;
         viewAnimatedCard1.updateImage(cardMoving.getCardNum());
         cardMoving.setVisibility(View.INVISIBLE);
-        View cardMovingTo = getViewColumnHighlight(endingColumn);
         viewColumns[startingColumn].removeFinalCard();
         viewAnimation1.cardAnimate(cardMoving.getX() + viewColumns[startingColumn].getX(), viewColumns[endingColumn].getX(),
                     cardMoving.getY()+ viewColumns[startingColumn].getY(), viewColumns[endingColumn].getY());
@@ -473,12 +466,9 @@ public class Solitaire extends AppCompatActivity {
         }else if(isDealing){
             viewColumns[dealtColumn].addCard(dealtCard);
             dealtColumn++;
-            if(dealtColumn < 4){
-                System.out.println("Line before clicktoDeal postAnimation");
+            if(dealtColumn < 4)
                 dealACard();
-            }
             else{
-                System.out.println("Post Animation else reached");
                 isDealing = false;
                 dealtColumn = 0;
                 removeHighlightedChoices();
@@ -489,38 +479,8 @@ public class Solitaire extends AppCompatActivity {
         }
     }
 
-    private static View getViewColumnHighlight(int column){
-        if(column == 0){
-            return viewColumnHighlight0;
-        }else if(column == 1){
-            return viewColumnHighlight1;
-        }else if(column == 2){
-            return viewColumnHighlight2;
-        }else{
-            return viewColumnHighlight3;
-        }
-    }
-
 
     /******************** CARD ANIMATION HELPERS ********************/
-
-    /**
-     * The visual x position of the card view
-     *
-     * @param cardNum the value of the card that was tapped on
-     */
-    private static float getCardInHandX(int cardNum) {
-        return viewColumns[deck.getCurPlayersTurn()].getX() + viewColumns[deck.getCurPlayersTurn()].getCard(cardNum).getX();
-    }
-
-    /**
-     * The visual y position of the card view
-     *
-     * @param cardNum the value of the card that was tapped on
-     */
-    private static float getCardInHandY(int cardNum) {
-        return viewColumns[deck.getCurPlayersTurn()].getY() + viewColumns[deck.getCurPlayersTurn()].getCard(cardNum).getY();
-    }
 
     /**
      * Returns true if the card on top of a stack in any column has been selected
@@ -599,18 +559,6 @@ public class Solitaire extends AppCompatActivity {
                 return true;
         }
         return false;
-    }
-
-    /**
-     * Returns an int representing the total number of playing cards amongst the columns
-     */
-    private static int getTotalNumberOfCardsOnPlayingTable() {
-        int totalNumOfCards = 0;
-
-        for(int i = 0; i<viewColumns.length; i++)
-            totalNumOfCards += viewColumns[i].getNumCards();
-
-        return totalNumOfCards;
     }
 
     /**
