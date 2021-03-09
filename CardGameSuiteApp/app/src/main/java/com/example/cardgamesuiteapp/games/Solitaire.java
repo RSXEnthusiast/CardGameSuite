@@ -10,7 +10,6 @@ import android.view.View;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.cardgamesuiteapp.R;
-import com.example.cardgamesuiteapp.deckMultiplayerManagement.DeckMultiplayerManager;
 import com.example.cardgamesuiteapp.decks.Standard;
 import com.example.cardgamesuiteapp.display.Card;
 import com.example.cardgamesuiteapp.display.CardAnimation;
@@ -18,8 +17,6 @@ import com.example.cardgamesuiteapp.display.SolitaireHand;
 import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplayMainPageActivity;
 
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 public class Solitaire extends AppCompatActivity {
     static SolitaireHand[] viewColumns;
@@ -305,22 +302,29 @@ public class Solitaire extends AppCompatActivity {
      *
      */
     public static void clickDeckToDeal() {
-        if(doAnySuitsMatch(getSuits()) && (doesAColumnWithMoreThanOneCardExist() && doesAnEmptyColumnExist()))
+        if(doAnySuitsMatch(getSuits()) && (doesAColumnWithMoreThanOneCardExist() && doesAnEmptyColumnExist() || isDealing)){
+            System.out.println("initial deal if statement");
             return;
+        }
+        dealACard();
 
+
+        if(deck.deckIsEmpty())
+            viewDeckBack.setVisibility(View.INVISIBLE);
+
+    }
+
+    private static void dealACard(){
         try {
-                dealtCard = deck.peekTopDraw();
-                System.out.println("Card peeked: " + dealtCard);
-                deck.draw(dealtColumn);
-                dealAnimation();
+            System.out.println("Dealing ");
+            dealtCard = deck.peekTopDraw();
+            System.out.println("Card peeked: " + dealtCard);
+            deck.draw(dealtColumn);
+            dealAnimation();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        if(deck.deckIsEmpty())
-            viewDeckBack.setVisibility(View.INVISIBLE);
-        removeHighlightedChoices();
     }
 
     private static void dealAnimation(){
@@ -412,8 +416,8 @@ public class Solitaire extends AppCompatActivity {
 
         try {
             deck.discardByValue(columnToMoveCardFrom, lastTouchedCardNum);
-            animateCardsToDiscard(columnToMoveCardFrom);
             viewColumns[columnToMoveCardFrom].removeCard(lastTouchedCardNum);
+            animateCardsToDiscard(columnToMoveCardFrom);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -469,12 +473,15 @@ public class Solitaire extends AppCompatActivity {
         }else if(isDealing){
             viewColumns[dealtColumn].addCard(dealtCard);
             dealtColumn++;
-            if(dealtColumn < 4)
-                clickDeckToDeal();
+            if(dealtColumn < 4){
+                System.out.println("Line before clicktoDeal postAnimation");
+                dealACard();
+            }
             else{
                 System.out.println("Post Animation else reached");
                 isDealing = false;
                 dealtColumn = 0;
+                removeHighlightedChoices();
             }
 
         }else{
