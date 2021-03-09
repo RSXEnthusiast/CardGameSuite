@@ -104,7 +104,7 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
     @Override
     public void RemoveSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector){};
 
-    @Override
+   /* @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         OnBackPressedCallback callback = new OnBackPressedCallback(
@@ -120,7 +120,7 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
         requireActivity().getOnBackPressedDispatcher().addCallback(
                 this, // LifecycleOwner
                 callback);
-    }
+    }*/
 }
 
 
