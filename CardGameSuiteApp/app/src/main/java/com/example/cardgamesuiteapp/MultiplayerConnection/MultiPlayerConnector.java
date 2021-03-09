@@ -36,6 +36,7 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
 
     public String serverUrl = (BuildConfig.DEBUG) ? ServerConfig.ServerURLDebug : ServerConfig.ServerURLProduction;
     private Socket _Socket;
+    private boolean _Connecting;
 
     public boolean Connected() {
 
@@ -81,12 +82,12 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
             opts.transports = new String[]{WebSocket.NAME};
 
             _Socket = IO.socket(serverUrl); //initialize here because we don't want to do it in the constructor
-            configureSocketEvents();
+            addEssentialEvents();
         }
 
-        if (!_Socket.connected()) {
+        if (!_Socket.connected() && !_Connecting) {
+            _Connecting=true;
             _Socket.connect();
-
         }
 
     }
@@ -95,6 +96,7 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
 
     public interface MultiPlayerConnectorEventAdder {
         public void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector);
+        public void RemoveSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector);
     }
 
    // ArrayList<String> _SocketEventAdders = new ArrayList<>();
@@ -102,11 +104,9 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
 
             multiPlayerConnectorEventAdder.AddSocketEvents(_Socket, this);
     }
+    public void removeSocketEvents(MultiPlayerConnectorEventAdder multiPlayerConnectorEventAdder){
 
-
-    private void configureSocketEvents() {
-
-        addEssentialEvents();
+        multiPlayerConnectorEventAdder.RemoveSocketEvents(_Socket, this);
     }
 
 
@@ -116,7 +116,10 @@ public class MultiPlayerConnector extends Observable implements DefaultLifecycle
         _Socket.on(EVENT_CONNECT, args -> {
             //JSONObject obj = (JSONObject)args[0];
             Log.d(TAG, "Connected to server");
-
+            _Connecting=false;
+        }).on(EVENT_CONNECT_ERROR, args -> {
+            Log.d(TAG, "Unable to connect to server");
+            _Connecting=false;
         }).on("public-game-room-request", args -> {
             Log.d(TAG, "requesting public game room");
         }).on(EVENT_CONNECT_ERROR, args -> {

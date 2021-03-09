@@ -19,7 +19,7 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
     MultiPlayerConnector _MultiPlayerConnector = MultiPlayerConnector.get_Instance();
     Observer _MultiPlayerConnectorObserver;
     MultiplayerWaitingRoomActivity _MultiplayerWaitingRoomActivity;
-
+    boolean _SocketEventsAdded=false; // only add socket events on once!
 
     public MultiplayerWaitingRoomActivityFragment(int fragment_Rid) {
         super(fragment_Rid);
@@ -30,12 +30,16 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         _MultiplayerWaitingRoomActivity = (MultiplayerWaitingRoomActivity) getActivity();
-        _MultiPlayerConnector.addSocketEvents(this);
+
+
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        if(!_SocketEventsAdded) {
+            _SocketEventsAdded = true;
+            _MultiPlayerConnector.addSocketEvents(this);
+        }
     }
 
     /**
@@ -72,6 +76,12 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        _MultiPlayerConnector.removeSocketEvents(this);
+    }
+
     /**
      * Unsubscribe observers from the MultiPlayerConnector when they are not needed, parent view is not visible, or may cause null reference errors.
      */
@@ -90,6 +100,9 @@ public abstract class MultiplayerWaitingRoomActivityFragment extends Fragment im
 
     @Override
     public abstract void AddSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector);
+
+    @Override
+    public void RemoveSocketEvents(Socket socket, MultiPlayerConnector multiPlayerConnector){};
 
     @Override
     public void onAttach(@NonNull Context context) {

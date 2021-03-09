@@ -42,6 +42,12 @@ public class SelectPublicOrPrivateFragment extends MultiplayerWaitingRoomActivit
 
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        _MultiPlayerConnector.FullReset();
+    }
+
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -115,7 +121,8 @@ public class SelectPublicOrPrivateFragment extends MultiplayerWaitingRoomActivit
         }
         Bundle result = new Bundle();
         result.putString("fragmentClassName", PrivateGameOptionsFragment.class.getCanonicalName());
-        getParentFragmentManager().setFragmentResult("changeFragment", result);
+
+        _MultiplayerWaitingRoomActivity.changeFragment(PrivateGameOptionsFragment.class.getCanonicalName(),result);
     }
 
     private boolean ensureConnection() {
@@ -141,7 +148,8 @@ public class SelectPublicOrPrivateFragment extends MultiplayerWaitingRoomActivit
         Bundle result = new Bundle();
         result.putString("fragmentClassName", PublicGameWaitingRoom.class.getCanonicalName());
         // The child fragment needs to still set the result on its parent fragment manager
-        getParentFragmentManager().setFragmentResult("changeFragment", result);
+        _MultiplayerWaitingRoomActivity.changeFragment(PublicGameWaitingRoom.class.getCanonicalName(),result);
+        //getParentFragmentManager().setFragmentResult("changeFragment", result);
     }
 
 

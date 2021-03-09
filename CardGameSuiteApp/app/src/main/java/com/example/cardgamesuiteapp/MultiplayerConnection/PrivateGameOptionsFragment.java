@@ -84,12 +84,15 @@ public class PrivateGameOptionsFragment extends MultiplayerWaitingRoomActivityFr
 
 
     private void goToPrivateGameWaitingRoom() {
+
+
         Bundle result = new Bundle();
         result.putString("fragmentClassName", PrivateGameWaitingRoomFragment.class.getCanonicalName());
         result.putBoolean("gameCreator", true);
         result.putString("playerName", _PlayerName);
-        // The child fragment needs to still set the result on its parent fragment manager
-        getParentFragmentManager().setFragmentResult("changeFragment", result);
+
+        _MultiplayerWaitingRoomActivity.changeFragment(PrivateGameWaitingRoomFragment.class.getCanonicalName(),result);
+        //getParentFragmentManager().setFragmentResult("changeFragment", result);
     }
 
     private boolean emitJoinPrivateGame(TextView gameCodeTextInput) {

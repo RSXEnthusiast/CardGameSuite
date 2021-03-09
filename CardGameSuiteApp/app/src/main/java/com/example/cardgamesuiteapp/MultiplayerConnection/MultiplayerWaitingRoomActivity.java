@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
 
 import android.os.Handler;
@@ -38,7 +39,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mpconnection_activity_multiplayer_waiting_room);
-        initializeFragmentResultListeners();
+        //initializeFragmentResultListeners();
         _UIHandler = new Handler();
 
         // get notified on updates from the MultiplayerConnector
@@ -64,7 +65,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
 
         _MultiPlayerConnector.setLifeCycleOwner(this);
 
-        _MultiPlayerConnector.FullReset();
+        //_MultiPlayerConnector.FullReset(); do this in selectepublic or private fragment
 
 
         if (savedInstanceState == null) {
@@ -131,7 +132,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
     }
 
 
-    //Delete and just use _MultiplayerWaitingRoomActivity.changeFragment
+   /* //Delete and just use _MultiplayerWaitingRoomActivity.changeFragment
     private void initializeFragmentResultListeners() {
         getSupportFragmentManager().setFragmentResultListener("changeFragment", this, new FragmentResultListener() {
             @Override
@@ -145,7 +146,7 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
         });
 
 
-    }
+    }*/
 
 
 
@@ -157,6 +158,26 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+        // a more advanced way to save memory...
+     /*   FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // HideTheExistingFragment...
+
+        if (getSupportFragmentManager().findFragmentByTag(className) != null) {
+            //if the fragment exists, show it.
+            fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag(className)).commit();
+        } else {
+            //if the fragment does not exist, add it to fragment manager.
+            fragmentManager.beginTransaction().add(R.id.fragment_container_view, fragmentClass, bundle).commit();
+        }
+        if (fragmentManager.findFragmentByTag(className) != null) {
+            //if the other fragment is visible, hide it.
+            fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag(className)).commit();
+        }*/
+
+
+
         getSupportFragmentManager().beginTransaction()
                 .addToBackStack(null)
                 .replace(R.id.fragment_container_view, fragmentClass, bundle)
