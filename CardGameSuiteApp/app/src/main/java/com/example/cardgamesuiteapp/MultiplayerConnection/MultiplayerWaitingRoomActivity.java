@@ -132,24 +132,6 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
     }
 
 
-   /* //Delete and just use _MultiplayerWaitingRoomActivity.changeFragment
-    private void initializeFragmentResultListeners() {
-        getSupportFragmentManager().setFragmentResultListener("changeFragment", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
-                // We use a String here, but any type that can be put in a Bundle is supported
-                String fragmentClassName = bundle.getString("fragmentClassName");
-                _CurrentFragmentClassName = fragmentClassName;
-                // Do something with the result
-                changeFragment(fragmentClassName, bundle);
-            }
-        });
-
-
-    }*/
-
-
-
 
     protected void changeFragment(String className, Bundle bundle) {
         Class fragmentClass = null;
@@ -177,7 +159,10 @@ public class MultiplayerWaitingRoomActivity extends AppCompatActivity implements
         }*/
 
 
-
+        // this way causes a new fragment to be created each time. This means that the on create method with be fired for each fragment.
+        // currently socket events are added by the fragment during on create. The onCreate for SelectPublicOrPrivate resets the socket On subscribers, so when changing to a new fragment
+        // multiple on socket event callbacks don't get added. The better way would be to use the above method (more advanced way), but just reseting the socket works,
+        // and adding a method to do socket.off to each fragment is not required.
         getSupportFragmentManager().beginTransaction()
                 .addToBackStack(null)
                 .replace(R.id.fragment_container_view, fragmentClass, bundle)

@@ -30,6 +30,8 @@ import com.example.cardgamesuiteapp.singlePlayerMenus.FivesSinglePlayerMenu;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -120,7 +122,8 @@ public class Fives extends MultiPlayerGame {
         int playerNum = fivesGameInfo.getInt("myNumber", -1);
         initViewPlayers(playerNum);
         SharedPreferences settings = getSharedPreferences("preferences", MODE_PRIVATE);
-        viewPlayerNames[playerNum].setText(settings.getString("name", "nameNotFound"));
+        //viewPlayerNames[playerNum].setText(settings.getString("name", "nameNotFound"));
+        addPlayerNamesToView(_PlayerList);
         for (int i = 1 + numOnlineOpponents; i < numPlayers; i++) {
             viewPlayerNames[i].setText("CPU" + i);
         }
@@ -156,6 +159,12 @@ public class Fives extends MultiPlayerGame {
         preAnimation = true;
         playersReadyToContinue = 0;
         newGame();
+    }
+
+    private void addPlayerNamesToView(ArrayList<Player> playerList) {
+        for(Player player: playerList){
+            viewPlayerNames[player.playerNumber].setText(player.playerName);
+        }
     }
 
     private void returnToPlayerMenu() {
@@ -1097,6 +1106,15 @@ public class Fives extends MultiPlayerGame {
 
                 getSharedPreferences("fivesGameInfo", MODE_PRIVATE).edit().putInt("myNumber", myPlayerNumber).apply();
 
+
+            }
+
+
+            if (socketIOEventArg._EventName.equals(ServerConfig.playerNumbers)) { // once player number is received that signals game is ready to start
+
+                JSONArray playerNumbers = ((JSONArray) socketIOEventArg._JsonObject.opt("playerNumbers"));
+                setPlayerNames(playerNumbers);
+
                 _UIHandler.post(() -> {
                     initFives();
                     if (deck.getMyPlayerNum() == 0) {
@@ -1104,6 +1122,7 @@ public class Fives extends MultiPlayerGame {
                         _LoadingDialog.dismiss();
                     }
                 });
+
             }
 
             if (socketIOEventArg._EventName.equals(ServerConfig.playerDisconnected)) {// this means a player has left
@@ -1111,6 +1130,33 @@ public class Fives extends MultiPlayerGame {
             }
         }
     };
+
+    private class Player {
+        public int playerNumber;
+        public String playerName;
+        public Player ( String playerName, int playerNumber){
+            this.playerName=playerName;
+            this.playerNumber= playerNumber;
+        }
+    }
+
+    ArrayList<Player> _PlayerList;
+    private void setPlayerNames(JSONArray playerNames) {
+        _PlayerList= new ArrayList<>();
+        for (int i = 0; i < playerNames.length(); i++) {
+            JSONObject player=null;
+            try {
+                player =playerNames.getJSONObject(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String playerName = (String)(player.opt("playerName"));
+            int playerNumber = (int) player.opt("playerNumber");
+                _PlayerList.add(new Player(playerName, playerNumber));
+        }
+
+
+    }
 
     private void endMultiPlayerGame() {
 
