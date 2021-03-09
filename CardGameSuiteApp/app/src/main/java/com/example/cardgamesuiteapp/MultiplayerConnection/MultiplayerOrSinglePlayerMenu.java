@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.cardgamesuiteapp.R;
+import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplayMainPageActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,6 +28,12 @@ public class MultiplayerOrSinglePlayerMenu extends AppCompatActivity {
     private void startOfflineSinglePlayer() {
         Intent intent = new Intent(this, (Class) getIntent().getSerializableExtra("singlePlayerClass"));
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent newIntent = new Intent(this, DisplayMainPageActivity.class);
+        startActivity(newIntent);
     }
 
     private void startOnlineMultiplayer() {
