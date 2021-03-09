@@ -114,6 +114,7 @@ public class Fives extends MultiPlayerGame {
         TypedArray ta = getTheme().obtainStyledAttributes(R.styleable.ViewStyle);
         colorOnSecondary = ta.getColor(R.styleable.ViewStyle_colorOnSecondary, 0);
         if(!multiplayer) numOnlineOpponents=0;
+        if(multiplayer) numAI=0;
         numPlayers = numAI + numOnlineOpponents + 1;
         setContentView();
         viewPlayers = new Hand[numPlayers];
@@ -622,7 +623,7 @@ public class Fives extends MultiPlayerGame {
                     }
             }
         }
-        return "Player " + deck.getCurPlayersTurn() + "'s Turn";
+        return viewPlayerNames[deck.getCurPlayersTurn()].getText() + "'s Turn";
     }
 
     /**
