@@ -306,12 +306,13 @@ public class Solitaire extends AppCompatActivity {
      */
     public static void clickDeckToDeal() {
         if(doAnySuitsMatch(getSuits()) && (doesAColumnWithMoreThanOneCardExist() && doesAnEmptyColumnExist()))
-            return ;
+            return;
 
         try {
                 dealtCard = deck.peekTopDraw();
-                dealAnimation();
+                System.out.println("Card peeked: " + dealtCard);
                 deck.draw(dealtColumn);
+                dealAnimation();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -325,8 +326,10 @@ public class Solitaire extends AppCompatActivity {
     private static void dealAnimation(){
         isDealing = true;
         viewAnimatedCard1.updateImage(dealtCard);
-
-        if(viewColumns[dealtColumn].isEmpty()){
+        System.out.println("Dealt column: " + dealtColumn);
+        System.out.println("hand is empty: " + viewColumns[dealtColumn].isEmpty());
+        if(viewColumns[dealtColumn].isEmpty() == true){
+            System.out.println("hand is empty entered if statement");
             viewAnimation1.cardAnimate(viewDeckBack.getX(), viewColumns[dealtColumn].getX(),
                     viewDeckBack.getY(), viewColumns[dealtColumn].getY());
         } else {
@@ -469,6 +472,7 @@ public class Solitaire extends AppCompatActivity {
             if(dealtColumn < 4)
                 clickDeckToDeal();
             else{
+                System.out.println("Post Animation else reached");
                 isDealing = false;
                 dealtColumn = 0;
             }
