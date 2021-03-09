@@ -27,7 +27,7 @@ Once enough players have joined the room for the  `minPlayersRequiredForGame` th
 Upon receiving this event, do application and game setup  and once a player is ready emit a `'player-ready-for-game-data'` event. 
 
 Once the server has received a `'player-ready-for-game-data'` from all players in the room, then the server will emit to each player a `'player_number'` event that has the following JSON values: `player.emit(event.playerNumber, {playerNumber:  i, playerName:  player.playerName, numberOfPlayersInRoom:  socket.currentRoom.playerCount })`
-Followed by a list of all the players and their numbers:
+Followed immediately by a `'player_numbers'` event which will have a list of all the players and their numbers:
 `io.to(socket.currentRoom.name).emit(event.playerNumbers, {playerNumbers:playerNumbers})`
 
 - The server will mark the Game as in Session. (At this point the `'player-disconnected'` event will be fired instead of `'room-player-count-changed'`)
@@ -60,7 +60,7 @@ The initiating player should now have the option to click a button to start the 
 Upon receiving this event, do application and game setup and once a player is ready emit a `'player-ready-for-game-data'` event. 
 
 Once the server has received a `'player-ready-for-game-data'` from all players in the room, then the server will emit to each player a `'player_number'` event that has the following JSON values: `player.emit(event.playerNumber, {playerNumber:  i, playerName:  player.playerName, numberOfPlayersInRoom:  socket.currentRoom.playerCount })`
-Followed by a list of all the players and their numbers:
+Followed immediately by a `'player_numbers'` event which will have a list of all the players and their numbers:
 `io.to(socket.currentRoom.name).emit(event.playerNumbers, {playerNumbers:playerNumbers})`
 
 The server will mark the Game as in Session. (At this point the `'player-disconnected'` event will be fired instead of `'room-player-count-changed'`)
@@ -77,6 +77,8 @@ The flow from here on out is the same as the joining a private a game, the only 
 ## Game Play
 
 Once a game is in session game data can be broadcasted to all sockets via the `game-data` event. Upon receiving a game-data event the server will send to all players in the room excluding the player who sent the data, a `game-data` event with the JSON object that was sent from the player who fired the `game-data` event in the first place.
+
+- The `game-data` can be used to send whatever JSON data you want. It is a catch all event that can be used to do any sort of custom communication between all players. 
 
 There is also a `game-data-all` event in which all players in the room, including the player who fired the event will  receive a `game-data` event with the JSON object that was sent from the player who fired the `game-data` event.
 
