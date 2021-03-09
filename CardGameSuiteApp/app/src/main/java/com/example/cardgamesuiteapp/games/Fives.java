@@ -113,6 +113,7 @@ public class Fives extends MultiPlayerGame {
         numAI = (int) getIntent().getSerializableExtra("numAI");
         TypedArray ta = getTheme().obtainStyledAttributes(R.styleable.ViewStyle);
         colorOnSecondary = ta.getColor(R.styleable.ViewStyle_colorOnSecondary, 0);
+        if(!multiplayer) numOnlineOpponents=0;
         numPlayers = numAI + numOnlineOpponents + 1;
         setContentView();
         viewPlayers = new Hand[numPlayers];
@@ -122,8 +123,8 @@ public class Fives extends MultiPlayerGame {
         int playerNum = fivesGameInfo.getInt("myNumber", -1);
         initViewPlayers(playerNum);
         SharedPreferences settings = getSharedPreferences("preferences", MODE_PRIVATE);
-        //viewPlayerNames[playerNum].setText(settings.getString("name", "nameNotFound"));
-        addPlayerNamesToView(_PlayerList);
+        viewPlayerNames[playerNum].setText(settings.getString("name", "nameNotFound"));
+        if(multiplayer) addOnlinePlayerNamesToView(_OnlinePlayerList);
         for (int i = 1 + numOnlineOpponents; i < numPlayers; i++) {
             viewPlayerNames[i].setText("CPU" + i);
         }
@@ -161,7 +162,7 @@ public class Fives extends MultiPlayerGame {
         newGame();
     }
 
-    private void addPlayerNamesToView(ArrayList<Player> playerList) {
+    private void addOnlinePlayerNamesToView(ArrayList<Player> playerList) {
         for(Player player: playerList){
             viewPlayerNames[player.playerNumber].setText(player.playerName);
         }
@@ -1140,9 +1141,9 @@ public class Fives extends MultiPlayerGame {
         }
     }
 
-    ArrayList<Player> _PlayerList;
+    ArrayList<Player> _OnlinePlayerList;
     private void setPlayerNames(JSONArray playerNames) {
-        _PlayerList= new ArrayList<>();
+        _OnlinePlayerList = new ArrayList<>();
         for (int i = 0; i < playerNames.length(); i++) {
             JSONObject player=null;
             try {
@@ -1152,7 +1153,7 @@ public class Fives extends MultiPlayerGame {
             }
             String playerName = (String)(player.opt("playerName"));
             int playerNumber = (int) player.opt("playerNumber");
-                _PlayerList.add(new Player(playerName, playerNumber));
+                _OnlinePlayerList.add(new Player(playerName, playerNumber));
         }
 
 
