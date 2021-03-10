@@ -113,8 +113,8 @@ public class Fives extends MultiPlayerGame {
         numAI = (int) getIntent().getSerializableExtra("numAI");
         TypedArray ta = getTheme().obtainStyledAttributes(R.styleable.ViewStyle);
         colorOnSecondary = ta.getColor(R.styleable.ViewStyle_colorOnSecondary, 0);
-        if(!multiplayer) numOnlineOpponents=0;
-        if(multiplayer) numAI=0;
+        if (!multiplayer) numOnlineOpponents = 0;
+        if (multiplayer) numAI = 0;
         numPlayers = numAI + numOnlineOpponents + 1;
         setContentView();
         viewPlayers = new Hand[numPlayers];
@@ -125,7 +125,7 @@ public class Fives extends MultiPlayerGame {
         initViewPlayers(playerNum);
         SharedPreferences settings = getSharedPreferences("preferences", MODE_PRIVATE);
         viewPlayerNames[playerNum].setText(settings.getString("name", "nameNotFound"));
-        if(multiplayer) addOnlinePlayerNamesToView(_OnlinePlayerList);
+        if (multiplayer) addOnlinePlayerNamesToView(_OnlinePlayerList);
         for (int i = 1 + numOnlineOpponents; i < numPlayers; i++) {
             viewPlayerNames[i].setText("CPU" + i);
         }
@@ -159,12 +159,13 @@ public class Fives extends MultiPlayerGame {
         viewAnimation2 = new CardAnimation(viewAnimatedCard2, false, this);
         isAnimating = false;
         preAnimation = true;
+        handlingIncomingData = false;
         playersReadyToContinue = 0;
         newGame();
     }
 
     private void addOnlinePlayerNamesToView(ArrayList<Player> playerList) {
-        for(Player player: playerList){
+        for (Player player : playerList) {
             viewPlayerNames[player.playerNumber].setText(player.playerName);
         }
     }
@@ -250,7 +251,6 @@ public class Fives extends MultiPlayerGame {
                 DeckMultiplayerManager.readyToContinue();
                 if (playersReadyToContinue >= numPlayers - numAI) {
                     playersReadyToContinue = 0;
-                    System.out.println("continuing from confirm button");
                     stage = fivesStage.memCards;
                     newRound();
                     viewConfirm.setText("Memorized");
@@ -354,9 +354,9 @@ public class Fives extends MultiPlayerGame {
      */
     private static void stageDrewFromDeck(int cardNum) {
         boolean endTurn = false;
+        handlingIncomingData = true;
         if (deck.peekTopDiscard() == cardNum) {
             if (preAnimation) {
-                handlingIncomingData = true;
                 //Logic for discarded from draw
                 viewAnimatedCard1.updateImage(deck.peekTopDraw());
                 isAnimating = true;
@@ -383,7 +383,6 @@ public class Fives extends MultiPlayerGame {
             int cardLocation = deck.getCardLocation(deck.getMyPlayerNum(), cardNum);
             if (preAnimation) {
                 //Logic for swapped with hand
-                handlingIncomingData = true;
                 isAnimating = true;
                 preAnimation = false;
                 viewAnimatedCard1.updateImage(deck.peekTopDraw());
@@ -465,10 +464,10 @@ public class Fives extends MultiPlayerGame {
      */
     private static void stageDrewFromDiscard(int cardNum) {
         boolean endTurn = false;
+        handlingIncomingData = true;
         if (isValidTapOnCardInHand(cardNum)) {
             int cardLocation = deck.getCardLocation(deck.getMyPlayerNum(), cardNum);
             if (preAnimation) {
-                handlingIncomingData = true;
                 viewAnimatedCard1.updateImage(deck.peekTopDiscard());
                 isAnimating = true;
                 preAnimation = false;
@@ -784,10 +783,12 @@ public class Fives extends MultiPlayerGame {
             case drewFromDiscard:
                 AIDrewFromDiscard(lastLocation);
                 deck.nextPlayerFromPeer();
+                handleNextData();
                 break;
             case drewFromDeck:
                 AIKeptDraw(lastLocation);
                 deck.nextPlayerFromPeer();
+                handleNextData();
                 break;
             case discardedFromDeck:
                 AIDiscardedDraw();
@@ -800,7 +801,6 @@ public class Fives extends MultiPlayerGame {
         if (!deck.isMyTurn() && numAI > 0) {
             runAITurns();
         }
-        handleNextData();
     }
 
     /**
@@ -877,6 +877,8 @@ public class Fives extends MultiPlayerGame {
         if (roundOver()) {
             new Fives().scoreRound();
         }
+        updateViewInstruction();
+        handleNextData();
     }
 
     private static void AIFlippedCardByCardNum(int cardNum) {
@@ -886,6 +888,8 @@ public class Fives extends MultiPlayerGame {
         if (roundOver()) {
             new Fives().scoreRound();
         }
+        updateViewInstruction();
+        handleNextData();
     }
 
     /**
@@ -1083,7 +1087,7 @@ public class Fives extends MultiPlayerGame {
     }
 
     private static Queue<JSONObject> incomingData = new LinkedList<>();
-    static boolean handlingIncomingData = false;
+    static boolean handlingIncomingData;
 
     private Observer _MultiPlayerConnectorObserver = new Observer() {
         @Override
@@ -1136,25 +1140,27 @@ public class Fives extends MultiPlayerGame {
     private class Player {
         public int playerNumber;
         public String playerName;
-        public Player ( String playerName, int playerNumber){
-            this.playerName=playerName;
-            this.playerNumber= playerNumber;
+
+        public Player(String playerName, int playerNumber) {
+            this.playerName = playerName;
+            this.playerNumber = playerNumber;
         }
     }
 
     ArrayList<Player> _OnlinePlayerList;
+
     private void setPlayerNames(JSONArray playerNames) {
         _OnlinePlayerList = new ArrayList<>();
         for (int i = 0; i < playerNames.length(); i++) {
-            JSONObject player=null;
+            JSONObject player = null;
             try {
-                player =playerNames.getJSONObject(i);
+                player = playerNames.getJSONObject(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            String playerName = (String)(player.opt("playerName"));
+            String playerName = (String) (player.opt("playerName"));
             int playerNumber = (int) player.opt("playerNumber");
-                _OnlinePlayerList.add(new Player(playerName, playerNumber));
+            _OnlinePlayerList.add(new Player(playerName, playerNumber));
         }
 
 
@@ -1205,46 +1211,37 @@ public class Fives extends MultiPlayerGame {
         handlingIncomingData = true;
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
+        System.out.println(gson.fromJson((String) data.opt("operation"), Operation.class));
         switch (gson.fromJson((String) data.opt("operation"), Operation.class)) {
             case discardFromDeck:
-                System.out.println("discardFromDeck");
                 discardFromDeckReceived();
                 break;
             case initialize:
-                System.out.println("initialize");
                 initializeReceived(data);
                 if (_LoadingDialog != null) {
                     _LoadingDialog.dismiss();
                 }
                 break;
             case drawIntoIndex:
-                System.out.println("playerDrawIntoIndex");
                 playerDrawIntoIndexReceived(data);
                 break;
             case drawIntoIndexFromDiscard:
-                System.out.println("playerDrawIntoIndexFromDiscard");
                 playerDrawIntoIndexFromDiscardReceived(data);
                 break;
             case recover:
-                System.out.println("recover");
                 recoverReceived(data);
                 break;
             case flipCardInHand:
-                System.out.println("Flip Card");
                 flipCardReceived(data);
-                handleNextData();
                 break;
             case flipDeck:
-                System.out.println("FlipDeck");
                 viewDeck.flipCard();
                 handleNextData();
                 break;
             case readyToContinue:
-                System.out.println("ReadyToContinue");
                 playersReadyToContinue++;
                 if (playersReadyToContinue >= numPlayers - numAI) {
                     playersReadyToContinue = 0;
-                    System.out.println("continuing from peer");
                     stage = fivesStage.memCards;
                     boolean newGame = false;
                     if (viewConfirm.getText().equals("New Game")) {

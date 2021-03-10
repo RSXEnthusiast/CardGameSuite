@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.renderscript.ScriptGroup;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -69,6 +70,7 @@ public class DisplaySettingsActivity extends AppCompatActivity {
         view = this.getCurrentFocus();
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         editPreference("name", String.valueOf(((EditText) findViewById(R.id.playerNameInput)).getText()));
+        ((Button) findViewById(R.id.saveName)).setText("SAVED!");
     }
 
     public void setLightBack(View view) {
