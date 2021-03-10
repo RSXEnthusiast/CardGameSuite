@@ -417,7 +417,7 @@ public class Fives extends MultiPlayerGame {
             if (roundOver()) {
                 new Fives().scoreRound();
             }
-            deck.nextPlayer(multiplayer);
+            deck.nextPlayer();
             updateViewInstruction();
             handleNextData();
             if (numAI > 0 && deck.getCurPlayersTurn() >= numOnlineOpponents + 1) {
@@ -448,7 +448,7 @@ public class Fives extends MultiPlayerGame {
             if (roundOver()) {
                 new Fives().scoreRound();
             }
-            deck.nextPlayer(multiplayer);
+            deck.nextPlayer();
             handleNextData();
             updateViewInstruction();
             if (numAI > 0 && deck.getCurPlayersTurn() >= numOnlineOpponents + 1) {
@@ -505,7 +505,7 @@ public class Fives extends MultiPlayerGame {
             if (roundOver()) {
                 new Fives().scoreRound();
             }
-            deck.nextPlayer(multiplayer);
+            deck.nextPlayer();
             handleNextData();
             updateViewInstruction();
             if (numAI > 0 && deck.getCurPlayersTurn() >= numOnlineOpponents + 1) {
@@ -685,7 +685,7 @@ public class Fives extends MultiPlayerGame {
         }
         updateViewInstruction();
         setConfirmButtonVisible();
-        deck.nextPlayerFromPeer();
+        deck.nextPlayer();
     }
 
     /**
@@ -782,12 +782,12 @@ public class Fives extends MultiPlayerGame {
         switch (AIStage) {
             case drewFromDiscard:
                 AIDrewFromDiscard(lastLocation);
-                deck.nextPlayerFromPeer();
+                deck.nextPlayer();
                 handleNextData();
                 break;
             case drewFromDeck:
                 AIKeptDraw(lastLocation);
-                deck.nextPlayerFromPeer();
+                deck.nextPlayer();
                 handleNextData();
                 break;
             case discardedFromDeck:
@@ -873,7 +873,7 @@ public class Fives extends MultiPlayerGame {
     private static void AIFlippedCardByIndex(int location) {
         viewPlayers[deck.getCurPlayersTurn()].flipCardByIndex(location);
         AIStage = fivesStage.draw;
-        deck.nextPlayerFromPeer();
+        deck.nextPlayer();
         if (roundOver()) {
             new Fives().scoreRound();
         }
@@ -884,7 +884,7 @@ public class Fives extends MultiPlayerGame {
     private static void AIFlippedCardByCardNum(int cardNum) {
         viewPlayers[deck.getCurPlayersTurn()].flipCardByNum(cardNum);
         AIStage = fivesStage.draw;
-        deck.nextPlayerFromPeer();
+        deck.nextPlayer();
         if (roundOver()) {
             new Fives().scoreRound();
         }

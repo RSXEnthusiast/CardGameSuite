@@ -72,14 +72,7 @@ public abstract class Deck implements Serializable {
     /**
      * Moves to the next player
      */
-    public void nextPlayer(boolean multiplayer) {
-        nextPlayerFromPeer();
-//        if (multiplayer) {
-//            DeckMultiplayerManager.nextPlayer();
-//        }
-    }
-
-    public void nextPlayerFromPeer() {
+    public void nextPlayer() {
         curPlayersTurn = (curPlayersTurn + 1) % numPlayers;
     }
 
@@ -401,11 +394,11 @@ public abstract class Deck implements Serializable {
         return -1;
     }
 
-    public int whichPlayerHasCard(int cardNum){
-        for(int i = 0; i < hands.length; i++){
+    public int whichPlayerHasCard(int cardNum) {
+        for (int i = 0; i < hands.length; i++) {
             ArrayList<Integer> hand = getHand(i);
-            for(int j = 0; j < hand.size(); j++){
-                if(hand.get(j) == cardNum)
+            for (int j = 0; j < hand.size(); j++) {
+                if (hand.get(j) == cardNum)
                     return i;
             }
         }
