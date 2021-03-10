@@ -582,9 +582,6 @@ public class Fives extends MultiPlayerGame {
      * @return the instruction text based on the current stage, or which player's turn it is
      */
     private static String getCurInstruction() {
-        if (((String) viewConfirm.getText()).equals("Continue")) {
-            return "Press Continue";
-        }
         if (deck.isMyTurn()) {
             switch (stage) {
                 case memCards:
@@ -597,30 +594,32 @@ public class Fives extends MultiPlayerGame {
                     return "Select a face down card to flip over";
                 case drewFromDiscard:
                     return "Select a face down card to swap the new card with";
-                case roundOver:
-                    if (playersReadyToContinue < numPlayers - numAI) {
-                        return "Waiting on other players";
-                    } else {
-                        return "Press continue";
-                    }
-                case gameOver:
-                    if (playersReadyToContinue == 0) {
-                        String winners = "";
-                        for (int i = 0; i < winnerIndex.size(); i++) {
-                            winners += viewPlayerNames[winnerIndex.get(i)].getText();
-                            if (winnerIndex.size() > i + 1) {
-                                winners += " and ";
-                            }
-                        }
-                        winners += " won! ";
-                        winners += viewPlayerNames[loserIndex].getText() + " lost!";
-                        return winners;
-                    } else if (playersReadyToContinue < numPlayers - numAI) {
-                        return "Waiting on other players";
-                    } else {
-                        return "Press continue";
-                    }
             }
+        }
+        switch (stage) {
+            case roundOver:
+                if (playersReadyToContinue > 0) {
+                    return "Waiting on other players";
+                } else {
+                    return "Press continue";
+                }
+            case gameOver:
+                if (playersReadyToContinue == 0) {
+                    String winners = "";
+                    for (int i = 0; i < winnerIndex.size(); i++) {
+                        winners += viewPlayerNames[winnerIndex.get(i)].getText();
+                        if (winnerIndex.size() > i + 1) {
+                            winners += " and ";
+                        }
+                    }
+                    winners += " won! ";
+                    winners += viewPlayerNames[loserIndex].getText() + " lost!";
+                    return winners;
+                } else if (playersReadyToContinue > 0) {
+                    return "Waiting on other players";
+                } else {
+                    return "Press continue";
+                }
         }
         return viewPlayerNames[deck.getCurPlayersTurn()].getText() + "'s Turn";
     }
