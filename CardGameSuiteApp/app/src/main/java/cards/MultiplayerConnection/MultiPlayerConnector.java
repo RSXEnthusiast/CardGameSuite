@@ -1,4 +1,4 @@
-package app.MultiplayerConnection;
+package cards.MultiplayerConnection;
 
 import android.app.Activity;
 import android.util.Log;
@@ -9,7 +9,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.OnLifecycleEvent;
 
-import com.example.cardgamesuiteapp.BuildConfig;
+import cards.BuildConfig;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

@@ -1,4 +1,4 @@
-package app.MultiplayerConnection;
+package cards.MultiplayerConnection;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,7 +12,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import com.example.cardgamesuiteapp.R;
+import cards.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -1,4 +1,4 @@
-package app.MultiplayerConnection;
+package cards.MultiplayerConnection;
 
 import org.json.JSONObject;
 

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="app.gameCollectionMainMenu.DisplaySolitaireRulesActivity"
+    tools:context="cards.gameCollectionMainMenu.DisplaySolitaireRulesActivity"
     tools:showIn="@layout/rules_solitaire"
     android:theme="@style/Theme.CardGameSuiteApp">
 

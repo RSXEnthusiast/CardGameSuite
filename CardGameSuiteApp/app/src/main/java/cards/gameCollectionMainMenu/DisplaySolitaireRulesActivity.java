@@ -3,13 +3,13 @@ package app.gameCollectionMainMenu;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cardgamesuiteapp.R;
+import app.R;
 
-public class DisplayFivesRulesActivity extends AppCompatActivity {
+public class DisplaySolitaireRulesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.rules_fives);
+        setContentView(R.layout.rules_solitaire);
     }
 }

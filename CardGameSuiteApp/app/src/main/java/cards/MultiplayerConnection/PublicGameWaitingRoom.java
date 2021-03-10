@@ -1,4 +1,4 @@
-package app.MultiplayerConnection;
+package cards.MultiplayerConnection;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,7 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.cardgamesuiteapp.R;
+import cards.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="app.games.Fives">
+    tools:context="cards.games.Fives">
 
     <Button
         android:id="@+id/confirmButton"
@@ -57,7 +57,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <app.display.FivesHand
+    <cards.display.FivesHand
         android:id="@+id/player1"
         android:layout_width="150dp"
         android:layout_height="210dp"
@@ -67,7 +67,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.99" />
 
-    <app.display.FivesHand
+    <cards.display.FivesHand
         android:id="@+id/player2"
         android:layout_width="110dp"
         android:layout_height="154dp"
@@ -78,7 +78,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.654" />
 
-    <app.display.FivesHand
+    <cards.display.FivesHand
         android:id="@+id/player3"
         android:layout_width="110dp"
         android:layout_height="154dp"
@@ -89,7 +89,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.027" />
 
-    <app.display.FivesHand
+    <cards.display.FivesHand
         android:id="@+id/player4"
         android:layout_width="110dp"
         android:layout_height="154dp"
@@ -100,7 +100,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.027" />
 
-    <app.display.FivesHand
+    <cards.display.FivesHand
         android:id="@+id/player5"
         android:layout_width="110dp"
         android:layout_height="154dp"
@@ -111,7 +111,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.027" />
 
-    <app.display.FivesHand
+    <cards.display.FivesHand
         android:id="@+id/player6"
         android:layout_width="110dp"
         android:layout_height="154dp"
@@ -122,7 +122,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.654" />
 
-    <app.display.Card
+    <cards.display.Card
         android:id="@+id/deck"
         android:layout_width="75dp"
         android:layout_height="105dp"
@@ -133,7 +133,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.584" />
 
-    <app.display.Card
+    <cards.display.Card
         android:id="@+id/discard"
         android:layout_width="75dp"
         android:layout_height="105dp"
@@ -144,14 +144,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.584" />
 
-    <app.display.Card
+    <cards.display.Card
         android:id="@+id/animatedCard1"
         android:layout_width="75dp"
         android:layout_height="105dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <app.display.Card
+    <cards.display.Card
         android:id="@+id/animatedCard2"
         android:layout_width="75dp"
         android:layout_height="105dp"

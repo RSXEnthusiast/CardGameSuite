@@ -1,4 +1,4 @@
-package app.MultiplayerConnection;
+package cards.MultiplayerConnection;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -13,7 +13,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.cardgamesuiteapp.R;
+import cards.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 

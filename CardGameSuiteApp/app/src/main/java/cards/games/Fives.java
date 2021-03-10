@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.cardgamesuiteapp.R;
+import app.R;
 
 import app.MultiplayerConnection.MultiPlayerConnector;
 import app.MultiplayerConnection.MultiplayerOrSinglePlayerMenu;

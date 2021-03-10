@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import app.MultiplayerConnection.MultiplayerOrSinglePlayerMenu;
 import app.games.Fives;
-import com.example.cardgamesuiteapp.R;
+import app.R;
 import app.games.Solitaire;
 import app.singlePlayerMenus.FivesSinglePlayerMenu;
 

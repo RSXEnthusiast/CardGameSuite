@@ -5,7 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="app.games.Solitaire">
+    tools:context="cards.games.Solitaire">
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/deck"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.993" />
 
-    <app.display.Card
+    <cards.display.Card
         android:id="@+id/discard"
         android:layout_width="75dp"
         android:layout_height="105dp"
@@ -29,35 +29,35 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.993" />
 
-    <app.display.Card
+    <cards.display.Card
         android:id="@+id/animatedCard1"
         android:layout_width="75dp"
         android:layout_height="105dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <app.display.Card
+    <cards.display.Card
         android:id="@+id/animatedCard2"
         android:layout_width="75dp"
         android:layout_height="105dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <app.display.Card
+    <cards.display.Card
         android:id="@+id/animatedCard3"
         android:layout_width="75dp"
         android:layout_height="105dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <app.display.Card
+    <cards.display.Card
         android:id="@+id/animatedCard4"
         android:layout_width="75dp"
         android:layout_height="105dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <app.display.SolitaireHand
+    <cards.display.SolitaireHand
         android:id="@+id/column0"
         android:layout_width="75dp"
         android:layout_height="577.5dp"
@@ -68,7 +68,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <app.display.SolitaireHand
+    <cards.display.SolitaireHand
         android:id="@+id/column1"
         android:layout_width="75dp"
         android:layout_height="577.5dp"
@@ -79,7 +79,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <app.display.SolitaireHand
+    <cards.display.SolitaireHand
         android:id="@+id/column2"
         android:layout_width="75dp"
         android:layout_height="577.5dp"
@@ -90,7 +90,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <app.display.SolitaireHand
+    <cards.display.SolitaireHand
         android:id="@+id/column3"
         android:layout_width="75dp"
         android:layout_height="577.5dp"

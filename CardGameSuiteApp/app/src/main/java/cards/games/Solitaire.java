@@ -9,7 +9,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.cardgamesuiteapp.R;
+import app.R;
 
 import app.decks.Standard;
 import app.display.Card;

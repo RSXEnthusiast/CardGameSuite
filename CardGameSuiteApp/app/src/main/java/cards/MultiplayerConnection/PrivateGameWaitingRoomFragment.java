@@ -1,4 +1,4 @@
-package app.MultiplayerConnection;
+package cards.MultiplayerConnection;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,7 +18,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import com.example.cardgamesuiteapp.R;
+import cards.R;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONArray;

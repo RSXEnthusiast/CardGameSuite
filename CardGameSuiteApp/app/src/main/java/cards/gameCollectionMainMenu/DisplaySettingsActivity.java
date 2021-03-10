@@ -15,7 +15,7 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cardgamesuiteapp.R;
+import app.R;
 
 public class DisplaySettingsActivity extends AppCompatActivity {
 

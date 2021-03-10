@@ -7,7 +7,7 @@ import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.cardgamesuiteapp.R;
+import app.R;
 
 public class DisplaySolitaireSettingsActivity extends AppCompatActivity {
 

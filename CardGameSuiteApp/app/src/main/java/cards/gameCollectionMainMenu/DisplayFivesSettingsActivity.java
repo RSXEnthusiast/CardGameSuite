@@ -6,7 +6,7 @@ import android.widget.NumberPicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cardgamesuiteapp.R;
+import app.R;
 
 public class DisplayFivesSettingsActivity extends AppCompatActivity {
 

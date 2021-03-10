@@ -1,6 +1,6 @@
-package app;
+package cards;
 
-import app.decks.Standard;
+import cards.decks.Standard;
 
 import org.junit.Test;
 

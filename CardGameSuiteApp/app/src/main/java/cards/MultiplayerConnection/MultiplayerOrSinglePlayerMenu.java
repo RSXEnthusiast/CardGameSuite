@@ -1,10 +1,10 @@
-package app.MultiplayerConnection;
+package cards.MultiplayerConnection;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.cardgamesuiteapp.R;
-import app.gameCollectionMainMenu.DisplayMainPageActivity;
+import cards.R;
+import cards.gameCollectionMainMenu.DisplayMainPageActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 

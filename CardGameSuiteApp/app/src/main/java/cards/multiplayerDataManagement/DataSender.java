@@ -1,9 +1,9 @@
-package app.multiplayerDataManagement;
+package cards.multiplayerDataManagement;
 
 import org.json.JSONObject;
 
-import app.MultiplayerConnection.MultiPlayerConnector;
-import app.MultiplayerConnection.ServerConfig;
+import cards.MultiplayerConnection.MultiPlayerConnector;
+import cards.MultiplayerConnection.ServerConfig;
 
 public class DataSender {
     @SuppressWarnings("rawtypes")

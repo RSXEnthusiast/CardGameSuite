@@ -1,4 +1,4 @@
-package app.MultiplayerConnection;
+package cards.MultiplayerConnection;
 
 public interface IMultiPlayerConnectorObserverSubscriber {
 
