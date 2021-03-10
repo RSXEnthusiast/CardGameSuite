@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.MultiplayerConnection;
+package app.MultiplayerConnection;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -20,9 +20,6 @@ import org.json.JSONObject;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;

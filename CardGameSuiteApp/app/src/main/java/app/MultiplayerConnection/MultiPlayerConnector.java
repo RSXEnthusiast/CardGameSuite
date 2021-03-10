@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.MultiplayerConnection;
+package app.MultiplayerConnection;
 
 import android.app.Activity;
 import android.util.Log;

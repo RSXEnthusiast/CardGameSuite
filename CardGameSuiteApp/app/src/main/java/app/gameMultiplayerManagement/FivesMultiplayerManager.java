@@ -1,6 +1,6 @@
-package com.example.cardgamesuiteapp.gameMultiplayerManagement;
+package app.gameMultiplayerManagement;
 
-import com.example.cardgamesuiteapp.multiplayerDataManagement.DataSender;
+import app.multiplayerDataManagement.DataSender;
 
 public class FivesMultiplayerManager {
 	private DataSender db;

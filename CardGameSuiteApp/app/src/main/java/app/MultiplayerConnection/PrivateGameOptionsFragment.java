@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.MultiplayerConnection;
+package app.MultiplayerConnection;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 
 import com.example.cardgamesuiteapp.R;
 

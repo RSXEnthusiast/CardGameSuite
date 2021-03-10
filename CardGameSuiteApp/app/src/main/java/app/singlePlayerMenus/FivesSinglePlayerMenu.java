@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.singlePlayerMenus;
+package app.singlePlayerMenus;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,7 +8,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cardgamesuiteapp.R;
-import com.example.cardgamesuiteapp.games.Fives;
+import app.games.Fives;
 
 public class FivesSinglePlayerMenu extends AppCompatActivity {
     static View[] viewAINumButtons;// The buttons the user would press to select the number of AI

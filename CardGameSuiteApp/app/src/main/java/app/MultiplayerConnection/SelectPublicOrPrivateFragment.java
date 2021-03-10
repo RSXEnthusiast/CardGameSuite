@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.MultiplayerConnection;
+package app.MultiplayerConnection;
 
 import android.content.Context;
 import android.content.res.ColorStateList;

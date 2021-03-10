@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.games;
+package app.games;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -15,18 +15,20 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.cardgamesuiteapp.R;
-import com.example.cardgamesuiteapp.MultiplayerConnection.MultiPlayerConnector;
-import com.example.cardgamesuiteapp.MultiplayerConnection.MultiplayerOrSinglePlayerMenu;
-import com.example.cardgamesuiteapp.MultiplayerConnection.ServerConfig;
-import com.example.cardgamesuiteapp.MultiplayerConnection.SocketIOEventArg;
-import com.example.cardgamesuiteapp.deckMultiplayerManagement.DeckMultiplayerManager;
-import com.example.cardgamesuiteapp.decks.Standard;
-import com.example.cardgamesuiteapp.display.Card;
-import com.example.cardgamesuiteapp.display.CardAnimation;
-import com.example.cardgamesuiteapp.display.Hand;
-import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplayMainPageActivity;
-import com.example.cardgamesuiteapp.multiplayerDataManagement.Operation;
-import com.example.cardgamesuiteapp.singlePlayerMenus.FivesSinglePlayerMenu;
+
+import app.MultiplayerConnection.MultiPlayerConnector;
+import app.MultiplayerConnection.MultiplayerOrSinglePlayerMenu;
+import app.MultiplayerConnection.ServerConfig;
+import app.MultiplayerConnection.SocketIOEventArg;
+import app.deckMultiplayerManagement.DeckMultiplayerManager;
+import app.decks.Standard;
+import app.display.Card;
+import app.display.CardAnimation;
+import app.display.Hand;
+import app.gameCollectionMainMenu.DisplayMainPageActivity;
+import app.multiplayerDataManagement.Operation;
+import app.singlePlayerMenus.FivesSinglePlayerMenu;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -245,34 +247,46 @@ public class Fives extends MultiPlayerGame {
                 viewConfirm.setVisibility(View.INVISIBLE);
                 break;
             case "Continue":
-                for (int i = 0; i < numAI + 1; i++) {
-                    playersReadyToContinue++;
-                }
-                DeckMultiplayerManager.readyToContinue();
-                if (playersReadyToContinue >= numPlayers - numAI) {
-                    playersReadyToContinue = 0;
+                if (multiplayer) {
+                    for (int i = 0; i < numAI + 1; i++) {
+                        playersReadyToContinue++;
+                    }
+                    DeckMultiplayerManager.readyToContinue();
+                    if (playersReadyToContinue >= numPlayers - numAI) {
+                        playersReadyToContinue = 0;
+                        stage = fivesStage.memCards;
+                        newRound();
+                        viewConfirm.setText("Memorized");
+                        DeckMultiplayerManager.initialize(deck);
+                    } else {
+                        viewConfirm.setVisibility(View.INVISIBLE);
+                    }
+                } else {
                     stage = fivesStage.memCards;
                     newRound();
                     viewConfirm.setText("Memorized");
-                    DeckMultiplayerManager.initialize(deck);
-                } else {
-                    viewConfirm.setVisibility(View.INVISIBLE);
                 }
                 updateViewInstruction();
                 break;
             case "New Game":
-                for (int i = 0; i < numAI + 1; i++) {
-                    playersReadyToContinue++;
-                }
-                DeckMultiplayerManager.readyToContinue();
-                if (playersReadyToContinue >= numPlayers - numAI) {
-                    playersReadyToContinue = 0;
+                if (multiplayer) {
+                    for (int i = 0; i < numAI + 1; i++) {
+                        playersReadyToContinue++;
+                    }
+                    DeckMultiplayerManager.readyToContinue();
+                    if (playersReadyToContinue >= numPlayers - numAI) {
+                        playersReadyToContinue = 0;
+                        stage = fivesStage.memCards;
+                        newGame();
+                        viewConfirm.setText("Memorized");
+                        DeckMultiplayerManager.initialize(deck);
+                    } else {
+                        viewConfirm.setVisibility(View.INVISIBLE);
+                    }
+                } else {
                     stage = fivesStage.memCards;
                     newGame();
                     viewConfirm.setText("Memorized");
-                    DeckMultiplayerManager.initialize(deck);
-                } else {
-                    viewConfirm.setVisibility(View.INVISIBLE);
                 }
                 updateViewInstruction();
                 break;
@@ -685,7 +699,9 @@ public class Fives extends MultiPlayerGame {
         }
         updateViewInstruction();
         setConfirmButtonVisible();
-        deck.nextPlayer();
+        if (multiplayer) {
+            deck.nextPlayer();
+        }
     }
 
     /**

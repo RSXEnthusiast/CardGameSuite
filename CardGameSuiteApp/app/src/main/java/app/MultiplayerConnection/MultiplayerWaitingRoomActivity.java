@@ -1,19 +1,15 @@
-package com.example.cardgamesuiteapp.MultiplayerConnection;
+package app.MultiplayerConnection;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-
 import com.example.cardgamesuiteapp.R;
-import com.example.cardgamesuiteapp.games.MultiPlayerGameInfo;
+import app.games.MultiPlayerGameInfo;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentResultListener;
 
 import android.os.Handler;
 

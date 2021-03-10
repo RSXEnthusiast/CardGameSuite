@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.games;
+package app.games;
 
 public class MultiPlayerGameInfo {
     public int minNumberPlayers;

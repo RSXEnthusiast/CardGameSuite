@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.MultiplayerConnection;
+package app.MultiplayerConnection;
 
 public class ServerConfig {
 

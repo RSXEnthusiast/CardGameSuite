@@ -1,16 +1,12 @@
-package com.example.cardgamesuiteapp.display;
+package app.display;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Point;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-
-import com.example.cardgamesuiteapp.R;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.multiplayerDataManagement;
+package app.multiplayerDataManagement;
 
 public enum Operation {
     drawIntoIndex, drawIntoIndexFromDiscard,

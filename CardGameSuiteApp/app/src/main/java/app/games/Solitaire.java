@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.games;
+package app.games;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,16 +10,14 @@ import android.view.View;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.cardgamesuiteapp.R;
-import com.example.cardgamesuiteapp.deckMultiplayerManagement.DeckMultiplayerManager;
-import com.example.cardgamesuiteapp.decks.Standard;
-import com.example.cardgamesuiteapp.display.Card;
-import com.example.cardgamesuiteapp.display.CardAnimation;
-import com.example.cardgamesuiteapp.display.SolitaireHand;
-import com.example.cardgamesuiteapp.gameCollectionMainMenu.DisplayMainPageActivity;
+
+import app.decks.Standard;
+import app.display.Card;
+import app.display.CardAnimation;
+import app.display.SolitaireHand;
+import app.gameCollectionMainMenu.DisplayMainPageActivity;
 
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 public class Solitaire extends AppCompatActivity {
     static SolitaireHand[] viewColumns;

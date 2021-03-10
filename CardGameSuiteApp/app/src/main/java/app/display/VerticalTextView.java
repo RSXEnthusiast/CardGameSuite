@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.display;
+package app.display;
 
 import android.content.Context;
 import android.graphics.Canvas;

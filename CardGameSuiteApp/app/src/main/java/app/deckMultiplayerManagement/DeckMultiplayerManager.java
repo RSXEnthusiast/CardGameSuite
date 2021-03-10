@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.deckMultiplayerManagement;
+package app.deckMultiplayerManagement;
 
 import java.util.ArrayList;
 import java.util.Queue;
@@ -7,9 +7,9 @@ import java.util.Stack;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.cardgamesuiteapp.decks.Deck;
-import com.example.cardgamesuiteapp.multiplayerDataManagement.DataSender;
-import com.example.cardgamesuiteapp.multiplayerDataManagement.Operation;
+import app.decks.Deck;
+import app.multiplayerDataManagement.DataSender;
+import app.multiplayerDataManagement.Operation;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

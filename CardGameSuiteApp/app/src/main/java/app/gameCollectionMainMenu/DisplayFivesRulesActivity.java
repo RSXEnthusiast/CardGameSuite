@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.gameCollectionMainMenu;
+package app.gameCollectionMainMenu;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;

@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.gameCollectionMainMenu;
+package app.gameCollectionMainMenu;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,11 +8,11 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cardgamesuiteapp.MultiplayerConnection.MultiplayerOrSinglePlayerMenu;
-import com.example.cardgamesuiteapp.games.Fives;
+import app.MultiplayerConnection.MultiplayerOrSinglePlayerMenu;
+import app.games.Fives;
 import com.example.cardgamesuiteapp.R;
-import com.example.cardgamesuiteapp.games.Solitaire;
-import com.example.cardgamesuiteapp.singlePlayerMenus.FivesSinglePlayerMenu;
+import app.games.Solitaire;
+import app.singlePlayerMenus.FivesSinglePlayerMenu;
 
 import java.io.Serializable;
 

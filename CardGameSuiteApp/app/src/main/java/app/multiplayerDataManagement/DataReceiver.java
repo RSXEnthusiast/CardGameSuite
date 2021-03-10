@@ -1,4 +1,4 @@
-//package com.example.cardgamesuiteapp.multiplayerDataManagement;
+//package app.multiplayerDataManagement;
 //
 //import android.content.SharedPreferences;
 //
@@ -10,7 +10,7 @@
 //
 //import com.example.cardgamesuiteapp.austenMPStuff.ServerConfig;
 //import com.example.cardgamesuiteapp.austenMPStuff.SocketIOEventArg;
-//import com.example.cardgamesuiteapp.deckMultiplayerManagement.DeckMultiplayerManager;
+//import app.deckMultiplayerManagement.DeckMultiplayerManager;
 //
 //import java.util.Observable;
 //import java.util.Observer;

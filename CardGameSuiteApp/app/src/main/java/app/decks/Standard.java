@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.decks;
+package app.decks;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

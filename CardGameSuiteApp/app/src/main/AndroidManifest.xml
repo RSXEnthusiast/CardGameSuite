@@ -12,23 +12,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CardGameSuiteApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".gameCollectionMainMenu.DisplaySettingsActivity" />
-        <activity android:name=".games.Fives" />
-        <activity android:name=".gameCollectionMainMenu.DisplayFivesRulesActivity" />
-        <activity android:name=".gameCollectionMainMenu.DisplayFivesSettingsActivity" />
-        <activity android:name=".games.Solitaire" />
-        <activity android:name=".gameCollectionMainMenu.DisplaySolitaireRulesActivity" />
-        <activity android:name=".gameCollectionMainMenu.DisplaySolitaireSettingsActivity" />
-        <activity android:name=".singlePlayerMenus.FivesSinglePlayerMenu" />
+        <activity android:name="app.gameCollectionMainMenu.DisplaySettingsActivity" />
+        <activity android:name="app.games.Fives" />
+        <activity android:name="app.gameCollectionMainMenu.DisplayFivesRulesActivity" />
+        <activity android:name="app.gameCollectionMainMenu.DisplayFivesSettingsActivity" />
+        <activity android:name="app.games.Solitaire" />
+        <activity android:name="app.gameCollectionMainMenu.DisplaySolitaireRulesActivity" />
+        <activity android:name="app.gameCollectionMainMenu.DisplaySolitaireSettingsActivity" />
+        <activity android:name="app.singlePlayerMenus.FivesSinglePlayerMenu" />
         <activity
-            android:name=".MultiplayerConnection.MultiplayerWaitingRoomActivity"
+            android:name="app.MultiplayerConnection.MultiplayerWaitingRoomActivity"
             android:label="@string/title_activity_multiplayer_waiting_room"
-            android:parentActivityName=".MultiplayerConnection.MultiplayerOrSinglePlayerMenu" />
+            android:parentActivityName="app.MultiplayerConnection.MultiplayerOrSinglePlayerMenu" />
         <activity
-            android:name=".MultiplayerConnection.MultiplayerOrSinglePlayerMenu"
+            android:name="app.MultiplayerConnection.MultiplayerOrSinglePlayerMenu"
             android:label="@string/app_name" />
         <activity
-            android:name=".gameCollectionMainMenu.DisplayMainPageActivity"
+            android:name="app.gameCollectionMainMenu.DisplayMainPageActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

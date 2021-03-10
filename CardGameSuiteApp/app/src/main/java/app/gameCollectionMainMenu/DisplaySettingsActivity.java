@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.gameCollectionMainMenu;
+package app.gameCollectionMainMenu;
 
 import android.content.Context;
 
@@ -6,9 +6,7 @@ import com.google.android.material.slider.Slider;
 import com.google.android.material.slider.Slider.OnSliderTouchListener;
 
 import android.content.SharedPreferences;
-import android.hardware.input.InputManager;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;

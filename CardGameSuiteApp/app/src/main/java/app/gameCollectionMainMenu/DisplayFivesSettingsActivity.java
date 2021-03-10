@@ -1,4 +1,4 @@
-package com.example.cardgamesuiteapp.gameCollectionMainMenu;
+package app.gameCollectionMainMenu;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;

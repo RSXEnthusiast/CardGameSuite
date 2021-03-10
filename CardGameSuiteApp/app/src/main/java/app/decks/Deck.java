@@ -1,6 +1,5 @@
-package com.example.cardgamesuiteapp.decks;
+package app.decks;
 
-import com.example.cardgamesuiteapp.deckMultiplayerManagement.DeckMultiplayerManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
