@@ -1,4 +1,4 @@
-package app.gameCollectionMainMenu;
+package cards.gameCollectionMainMenu;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,11 +8,11 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import app.MultiplayerConnection.MultiplayerOrSinglePlayerMenu;
-import app.games.Fives;
-import app.R;
-import app.games.Solitaire;
-import app.singlePlayerMenus.FivesSinglePlayerMenu;
+import cards.MultiplayerConnection.MultiplayerOrSinglePlayerMenu;
+import cards.games.Fives;
+import cards.R;
+import cards.games.Solitaire;
+import cards.singlePlayerMenus.FivesSinglePlayerMenu;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package app.decks;
+package cards.decks;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

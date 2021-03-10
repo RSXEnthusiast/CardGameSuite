@@ -1,4 +1,4 @@
-package app.gameCollectionMainMenu;
+package cards.gameCollectionMainMenu;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,7 +7,7 @@ import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-import app.R;
+import cards.R;
 
 public class DisplaySolitaireSettingsActivity extends AppCompatActivity {
 

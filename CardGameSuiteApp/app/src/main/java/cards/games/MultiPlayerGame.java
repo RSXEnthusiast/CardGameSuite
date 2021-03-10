@@ -1,4 +1,4 @@
-package app.games;
+package cards.games;
 
 import android.os.Bundle;
 import android.os.Handler;

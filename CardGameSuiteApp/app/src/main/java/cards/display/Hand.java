@@ -1,4 +1,4 @@
-package app.display;
+package cards.display;
 
 import android.content.Context;
 import android.graphics.Point;

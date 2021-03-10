@@ -1,4 +1,4 @@
-package app.decks;
+package cards.decks;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

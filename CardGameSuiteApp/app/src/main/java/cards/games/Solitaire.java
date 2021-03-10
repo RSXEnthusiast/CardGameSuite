@@ -1,4 +1,4 @@
-package app.games;
+package cards.games;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,13 +9,13 @@ import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import app.R;
+import cards.R;
 
-import app.decks.Standard;
-import app.display.Card;
-import app.display.CardAnimation;
-import app.display.SolitaireHand;
-import app.gameCollectionMainMenu.DisplayMainPageActivity;
+import cards.decks.Standard;
+import cards.display.Card;
+import cards.display.CardAnimation;
+import cards.display.SolitaireHand;
+import cards.gameCollectionMainMenu.DisplayMainPageActivity;
 
 import android.widget.TextView;
 

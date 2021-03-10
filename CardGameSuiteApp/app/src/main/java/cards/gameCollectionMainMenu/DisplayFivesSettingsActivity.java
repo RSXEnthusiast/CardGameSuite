@@ -1,4 +1,4 @@
-package app.gameCollectionMainMenu;
+package cards.gameCollectionMainMenu;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -6,7 +6,7 @@ import android.widget.NumberPicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import app.R;
+import cards.R;
 
 public class DisplayFivesSettingsActivity extends AppCompatActivity {
 

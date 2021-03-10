@@ -1,4 +1,4 @@
-package app.display;
+package cards.display;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
-import app.games.Fives;
-import app.games.Solitaire;
+import cards.games.Fives;
+import cards.games.Solitaire;
 
 public class CardAnimation {
 

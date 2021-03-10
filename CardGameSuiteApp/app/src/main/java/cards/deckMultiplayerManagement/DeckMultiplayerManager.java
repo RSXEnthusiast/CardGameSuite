@@ -1,4 +1,4 @@
-package app.deckMultiplayerManagement;
+package cards.deckMultiplayerManagement;
 
 import java.util.ArrayList;
 import java.util.Queue;
@@ -7,9 +7,9 @@ import java.util.Stack;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import app.decks.Deck;
-import app.multiplayerDataManagement.DataSender;
-import app.multiplayerDataManagement.Operation;
+import cards.decks.Deck;
+import cards.multiplayerDataManagement.DataSender;
+import cards.multiplayerDataManagement.Operation;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

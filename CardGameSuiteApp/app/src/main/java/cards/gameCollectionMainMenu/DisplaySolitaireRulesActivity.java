@@ -1,9 +1,9 @@
-package app.gameCollectionMainMenu;
+package cards.gameCollectionMainMenu;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
-import app.R;
+import cards.R;
 
 public class DisplaySolitaireRulesActivity extends AppCompatActivity {
 

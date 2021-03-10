@@ -1,4 +1,4 @@
-package app.display;
+package cards.display;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,9 +6,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import app.games.Fives;
-import app.games.Solitaire;
-import app.decks.Standard;
+import cards.games.Fives;
+import cards.games.Solitaire;
+import cards.decks.Standard;
 
 public class Card extends View implements View.OnTouchListener {
 

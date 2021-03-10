@@ -1,4 +1,4 @@
-package app.games;
+package cards.games;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -14,20 +14,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import app.R;
+import cards.R;
 
-import app.MultiplayerConnection.MultiPlayerConnector;
-import app.MultiplayerConnection.MultiplayerOrSinglePlayerMenu;
-import app.MultiplayerConnection.ServerConfig;
-import app.MultiplayerConnection.SocketIOEventArg;
-import app.deckMultiplayerManagement.DeckMultiplayerManager;
-import app.decks.Standard;
-import app.display.Card;
-import app.display.CardAnimation;
-import app.display.Hand;
-import app.gameCollectionMainMenu.DisplayMainPageActivity;
-import app.multiplayerDataManagement.Operation;
-import app.singlePlayerMenus.FivesSinglePlayerMenu;
+import cards.MultiplayerConnection.MultiPlayerConnector;
+import cards.MultiplayerConnection.MultiplayerOrSinglePlayerMenu;
+import cards.MultiplayerConnection.ServerConfig;
+import cards.MultiplayerConnection.SocketIOEventArg;
+import cards.deckMultiplayerManagement.DeckMultiplayerManager;
+import cards.decks.Standard;
+import cards.display.Card;
+import cards.display.CardAnimation;
+import cards.display.Hand;
+import cards.gameCollectionMainMenu.DisplayMainPageActivity;
+import cards.multiplayerDataManagement.Operation;
+import cards.singlePlayerMenus.FivesSinglePlayerMenu;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

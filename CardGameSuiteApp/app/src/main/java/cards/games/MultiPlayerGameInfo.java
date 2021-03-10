@@ -1,4 +1,4 @@
-package app.games;
+package cards.games;
 
 public class MultiPlayerGameInfo {
     public int minNumberPlayers;

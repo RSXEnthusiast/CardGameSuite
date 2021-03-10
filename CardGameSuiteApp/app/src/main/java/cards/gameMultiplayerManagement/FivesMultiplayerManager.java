@@ -1,6 +1,6 @@
-package app.gameMultiplayerManagement;
+package cards.gameMultiplayerManagement;
 
-import app.multiplayerDataManagement.DataSender;
+import cards.multiplayerDataManagement.DataSender;
 
 public class FivesMultiplayerManager {
 	private DataSender db;

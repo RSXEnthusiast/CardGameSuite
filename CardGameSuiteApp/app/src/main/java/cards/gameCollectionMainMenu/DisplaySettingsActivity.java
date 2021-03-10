@@ -1,4 +1,4 @@
-package app.gameCollectionMainMenu;
+package cards.gameCollectionMainMenu;
 
 import android.content.Context;
 
@@ -15,7 +15,7 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import app.R;
+import cards.R;
 
 public class DisplaySettingsActivity extends AppCompatActivity {
 
