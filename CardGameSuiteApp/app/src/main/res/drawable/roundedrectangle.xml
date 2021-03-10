@@ -1,7 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- drawable/card.xml -->
+<?xml version="1.0" encoding="utf-8"?><!-- drawable/card.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <corners android:radius="25dp" />
+    <stroke
+        android:width="2dp"
+        android:color="?colorOnSecondary" />
+    <corners android:radius="5dp" />
+
 
 </shape>

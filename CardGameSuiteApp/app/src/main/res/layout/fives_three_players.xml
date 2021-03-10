@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".games.Fives">
+    tools:context="app.games.Fives">
 
     <Button
         android:id="@+id/confirmButton"
@@ -57,7 +57,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.example.cardgamesuiteapp.display.FivesHand
+    <app.display.FivesHand
         android:id="@+id/player1"
         android:layout_width="150dp"
         android:layout_height="210dp"
@@ -67,7 +67,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.99" />
 
-    <com.example.cardgamesuiteapp.display.FivesHand
+    <app.display.FivesHand
         android:id="@+id/player2"
         android:layout_width="150dp"
         android:layout_height="210dp"
@@ -78,7 +78,7 @@
         app:layout_constraintTop_toBottomOf="@+id/scores"
         app:layout_constraintVertical_bias="0.464" />
 
-    <com.example.cardgamesuiteapp.display.FivesHand
+    <app.display.FivesHand
         android:id="@+id/player3"
         android:layout_width="150dp"
         android:layout_height="210dp"
@@ -88,7 +88,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.01" />
 
-    <com.example.cardgamesuiteapp.display.Card
+    <app.display.Card
         android:id="@+id/deck"
         android:layout_width="75dp"
         android:layout_height="105dp"
@@ -98,7 +98,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.example.cardgamesuiteapp.display.Card
+    <app.display.Card
         android:id="@+id/discard"
         android:layout_width="75dp"
         android:layout_height="105dp"
@@ -108,14 +108,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.example.cardgamesuiteapp.display.Card
+    <app.display.Card
         android:id="@+id/animatedCard1"
         android:layout_width="75dp"
         android:layout_height="105dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.example.cardgamesuiteapp.display.Card
+    <app.display.Card
         android:id="@+id/animatedCard2"
         android:layout_width="75dp"
         android:layout_height="105dp"
@@ -137,7 +137,7 @@
         android:layout_width="400dp"
         android:layout_height="60dp"
         android:gravity="center"
-        android:textColor="?colorPrimaryVariant"
+        android:textColor="?colorOnSecondary"
         app:layout_constraintBottom_toTopOf="@id/player1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.636"
@@ -161,7 +161,8 @@
             android:layout_height="30dp"
             android:gravity="center_horizontal"
             android:text="Scores"
-            android:textColor="?colorPrimaryVariant" />
+            android:textColor="?colorOnSecondary"
+            android:visibility="visible"/>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".games.Fives">
+    tools:context="app.games.Fives">
 
     <Button
         android:id="@+id/confirmButton"
@@ -57,7 +57,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.example.cardgamesuiteapp.display.FivesHand
+    <app.display.FivesHand
         android:id="@+id/player1"
         android:layout_width="150dp"
         android:layout_height="210dp"
@@ -67,7 +67,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.99" />
 
-    <com.example.cardgamesuiteapp.display.FivesHand
+    <app.display.FivesHand
         android:id="@+id/player2"
         android:layout_width="110dp"
         android:layout_height="154dp"
@@ -78,7 +78,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.654" />
 
-    <com.example.cardgamesuiteapp.display.FivesHand
+    <app.display.FivesHand
         android:id="@+id/player3"
         android:layout_width="110dp"
         android:layout_height="154dp"
@@ -89,7 +89,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.027" />
 
-    <com.example.cardgamesuiteapp.display.FivesHand
+    <app.display.FivesHand
         android:id="@+id/player4"
         android:layout_width="110dp"
         android:layout_height="154dp"
@@ -100,7 +100,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.027" />
 
-    <com.example.cardgamesuiteapp.display.FivesHand
+    <app.display.FivesHand
         android:id="@+id/player5"
         android:layout_width="110dp"
         android:layout_height="154dp"
@@ -111,7 +111,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.027" />
 
-    <com.example.cardgamesuiteapp.display.FivesHand
+    <app.display.FivesHand
         android:id="@+id/player6"
         android:layout_width="110dp"
         android:layout_height="154dp"
@@ -122,7 +122,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.654" />
 
-    <com.example.cardgamesuiteapp.display.Card
+    <app.display.Card
         android:id="@+id/deck"
         android:layout_width="75dp"
         android:layout_height="105dp"
@@ -133,7 +133,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.584" />
 
-    <com.example.cardgamesuiteapp.display.Card
+    <app.display.Card
         android:id="@+id/discard"
         android:layout_width="75dp"
         android:layout_height="105dp"
@@ -144,14 +144,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.584" />
 
-    <com.example.cardgamesuiteapp.display.Card
+    <app.display.Card
         android:id="@+id/animatedCard1"
         android:layout_width="75dp"
         android:layout_height="105dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.example.cardgamesuiteapp.display.Card
+    <app.display.Card
         android:id="@+id/animatedCard2"
         android:layout_width="75dp"
         android:layout_height="105dp"
@@ -179,7 +179,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player3"
         app:layout_constraintVertical_bias="0.975"
-        android:text="?colorPrimaryVariant"/>
+        android:textColor="?colorOnSecondary"/>
 
     <TextView
         android:id="@+id/scoresText"
@@ -192,7 +192,8 @@
         app:layout_constraintHorizontal_bias="0.226"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/player3"
-        android:textColor="?colorPrimaryVariant"
+        android:textColor="?colorOnSecondary"
+        android:visibility="visible"
         app:layout_constraintVertical_bias="0.024" />
 
     <LinearLayout
