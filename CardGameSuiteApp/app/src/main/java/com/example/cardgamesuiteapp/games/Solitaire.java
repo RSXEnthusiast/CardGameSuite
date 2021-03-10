@@ -408,8 +408,15 @@ public class Solitaire extends AppCompatActivity {
 
     public static void animateCardsToDiscard(int cardColumn){
         viewAnimatedCard1.updateImage(lastTouchedCardNum);
-        viewAnimation1.cardAnimate(viewColumns[cardColumn].getX(), viewDiscard.getX(),
-                viewColumns[cardColumn].getY(), viewDiscard.getY());
+        if(viewColumns[cardColumn].getNumCards() == 0){
+            viewAnimation1.cardAnimate(viewColumns[cardColumn].getX(), viewDiscard.getX(),
+                    viewColumns[cardColumn].getY() , viewDiscard.getY());
+        }else{
+            Card lastCardInHand = viewColumns[cardColumn].finalCard();
+            viewAnimation1.cardAnimate(lastCardInHand.getX() + viewColumns[cardColumn].getX(), viewDiscard.getX(),
+                    lastCardInHand.getY() +viewColumns[cardColumn].getY() + 90 , viewDiscard.getY() );
+        }
+
 
     }
 
@@ -475,6 +482,7 @@ public class Solitaire extends AppCompatActivity {
             }
 
         }else{
+            System.out.println("Made it to the discard else");
             viewDiscard.updateImage(deck.peekTopDiscard());
         }
     }
