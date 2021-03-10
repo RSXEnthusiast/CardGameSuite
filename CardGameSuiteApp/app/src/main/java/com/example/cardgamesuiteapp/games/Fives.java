@@ -686,6 +686,7 @@ public class Fives extends MultiPlayerGame {
         }
         updateViewInstruction();
         setConfirmButtonVisible();
+        deck.nextPlayerFromPeer();
     }
 
     /**
