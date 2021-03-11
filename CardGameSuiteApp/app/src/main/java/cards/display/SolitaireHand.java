@@ -21,7 +21,7 @@ public class SolitaireHand extends Hand {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        boolean bigFontCard = getCardType();
+        boolean bigFontCard = isCardTypeBig();
         int count = getChildCount();
         int cardWidth = getMeasuredWidth();
         int cardHeight = getMeasuredHeight();
@@ -58,14 +58,14 @@ public class SolitaireHand extends Hand {
         }
     }
 
-    public boolean getCardType () {
+    public boolean isCardTypeBig() {
         if(getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE).getString("cardStyle", "cardStyle not found").contains("big"))
             return true;
         else
             return false;
     }
 
-    public Card removeFinalCard(){
+    public Card removeFinalCard() {
         Card finalCard = cards.get(cards.size()-1);
         this.removeCard(cards.get(cards.size()-1).getCardNum());
         return finalCard;
