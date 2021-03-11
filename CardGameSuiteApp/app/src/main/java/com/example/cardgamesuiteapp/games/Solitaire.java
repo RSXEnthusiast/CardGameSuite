@@ -39,6 +39,7 @@ public class Solitaire extends AppCompatActivity {
     private static CardAnimation viewAnimation1;
     static int lastTouchedCardNum;
     static boolean highlightAssistEnabled;
+    private static int layeredCardDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +87,11 @@ public class Solitaire extends AppCompatActivity {
         isDealing = false;
         swappingHands = false;
         dealtColumn = 0;
-        viewAnimatedCard1 = findViewById(R.id.animatedCard1);
+        viewAnimatedCard1 = findViewById(R.id.animatedCard1S);
         viewAnimatedCard1.bringToFront();
         viewAnimation1 = new CardAnimation(viewAnimatedCard1, true, this);
+        setLayeredCardDistance();
+
         newGame();
     }
 
@@ -297,7 +300,6 @@ public class Solitaire extends AppCompatActivity {
 
     /**
      * Deals cards when deck is selected, makes the deck invisible when deck is empty
-     *
      */
     public static void clickDeckToDeal() {
         if(isDealing || swappingHands)
@@ -307,9 +309,6 @@ public class Solitaire extends AppCompatActivity {
             return;
 
         dealACard();
-
-        if(deck.deckIsEmpty())
-            viewDeckBack.setVisibility(View.INVISIBLE);
     }
 
     private static void dealACard(){
@@ -414,10 +413,8 @@ public class Solitaire extends AppCompatActivity {
         }else{
             Card lastCardInHand = viewColumns[cardColumn].finalCard();
             viewAnimation1.cardAnimate(lastCardInHand.getX() + viewColumns[cardColumn].getX(), viewDiscard.getX(),
-                    lastCardInHand.getY() +viewColumns[cardColumn].getY() + 90 , viewDiscard.getY() );
+                    lastCardInHand.getY() + viewColumns[cardColumn].getY() + layeredCardDistance , viewDiscard.getY() );
         }
-
-
     }
 
     private static void dealAnimation(){
@@ -429,9 +426,8 @@ public class Solitaire extends AppCompatActivity {
         } else {
             Card lastCardInHand = viewColumns[dealtColumn].finalCard();
             viewAnimation1.cardAnimate(viewDeckBack.getX(), viewColumns[dealtColumn].getX() + lastCardInHand.getX(),
-                    viewDeckBack.getY(), viewColumns[dealtColumn].getY() + lastCardInHand.getY() + 90);
+                    viewDeckBack.getY(), viewColumns[dealtColumn].getY() + lastCardInHand.getY() + layeredCardDistance);
         }
-
     }
 
     /**
@@ -462,7 +458,7 @@ public class Solitaire extends AppCompatActivity {
         cardMoving.setVisibility(View.INVISIBLE);
         viewColumns[startingColumn].removeFinalCard();
         viewAnimation1.cardAnimate(cardMoving.getX() + viewColumns[startingColumn].getX(), viewColumns[endingColumn].getX(),
-                    cardMoving.getY()+ viewColumns[startingColumn].getY(), viewColumns[endingColumn].getY());
+                    cardMoving.getY() + viewColumns[startingColumn].getY(), viewColumns[endingColumn].getY());
     }
 
     public static void postAnimation(){
@@ -479,6 +475,8 @@ public class Solitaire extends AppCompatActivity {
                 isDealing = false;
                 dealtColumn = 0;
                 removeHighlightedChoices();
+                if(deck.deckIsEmpty())
+                    viewDeckBack.setVisibility(View.INVISIBLE);
             }
 
         }else{
@@ -581,6 +579,13 @@ public class Solitaire extends AppCompatActivity {
         }
 
         return check;
+    }
+
+    private static void setLayeredCardDistance() {
+        if(viewColumns[0].isCardTypeBig())
+            layeredCardDistance = 220;
+        else
+            layeredCardDistance = 90;
     }
 
 

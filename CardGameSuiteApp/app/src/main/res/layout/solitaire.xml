@@ -30,30 +30,9 @@
         app:layout_constraintVertical_bias="0.993" />
 
     <com.example.cardgamesuiteapp.display.Card
-        android:id="@+id/animatedCard1"
+        android:id="@+id/animatedCard1S"
         android:layout_width="75dp"
-        android:layout_height="105dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.example.cardgamesuiteapp.display.Card
-        android:id="@+id/animatedCard2"
-        android:layout_width="75dp"
-        android:layout_height="105dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.example.cardgamesuiteapp.display.Card
-        android:id="@+id/animatedCard3"
-        android:layout_width="75dp"
-        android:layout_height="105dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.example.cardgamesuiteapp.display.Card
-        android:id="@+id/animatedCard4"
-        android:layout_width="75dp"
-        android:layout_height="105dp"
+        android:layout_height="115dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -162,14 +141,14 @@
         android:id="@+id/winOrLose"
         android:layout_width="214dp"
         android:layout_height="62dp"
-        android:textColor="?colorPrimaryVariant"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="620dp"
+        android:layout_marginTop="608dp"
         android:orientation="vertical"
         android:textAlignment="center"
+        android:textColor="?colorPrimaryVariant"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/returnToGameCollectionButton"
