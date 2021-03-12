@@ -111,7 +111,6 @@ public class Fives extends MultiPlayerGame {
     }
 
     private void initFives() {
-
         numAI = (int) getIntent().getSerializableExtra("numAI");
         TypedArray ta = getTheme().obtainStyledAttributes(R.styleable.ViewStyle);
         colorOnSecondary = ta.getColor(R.styleable.ViewStyle_colorOnSecondary, 0);
@@ -147,9 +146,11 @@ public class Fives extends MultiPlayerGame {
         viewReturnToAppCollection.setOnClickListener(v -> returnToGameCollection());
 
         viewReturnToPlayerMenu = findViewById(R.id.returnToPlayerMenuButton);
-        viewReturnToPlayerMenu.setOnClickListener(v -> returnToPlayerMenu());
+        if (multiplayer) viewReturnToPlayerMenu.setVisibility(View.INVISIBLE);
+        else viewReturnToPlayerMenu.setOnClickListener(v -> returnToPlayerMenu());
 
         viewReturnToGameMainMenu = findViewById(R.id.returnToGameMainMenuButton);
+        viewReturnToGameMainMenu.setText("Fives Home");
         viewReturnToGameMainMenu.setOnClickListener(v -> returnToGameMainMenu());
 
         winnerIndex = new ArrayList<Integer>();
