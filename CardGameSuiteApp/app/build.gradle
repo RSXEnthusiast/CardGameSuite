@@ -14,7 +14,7 @@ android {
         applicationId "com.joelk111ind.cards"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 2
+        versionCode 3
         versionName "0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
