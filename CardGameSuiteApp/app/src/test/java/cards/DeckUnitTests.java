@@ -1,13 +1,22 @@
 package cards;
 
-import cards.decks.Standard;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
+import cards.decks.Standard;
+import cards.multiplayerDataManagement.Operation;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Queue;
+import java.util.Stack;
 
 public class DeckUnitTests {
 
@@ -44,7 +53,7 @@ public class DeckUnitTests {
 
     @Test
     public void cardValue() {
-        assertEquals(1, standardDeck.getNumericalValue(1));
+        assertEquals(14, standardDeck.getNumericalValue(1));
     }
 
     @Test
@@ -158,16 +167,39 @@ public class DeckUnitTests {
 
     @Test
     public void initializeFromPeer() throws Exception {
-        standardDeck.deal(1);
-        ArrayList<Integer>[] beforeHands = standardDeck.getHands();
-
-        Standard testDeck = new Standard(false, 4);
-        testDeck.deal(2);
-        ArrayList<Integer>[] newHands = testDeck.getHands();
-//        standardDeck.initializeFromPeer(testDeck);
+        standardDeck.deal(3);
+        standardDeck.discardByIndex(0,0);
         ArrayList<Integer>[] hands = standardDeck.getHands();
-        assertEquals(newHands, hands);
-        assertNotEquals(beforeHands, hands);
+
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            Gson gson = gsonBuilder.create();
+            jsonObject.put("deck", gson.toJson(standardDeck.getDeck(), new TypeToken<Queue<Integer>>() {
+            }.getType()));
+            jsonObject.put("discard", gson.toJson(standardDeck.getDiscard(), new TypeToken<Stack<Integer>>() {
+            }.getType()));
+            for (int i = 0; i < standardDeck.getNumPlayers(); i++) {
+                jsonObject.put("hand" + i, gson.toJson(standardDeck.getHand(i), new TypeToken<ArrayList<Integer>>() {
+                }.getType()));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Standard testDeck = new Standard(false, 4);
+        testDeck.deal(3);
+        ArrayList<Integer>[] beforeHands = testDeck.getHands();
+        int beforeInitialiZe = beforeHands[0].get(0);
+        testDeck.initializeFromPeer(jsonObject);
+        ArrayList<Integer>[] newHands = testDeck.getHands();
+
+        int initialDiscard = standardDeck.peekTopDiscard();
+        int postDiscard = testDeck.peekTopDiscard();
+
+        assertEquals(hands[0].get(0), newHands[0].get(0));
+        assertTrue(beforeInitialiZe != newHands[0].get(0));
+        assertEquals(initialDiscard, postDiscard);
     }
 
     @Test
