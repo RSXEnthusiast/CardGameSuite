@@ -7,9 +7,10 @@ import java.util.Stack;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cards.MultiplayerConnection.MultiPlayerConnector;
+import cards.MultiplayerConnection.ServerConfig;
 import cards.decks.Deck;
-import cards.multiplayerDataManagement.DataSender;
-import cards.multiplayerDataManagement.Operation;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -33,20 +34,12 @@ public abstract class DeckMultiplayerManager {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        DataSender.sendData(jsonObject);
-    }
-
-    public static void nextPlayer() {
-        try {
-            DataSender.sendData(new JSONObject().put("operation", Operation.nextPlayer));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        sendData(jsonObject);
     }
 
     public static void flipDeck() {
         try {
-            DataSender.sendData(new JSONObject().put("operation", Operation.flipDeck));
+            sendData(new JSONObject().put("operation", Operation.flipDeck));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -54,7 +47,7 @@ public abstract class DeckMultiplayerManager {
 
     public static void discardedFromDeck() {
         try {
-            DataSender.sendData(new JSONObject().put("operation", Operation.discardFromDeck));
+            sendData(new JSONObject().put("operation", Operation.discardFromDeck));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -62,7 +55,7 @@ public abstract class DeckMultiplayerManager {
 
     public static void drewFromDeck(int cardLocation) {
         try {
-            DataSender.sendData(new JSONObject().put("operation", Operation.drawIntoIndex).put("location", cardLocation));
+            sendData(new JSONObject().put("operation", Operation.drawIntoIndex).put("location", cardLocation));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -70,7 +63,7 @@ public abstract class DeckMultiplayerManager {
 
     public static void flipCardInHand(int cardNum) {
         try {
-            DataSender.sendData(new JSONObject().put("operation", Operation.flipCardInHand).put("cardNum", cardNum));
+            sendData(new JSONObject().put("operation", Operation.flipCardInHand).put("cardNum", cardNum));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -78,7 +71,7 @@ public abstract class DeckMultiplayerManager {
 
     public static void drewFromDiscard(int cardLocation) {
         try {
-            DataSender.sendData(new JSONObject().put("operation", Operation.drawIntoIndexFromDiscard).put("location", cardLocation));
+            sendData(new JSONObject().put("operation", Operation.drawIntoIndexFromDiscard).put("location", cardLocation));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -86,9 +79,14 @@ public abstract class DeckMultiplayerManager {
 
     public static void readyToContinue() {
         try {
-            DataSender.sendData(new JSONObject().put("operation", Operation.readyToContinue));
+            sendData(new JSONObject().put("operation", Operation.readyToContinue));
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static void sendData(JSONObject data) {
+        MultiPlayerConnector.get_Instance().emitEvent(ServerConfig.gameData, data);
     }
 }
