@@ -164,6 +164,7 @@ public class DeckUnitTests {
         Standard testDeck = new Standard(false, 4);
         testDeck.deal(2);
         ArrayList<Integer>[] newHands = testDeck.getHands();
+        // I Commented out this call so it'd compile
 //        standardDeck.initializeFromPeer(testDeck);
         ArrayList<Integer>[] hands = standardDeck.getHands();
         assertEquals(newHands, hands);
