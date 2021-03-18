@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -63,12 +64,15 @@ public class DisplaySettingsActivity extends AppCompatActivity {
     }
 
     public void saveName(View view) {
-        // 3/4 of these lines of code are to simply hide the keyboard. Why are you like this android?
-        InputMethodManager imm = (InputMethodManager) this.getSystemService(this.INPUT_METHOD_SERVICE);
-        view = this.getCurrentFocus();
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        editPreference("name", String.valueOf(((EditText) findViewById(R.id.playerNameInput)).getText()));
-        ((Button) findViewById(R.id.saveName)).setText("SAVED!");
+        try {
+            InputMethodManager imm = (InputMethodManager) this.getSystemService(this.INPUT_METHOD_SERVICE);
+            view = this.getCurrentFocus();
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            editPreference("name", String.valueOf(((EditText) findViewById(R.id.playerNameInput)).getText()));
+            ((Button) findViewById(R.id.saveName)).setText("SAVED!");
+        } catch (NullPointerException e) {
+            Toast.makeText(getApplicationContext(), "Name not changed.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void setLightBack(View view) {
