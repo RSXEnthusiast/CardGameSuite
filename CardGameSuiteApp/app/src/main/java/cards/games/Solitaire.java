@@ -345,6 +345,27 @@ public class Solitaire extends AppCompatActivity {
         dialog.show();
     }
 
+    public void clickNewGame(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("New Game");
+        builder.setMessage("All current game progress will be lost.\n\nAre you sure?");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getBaseContext(), Solitaire.class);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Do Nothing
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     /**
      * Makes the discard stack a clickable object even when empty and calls card touched. Passes a -1, indicating that the click was a destination.
      *

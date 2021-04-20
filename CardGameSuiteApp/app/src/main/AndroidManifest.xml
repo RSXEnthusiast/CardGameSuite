@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cards">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -12,23 +13,52 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CardGameSuiteApp"
         android:usesCleartextTraffic="true">
-        <activity android:name="cards.gameCollectionMainMenu.DisplaySettingsActivity" />
-        <activity android:name="cards.games.Fives" />
-        <activity android:name="cards.gameCollectionMainMenu.DisplayFivesRulesActivity" />
-        <activity android:name="cards.gameCollectionMainMenu.DisplayFivesSettingsActivity" />
-        <activity android:name="cards.games.Solitaire" />
-        <activity android:name="cards.gameCollectionMainMenu.DisplaySolitaireRulesActivity" />
-        <activity android:name="cards.gameCollectionMainMenu.DisplaySolitaireSettingsActivity" />
-        <activity android:name="cards.singlePlayerMenus.FivesSinglePlayerMenu" />
+        <activity
+            android:name="cards.gameCollectionMainMenu.DisplaySettingsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cards.games.Fives"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cards.gameCollectionMainMenu.DisplayFivesRulesActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cards.gameCollectionMainMenu.DisplayFivesSettingsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cards.games.Solitaire"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cards.gameCollectionMainMenu.DisplaySolitaireRulesActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cards.gameCollectionMainMenu.DisplaySolitaireSettingsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="cards.singlePlayerMenus.FivesSinglePlayerMenu"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
         <activity
             android:name="cards.MultiplayerConnection.MultiplayerWaitingRoomActivity"
+            android:configChanges="orientation"
             android:label="@string/title_activity_multiplayer_waiting_room"
-            android:parentActivityName="cards.MultiplayerConnection.MultiplayerOrSinglePlayerMenu" />
+            android:parentActivityName="cards.MultiplayerConnection.MultiplayerOrSinglePlayerMenu"
+            android:screenOrientation="portrait" />
         <activity
             android:name="cards.MultiplayerConnection.MultiplayerOrSinglePlayerMenu"
-            android:label="@string/app_name" />
+            android:configChanges="orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
         <activity
             android:name="cards.gameCollectionMainMenu.DisplayMainPageActivity"
+            android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
