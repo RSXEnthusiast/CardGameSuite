@@ -26,7 +26,7 @@ import cards.display.Card;
 import cards.display.CardAnimation;
 import cards.display.Hand;
 import cards.gameCollectionMainMenu.DisplayMainPageActivity;
-import cards.multiplayerDataManagement.Operation;
+import cards.deckMultiplayerManagement.Operation;
 import cards.singlePlayerMenus.FivesSinglePlayerMenu;
 
 import com.google.gson.Gson;
